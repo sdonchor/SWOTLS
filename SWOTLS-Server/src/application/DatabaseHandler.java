@@ -9,9 +9,6 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class DatabaseHandler {
 	private Connection connect = null;
-    private Statement statement = null;
-    private PreparedStatement preparedStatement = null;
-    private ResultSet resultSet = null;
     
     private String address="sql.sdonchor.nazwa.pl";
     private String username="sdonchor_SWOTLS-DB";
@@ -19,9 +16,19 @@ public class DatabaseHandler {
     private String dbName="sdonchor_SWOTLS-DB";
     private int port=3306;
     
+    private Statement sql=null;
     
-	public DatabaseHandler() {
+	public DatabaseHandler(String address,String username,String password,String dbName,int port) {
+		this.address=address;
+		this.username=username;
+		this.password=password;
+		this.dbName=dbName;
+		this.port=port;	
+	}
+	
+	public void connect() {
 		try {
+			
 			MysqlDataSource dataSource = new MysqlDataSource();
 			dataSource.setUser(username);
 			dataSource.setPassword(password);
@@ -29,17 +36,48 @@ public class DatabaseHandler {
 			dataSource.setPort(port);
 			dataSource.setDatabaseName(dbName);
 			
-			Connection conn = dataSource.getConnection();
-			Statement stmt = conn.createStatement();
+			connect = dataSource.getConnection();
+			sql=connect.createStatement();
+			
+			
+			
+				
+		} catch (SQLException e) {
+			System.out.println("Failed to connect to DB.");
+		//	e.printStackTrace();
+		}
+	}
+	
+	public void printContestants() {
+		try {
+			Statement stmt = connect.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM contestants");
 			while(rs.next()){
 				System.out.println("cID="+rs.getInt("contestant_id")+", Name="+rs.getString("name"));
 			}
-				
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("DB ERROR");
+		}
+	}
+	public void formatDatabase() {
+		try {
+			//Statement sql = connect.createStatement();
+			System.out.println(connect);
+		
+			sql.executeQuery(DatabaseTemplate.GetScript());
+		} catch (SQLException e) {
+			System.out.println("Connection not found.");
 			e.printStackTrace();
 		}
+		
+	}
 	
+	public void closeConnection() {
+		try {
+			connect.close();
+		} catch (SQLException e) {
+			System.out.println("Failed to close DB connection.");
+		//	e.printStackTrace();
+		}
 	}
 }

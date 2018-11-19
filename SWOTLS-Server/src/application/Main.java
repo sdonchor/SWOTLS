@@ -22,6 +22,18 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
-		DatabaseHandler db = new DatabaseHandler();
+		
+		//DB TEST BEGIN
+		String address="sql.sdonchor.nazwa.pl";
+	    String username="sdonchor_SWOTLS-DB";
+	    String password="";
+	    String dbName="sdonchor_SWOTLS-DB";
+	    int port=3306;
+	    
+		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
+		db.connect();
+		db.formatDatabase();
+		db.closeConnection();
+		//DB TEST END
 	}
 }
