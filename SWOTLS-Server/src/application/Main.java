@@ -21,19 +21,24 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
-		launch(args);
-		
+		//launch(args);
+		int port = 0; // use default port
+		Thread sThread = new Thread(new ServerThread(port));
+		sThread.start();
 		//DB TEST BEGIN
-		String address="sql.sdonchor.nazwa.pl";
+		/*String address="sql.sdonchor.nazwa.pl";
 	    String username="sdonchor_SWOTLS-DB";
-	    String password="";
+	    String password="ZXCasdqwe123";
 	    String dbName="sdonchor_SWOTLS-DB";
 	    int port=3306;
 	    
 		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
 		db.connect();
 		db.formatDatabase();
-		db.closeConnection();
+		db.closeConnection();*/
 		//DB TEST END
+		
+		
+		
 	}
 }

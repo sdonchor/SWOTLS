@@ -61,15 +61,11 @@ public class DatabaseHandler {
 	}
 	public void formatDatabase() {
 		try {
-			//Statement sql = connect.createStatement();
-			System.out.println(connect);
-		
-			sql.executeQuery(DatabaseTemplate.GetScript());
+			sql.executeUpdate(DatabaseTemplate.GetScript());
 		} catch (SQLException e) {
 			System.out.println("Connection not found.");
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public void closeConnection() {
