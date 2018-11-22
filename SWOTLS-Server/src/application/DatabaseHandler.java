@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class DatabaseHandler {
@@ -15,6 +14,7 @@ public class DatabaseHandler {
     private String password="";
     private String dbName="sdonchor_SWOTLS-DB";
     private int port=3306;
+    private QueryBuilder queryBuilder = null;
     
     private Statement sql=null;
     
@@ -25,7 +25,9 @@ public class DatabaseHandler {
 		this.dbName=dbName;
 		this.port=port;	
 	}
-	
+	public QueryBuilder getQueryBuilder() {
+		return queryBuilder;
+	}
 	public void connect() {
 		try {
 			
@@ -37,8 +39,8 @@ public class DatabaseHandler {
 			dataSource.setDatabaseName(dbName);
 			
 			connect = dataSource.getConnection();
-			sql=connect.createStatement();
-			
+			//sql=connect.createStatement();
+			queryBuilder = new QueryBuilder(connect);
 			
 			
 				
