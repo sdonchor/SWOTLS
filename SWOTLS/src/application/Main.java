@@ -44,9 +44,7 @@ public class Main extends Application {
         );
 
         MainController mainController = loader.getController();
-
-        VistaNavigator.setMainController(mainController);
-        VistaNavigator.loadVista(VistaNavigator.VISTA_1);
+        VistaNavigator.loadVista(VistaNavigator.VISTA_EVENT, mainController);
 
         return mainPane;
     }

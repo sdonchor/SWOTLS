@@ -18,18 +18,7 @@ public class VistaNavigator {
     public static final String MAIN    = "/application/main.fxml";
     public static final String VISTA_1 = "/application/vista1.fxml";
     public static final String VISTA_2 = "/application/vista2.fxml";
-
-    /** The main application layout controller. */
-    private static MainController mainController;
-
-    /**
-     * Stores the main controller for later use in navigation tasks.
-     *
-     * @param mainController the main application layout controller.
-     */
-    public static void setMainController(MainController mainController) {
-        VistaNavigator.mainController = mainController;
-    }
+    public static final String VISTA_EVENT = "/application/vistaEvent.fxml";
 
     /**
      * Loads the vista specified by the fxml file into the
@@ -48,15 +37,14 @@ public class VistaNavigator {
      *
      * @param fxml the fxml file to be loaded.
      */
-    public static void loadVista(String fxml) {
+    public static void loadVista(String fxml, VistaContainer vc) {
         try {
-            mainController.setVista(
-                FXMLLoader.load(
-                    VistaNavigator.class.getResource(
-                        fxml
-                    )
-                )
-            );
+            FXMLLoader loader = new FXMLLoader(VistaNavigator.class.getResource(fxml));
+            vc.setVista( loader.load() );
+
+            VistaContainable child = loader.getController();
+            child.setParent(vc);
+            child.init();
         } catch (IOException e) {
             e.printStackTrace();
         }

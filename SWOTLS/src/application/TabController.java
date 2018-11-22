@@ -22,7 +22,16 @@ import java.util.ResourceBundle;
 /**
  * Main controller class for the entire layout.
  */
-public class MainController extends VistaContainer  {
+public class TabController extends VistaContainer {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public TabController(String name){
+        this.name = name;
+    }
 
     /** Holder of a switchable vista. */
     @FXML
@@ -33,12 +42,13 @@ public class MainController extends VistaContainer  {
      *
      * @param node the vista node to be swapped in.
      */
-    public void setVista(Node node) { vistaHolder.getChildren().setAll(node); }
+    public void setVista(Node node) {
+        vistaHolder.getChildren().setAll(node);
+    }
 
     @FXML
     private void closeAppAction(ActionEvent event) {
         Platform.exit();
     }
-
 
 }
