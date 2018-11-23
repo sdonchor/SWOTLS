@@ -1,6 +1,5 @@
 package application;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,15 +7,12 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class DatabaseHandler {
 	private Connection connect = null;
-    
     private String address="sql.sdonchor.nazwa.pl";
     private String username="sdonchor_SWOTLS-DB";
     private String password="";
     private String dbName="sdonchor_SWOTLS-DB";
     private int port=3306;
     private QueryBuilder queryBuilder = null;
-    
-    private Statement sql=null;
     
 	public DatabaseHandler(String address,String username,String password,String dbName,int port) {
 		this.address=address;
@@ -25,12 +21,18 @@ public class DatabaseHandler {
 		this.dbName=dbName;
 		this.port=port;	
 	}
+	/**
+	 * Returns handler's query builder object
+	 * @return
+	 */
 	public QueryBuilder getQueryBuilder() {
 		return queryBuilder;
 	}
+	/**
+	 * Connects to the database.
+	 */
 	public void connect() {
 		try {
-			
 			MysqlDataSource dataSource = new MysqlDataSource();
 			dataSource.setUser(username);
 			dataSource.setPassword(password);
@@ -49,7 +51,9 @@ public class DatabaseHandler {
 		//	e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Debug method, prints contents of contestants table.
+	 */
 	public void printContestants() {
 		try {
 			Statement stmt = connect.createStatement();
@@ -61,15 +65,21 @@ public class DatabaseHandler {
 			System.out.println("DB ERROR");
 		}
 	}
+	/**
+	 * Prepares the database for system's use. Removes all data if exists.
+	 */
 	public void formatDatabase() {
 		try {
-			sql.executeUpdate(DatabaseTemplate.GetScript());
+			getQueryBuilder().dropAllTables();
+			getQueryBuilder().createTables();
 		} catch (SQLException e) {
-			System.out.println("Connection not found.");
-			e.printStackTrace();
+			System.out.println("Couldn't format the database.");
+			//e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Closes database connection.
+	 */
 	public void closeConnection() {
 		try {
 			connect.close();

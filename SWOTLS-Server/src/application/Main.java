@@ -1,5 +1,6 @@
 package application;
 	
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -22,11 +23,11 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		//launch(args);
-		int port = 0; // use default port
-		Thread sThread = new Thread(new ServerThread(port));
+		int serverPort = 0; // use default port
+		Thread sThread = new Thread(new ServerThread(serverPort));
 		sThread.start();
 		//DB TEST BEGIN
-		/*String address="sql.sdonchor.nazwa.pl";
+		String address="sql.sdonchor.nazwa.pl";
 	    String username="sdonchor_SWOTLS-DB";
 	    String password="ZXCasdqwe123";
 	    String dbName="sdonchor_SWOTLS-DB";
@@ -34,8 +35,13 @@ public class Main extends Application {
 	    
 		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
 		db.connect();
-		db.formatDatabase();
-		db.closeConnection();*/
+		try {
+			db.formatDatabase();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		db.closeConnection();
 		//DB TEST END
 		
 		
