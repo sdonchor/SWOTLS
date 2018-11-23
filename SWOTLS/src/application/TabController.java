@@ -1,6 +1,8 @@
 package application;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,14 +25,25 @@ import java.util.ResourceBundle;
  * Main controller class for the entire layout.
  */
 public class TabController extends VistaContainer {
-    private String name;
+    private StringProperty name = new SimpleStringProperty();
+    private Tab tab;
 
-    public String getName() {
-        return name;
+    public TabController(String tabName) {
+        name.set(tabName);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_HOLDER));
+        loader.setController(this);
+        Node node = null;
+        try {
+            node = (StackPane) loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.tab = new Tab(tabName, node);
+        VistaNavigator.loadVista(VistaNavigator.VISTA_1, this);
     }
 
-    public TabController(String name){
-        this.name = name;
+    public Tab getTab() {
+        return tab;
     }
 
     /** Holder of a switchable vista. */
@@ -45,10 +58,4 @@ public class TabController extends VistaContainer {
     public void setVista(Node node) {
         vistaHolder.getChildren().setAll(node);
     }
-
-    @FXML
-    private void closeAppAction(ActionEvent event) {
-        Platform.exit();
-    }
-
 }

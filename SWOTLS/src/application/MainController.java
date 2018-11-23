@@ -33,6 +33,7 @@ public class MainController extends VistaContainer  {
      *
      * @param node the vista node to be swapped in.
      */
+    @Override
     public void setVista(Node node) { vistaHolder.getChildren().setAll(node); }
 
     @FXML

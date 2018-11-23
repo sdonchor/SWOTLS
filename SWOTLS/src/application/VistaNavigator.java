@@ -19,6 +19,7 @@ public class VistaNavigator {
     public static final String VISTA_1 = "/application/vista1.fxml";
     public static final String VISTA_2 = "/application/vista2.fxml";
     public static final String VISTA_EVENT = "/application/vistaEvent.fxml";
+    public static final String VISTA_HOLDER = "/application/vistaHolder.fxml";
 
     /**
      * Loads the vista specified by the fxml file into the

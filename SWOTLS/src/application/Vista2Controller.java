@@ -8,10 +8,11 @@ import javafx.fxml.FXML;
  */
 public class Vista2Controller implements VistaContainable {
     VistaContainer parent;
-
+    @Override
     public void setParent(VistaContainer parent) {
         this.parent = parent;
     }
+    @Override
     public void init(){}
 
     /**

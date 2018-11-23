@@ -23,11 +23,11 @@ import java.util.ResourceBundle;
  */
 public class VistaEventController implements VistaContainable{
     VistaContainer parent;
-
+    @Override
     public void setParent(VistaContainer parent) {
         this.parent = parent;
     }
-
+    @Override
     public void init(){
         loadListView();
         selectMenu();
@@ -37,9 +37,6 @@ public class VistaEventController implements VistaContainable{
     private ListView<String> lvmaster;
     @FXML
     private TabPane tbpane;
-    @FXML
-    private StackPane vistaHolder;
-
 
     private void loadListView(){
         ObservableList<String> ols = FXCollections.observableArrayList();
@@ -54,14 +51,11 @@ public class VistaEventController implements VistaContainable{
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 int i = lvmaster.getSelectionModel().getSelectedIndex();
                 if(i==0) {
-                    Node node = null;
-                    try {
-                        node = (StackPane) FXMLLoader.load(getClass().getResource(VistaNavigator.VISTA_1));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Tab tb = new Tab("Profil", node);
-                    tbpane.getTabs().add(tb);
+                    TabController controller = new TabController("Profil - Pranica");
+                    tbpane.getTabs().add(controller.getTab());
+                }else if(i==1){
+                    TabController controller = new TabController("Profil - Donchór");
+                    tbpane.getTabs().add(controller.getTab());
                 }
 
             }
