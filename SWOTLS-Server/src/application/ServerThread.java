@@ -1,32 +1,26 @@
 package application;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerThread implements Runnable{
-	private final int defaultPort = 4545;
-	private ServerSocket server = null;
-	private Socket client = null;
-	private int port;
-	public ServerThread(int port) {
-		if(port==0)
-			this.port=defaultPort;
-		else
-			this.port=port;
+public class ServerThread extends Thread{
+	private Socket socket;
+	public ServerThread(Socket socket) {
+		this.socket=socket;
 	}
-	private void start() throws IOException {
-		server = new ServerSocket(port);
-		
-	}
-	@Override
 	public void run() {
 		try {
-			this.start();
+			String message=null;
+			BufferedReader bufferedReader = new BufferedReader ( new InputStreamReader(socket.getInputStream()));
+			while((message=bufferedReader.readLine())!=null)
+			{
+				System.out.println("Acquired message: "+message);
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 }

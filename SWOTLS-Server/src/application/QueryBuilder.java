@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetFactory;
+import javax.sql.rowset.RowSetProvider;
+
 public class QueryBuilder {
 	private String selectionAll = "SELECT * FROM";
 	private String ordering = "ORDER BY";
@@ -101,5 +105,15 @@ public class QueryBuilder {
 		else
 			return false;
 	
+	}
+	public CachedRowSet getTable(String tableName) throws SQLException {
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		String query = "SELECT * FROM $tablename";
+		query =query.replace("$tablename",tableName);
+		PreparedStatement stmt = connection.prepareStatement(query);
+		ResultSet rs = stmt.executeQuery();
+		crs.populate(rs);
+		return crs;
 	}
 }

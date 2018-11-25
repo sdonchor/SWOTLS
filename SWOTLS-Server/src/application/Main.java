@@ -1,6 +1,10 @@
 package application;
 	
 
+import java.io.IOException;
+
+import javax.sql.rowset.CachedRowSet;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -23,9 +27,16 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		//launch(args);
-		int serverPort = 0; // use default port
-		Thread sThread = new Thread(new ServerThread(serverPort));
-		sThread.start();
+		//SERVER TEST BEGIN
+		Server server = new Server();
+		try {
+			server.runServer();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		//SERVER TEST END
 		//DB TEST BEGIN
 		String address="sql.sdonchor.nazwa.pl";
 	    String username="sdonchor_SWOTLS-DB";
@@ -37,8 +48,14 @@ public class Main extends Application {
 		db.connect();
 		try {
 			//db.formatDatabase();
-			//db.getQueryBuilder().contestantInsertion(new Contestant("ss","ssd","sdsdsd",-1,"polish","123123123","",-1));
-			System.out.println(db.getQueryBuilder().verifySystemLogin(new SystemUser("sdsd","abc")));
+			db.getQueryBuilder().contestantInsertion(new Contestant("ss","ssd","sdsdsd",-1,"polish","123123123","",-1));
+			//System.out.println(db.getQueryBuilder().verifySystemLogin(new SystemUser("sdsd","abc")));
+			CachedRowSet crs = db.getQueryBuilder().getTable("contestants");
+			while(crs.next()) {
+				int id = crs.getInt("contestant_id");
+				String nickname = crs.getString("nickname");
+				System.out.println(id+nickname);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
