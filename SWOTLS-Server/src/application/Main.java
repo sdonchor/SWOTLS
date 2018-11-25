@@ -36,7 +36,9 @@ public class Main extends Application {
 		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
 		db.connect();
 		try {
-			db.formatDatabase();
+			//db.formatDatabase();
+			//db.getQueryBuilder().contestantInsertion(new Contestant("ss","ssd","sdsdsd",-1,"polish","123123123","",-1));
+			System.out.println(db.getQueryBuilder().verifySystemLogin(new SystemUser("sdsd","abc")));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

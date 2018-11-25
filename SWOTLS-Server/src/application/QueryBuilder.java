@@ -2,6 +2,7 @@ package application;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class QueryBuilder {
@@ -49,30 +50,56 @@ public class QueryBuilder {
 	 * @param name
 	 * @param surname
 	 * @param nickname
-	 * @param score
+	 * @param score contestant's ranking
 	 * @param language
 	 * @param contact_info
-	 * @param additional_info
-	 * @param team_id
+	 * @param additional_info optional
+	 * @param team_id set to -1 if null
 	 * @return
 	 * @throws SQLException
 	 */
-	public int contestantInsertion(String name, String surname, String nickname, int score, String language, String contact_info, String additional_info,int team_id) throws SQLException
+	public int contestantInsertion(Contestant contestant) throws SQLException
 	{
+		
 		String query=null;
 		query = insertion + " contestants VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement stmt = connection.prepareStatement(query);
-		stmt.setString(1,name);
-		stmt.setString(2,surname);
-		stmt.setString(3,nickname);
-		stmt.setInt(4,score);
-		stmt.setString(5,language);
-		stmt.setString(6,contact_info);
-		stmt.setString(7,additional_info);
-		if(team_id!=-1)
-			stmt.setInt(8,team_id);
+		stmt.setString(1,contestant.getName());
+		stmt.setString(2,contestant.getSurname());
+		stmt.setString(3,contestant.getNickname());
+		stmt.setInt(4,contestant.getScore());
+		stmt.setString(5,contestant.getLanguage());
+		stmt.setString(6,contestant.getContact_info());
+		stmt.setString(7,contestant.getAdditional_info());
+		if(contestant.getTeam_id()!=-1)
+			stmt.setInt(8,contestant.getTeam_id());
 		else
-			stmt.setNull(8, team_id);
+			stmt.setNull(8, contestant.getTeam_id());
 		return stmt.executeUpdate();	
+	}
+	/**
+	 * Returns true if login and password hash match a record in the database.
+	 * Returns false if password hash doesn't match or there is no user with such login.
+	 * @param sysusr system user to verify
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean verifySystemLogin(SystemUser sysusr) throws SQLException
+	{
+		String query = "SELECT * FROM system_users WHERE login = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, sysusr.getLogin());
+		ResultSet result = stmt.executeQuery();
+		if(result.next())
+		{
+			String savedHash = result.getString("pw_hash");
+			if(sysusr.getPw_hash().equals(savedHash))
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+	
 	}
 }

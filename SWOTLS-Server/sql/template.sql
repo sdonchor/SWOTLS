@@ -1,33 +1,11 @@
-CREATE TABLE `arenas` (
-  `arena_id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf16_polish_ci NOT NULL,
-  `location` varchar(50) COLLATE utf16_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
-CREATE TABLE `contestants` (
-  `contestant_id` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf16_polish_ci NOT NULL,
-  `surname` varchar(50) COLLATE utf16_polish_ci NOT NULL,
-  `nickname` varchar(50) COLLATE utf16_polish_ci NOT NULL,
-  `score` int(11) NOT NULL,
-  `language` varchar(50) COLLATE utf16_polish_ci NOT NULL,
-  `contact_info` text COLLATE utf16_polish_ci NOT NULL,
-  `additional_info` text COLLATE utf16_polish_ci,
-  `team_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
-CREATE TABLE `matches` (
-  `match_id` int(11) NOT NULL,
-  `sideA` int(11) NOT NULL,
-  `sideB` int(11) NOT NULL,
-  `sideA_score` int(11) DEFAULT NULL,
-  `sideB_score` int(11) DEFAULT NULL,
-  `time` datetime NOT NULL,
-  `tournament` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
+CREATE TABLE `arenas` (`arena_id` int(11) NOT NULL,`name` varchar(50) COLLATE utf16_polish_ci NOT NULL,`location` varchar(50) COLLATE utf16_polish_ci NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
+CREATE TABLE `contestants` (`contestant_id` int(11) NOT NULL,`name` varchar(50) COLLATE utf16_polish_ci NOT NULL,`surname` varchar(50) COLLATE utf16_polish_ci NOT NULL,`nickname` varchar(50) COLLATE utf16_polish_ci NOT NULL,`score` int(11) NOT NULL,`language` varchar(50) COLLATE utf16_polish_ci NOT NULL,`contact_info` text COLLATE utf16_polish_ci NOT NULL,`additional_info` text COLLATE utf16_polish_ci,`team_id` int(11) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
+CREATE TABLE `matches` (`match_id` int(11) NOT NULL,`sideA` int(11) NOT NULL,`sideB` int(11) NOT NULL,`sideA_score` int(11) DEFAULT NULL,`sideB_score` int(11) DEFAULT NULL,`time` datetime NOT NULL,`tournament` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
 CREATE TABLE `system_users` (
   `sys_usr_id` int(11) NOT NULL,
   `login` varchar(20) COLLATE utf16_polish_ci NOT NULL,
-  `pw_hash` int(32) NOT NULL,
-  `permissions` varchar(5) COLLATE utf16_polish_ci NOT NULL
+  `pw_hash` varchar(32) NOT NULL,
+  `permissions` varchar(5) COLLATE utf16_polish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_polish_ci;
 CREATE TABLE `teams` (
   `team_id` int(11) NOT NULL,
@@ -64,6 +42,16 @@ ALTER TABLE `tournaments`
   ADD KEY `operator` (`operator`);
 ALTER TABLE `contestants`
   MODIFY `contestant_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `arenas`
+  MODIFY `arena_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tournaments`
+  MODIFY `tournament_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `system_users`
+  MODIFY `sys_usr_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `matches`
+  MODIFY `match_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `teams`
+  MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `contestants`
   ADD CONSTRAINT `contestants_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`team_id`);
 ALTER TABLE `matches`
