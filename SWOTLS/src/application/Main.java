@@ -69,6 +69,14 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+    	try {
+			ClientThread cThread = new ClientThread(new ServerConnection("localhost",4545));
+			cThread.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Server not found.");
+		}
         launch(args);
+        
     }
 }

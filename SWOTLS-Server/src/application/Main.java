@@ -27,16 +27,7 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		//launch(args);
-		//SERVER TEST BEGIN
-		Server server = new Server();
-		try {
-			server.runServer();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		//SERVER TEST END
+	
 		//DB TEST BEGIN
 		String address="sql.sdonchor.nazwa.pl";
 	    String username="sdonchor_SWOTLS-DB";
@@ -46,23 +37,19 @@ public class Main extends Application {
 	    
 		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
 		db.connect();
-		try {
-			//db.formatDatabase();
-			db.getQueryBuilder().contestantInsertion(new Contestant("ss","ssd","sdsdsd",-1,"polish","123123123","",-1));
-			//System.out.println(db.getQueryBuilder().verifySystemLogin(new SystemUser("sdsd","abc")));
-			CachedRowSet crs = db.getQueryBuilder().getTable("contestants");
-			while(crs.next()) {
-				int id = crs.getInt("contestant_id");
-				String nickname = crs.getString("nickname");
-				System.out.println(id+nickname);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		db.closeConnection();
+	
 		//DB TEST END
 		
+		//SERVER TEST BEGIN
+		Server server = new Server(db);
+		try {
+			server.runServer();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		//SERVER TEST END
 		
 		
 	}

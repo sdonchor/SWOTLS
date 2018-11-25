@@ -7,10 +7,13 @@ import java.net.Socket;
 public class Server {
 	private int defaultServerPort=4545;
 	private int serverPort;
-	public Server(int port) {
+	private DatabaseHandler dbH=null;
+	public Server(int port, DatabaseHandler dbH) {
+		this.dbH=dbH;
 		serverPort=port;
 	}
-	public Server() {
+	public Server(DatabaseHandler dbH) {
+		this.dbH=dbH;
 		serverPort=defaultServerPort;
 	}
 	public void runServer() throws IOException{
@@ -18,7 +21,8 @@ public class Server {
 		System.out.println("Server initialized on port "+serverPort+". Awaiting connections.");
 		while(true) {
 			Socket socket = serverSocket.accept();
-			new ServerThread(socket).start();
+			//System.out.println("new connection");
+			new ServerThread(socket,dbH).start();
 		}
 	}
 }
