@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 /**
  * Controller class for the first vista.
  */
-public class Vista1Controller implements VistaContainable {
+public class VistaLogInController implements VistaContainable {
     VistaContainer parent;
 
     @Override

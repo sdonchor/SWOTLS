@@ -22,7 +22,7 @@ public class Vista2Controller implements VistaContainable {
      */
     @FXML
     void previousPane(ActionEvent event) {
-        VistaNavigator.loadVista(VistaNavigator.VISTA_1, parent);
+        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, parent);
     }
 
 }
