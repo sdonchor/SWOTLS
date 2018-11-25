@@ -32,9 +32,13 @@ public class ServerData {
 				String language = crs.getString("language");
 				String contact_info = crs.getString("contact_info");
 				String additional_info = crs.getString("additional_info");
-				//int team_id = contestants.getInt("team_id");
-				//to do - team finding
-				Player p = new Player(cid, name, surname, nickname, score, language, contact_info, additional_info, null);
+				int team_id = crs.getInt("team_id");
+				Team team = null;
+				if(!crs.wasNull())
+				{
+					team = ServerData.getTeamById(team_id);
+				}
+				Player p = new Player(cid, name, surname, nickname, score, language, contact_info, additional_info, team);
 				contestants.add(p);
 			}
 		} catch (SQLException e) {
@@ -49,9 +53,14 @@ public class ServerData {
 				int tid = crs.getInt("team_id");
 				String name = crs.getString("name");
 				String where_from = crs.getString("where_from");
-				//int leader_id = crs.getInt("leader_id");
-				//to do - leader finding
-				Team t = new Team(tid,name,where_from,null);
+				int leader_id = crs.getInt("leader_id");
+				Player l = null;
+				if(!crs.wasNull())
+				{
+					l = ServerData.getContestantById(leader_id);
+				}
+				Team t = new Team(tid,name,where_from,l);
+				
 				teams.add(t);
 			}
 		} catch (SQLException e) {
@@ -75,8 +84,12 @@ public class ServerData {
 				{
 					t= Competition.Type.TEAM;
 				}
-				//int operator = crs.getInt("operator");
-				//to do - system user finding
+				int operator = crs.getInt("operator");
+				User u = null;
+				if(!crs.wasNull())
+				{
+					u = ServerData.getUserById(operator);
+				}
 				String additional_info = crs.getString("additional_info");
 				Competition c = new Competition(tid,name,t,additional_info,null);
 				tournaments.add(c);
@@ -93,7 +106,7 @@ public class ServerData {
 				int aid = crs.getInt("arena_id");
 				String name = crs.getString("name");
 				String location = crs.getString("location");
-				Arena a = new Arena(aid,name,location);
+				Arena a = new Arena(aid,location,name);
 				arenas.add(a);
 			}
 		} catch (SQLException e) {
@@ -112,8 +125,13 @@ public class ServerData {
 				int arenaId = crs.getInt("arena_id");
 				Date time = crs.getDate("time"); //??
 				int tournamentId = crs.getInt("tournament");
-				//to do - sides finding, tournament finding, arena finding
-				Match m = new Match(mid,null,null,null,time,null);
+				
+				Team a = ServerData.getTeamById(sideAid);
+				Team b = ServerData.getTeamById(sideBid);
+				Competition t = ServerData.getTournamentById(tournamentId);
+				Arena arena = ServerData.getArenaById(arenaId);
+
+				Match m = new Match(mid,a,b,sideAscore,sideBscore,t,time,arena);
 				matches.add(m);
 			}
 		} catch (SQLException e) {
@@ -199,8 +217,11 @@ public class ServerData {
 
     public static Map<String, Integer> getListOfAllMatches(){
         Map<String, Integer> map = new HashMap<String, Integer>();
-        map.put("2Pesteczka vs Unity Female - 25.11.2018 11:00", 0);
-        //todo
+       // map.put("2Pesteczka vs Unity Female - 25.11.2018 11:00", 0);
+        for(int i = 0; i<matches.size();i++)
+        {
+        	map.put(matches.get(i).toString(), matches.get(i).getId());
+        }
         return map;
     }
 

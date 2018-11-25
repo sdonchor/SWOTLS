@@ -6,8 +6,8 @@ public class Match {
     private int id;
     private Competitor sideA;
     private Competitor sideB;
-    private Float scoreA;
-    private Float scoreB;
+    private int scoreA;
+    private int scoreB;
     private Competition competition;
     private Date date;
     private Arena arena;
@@ -21,7 +21,7 @@ public class Match {
         this.arena = arena;
     }
 
-    public Match(int id, Competitor sideA, Competitor sideB, Float scoreA, Float scoreB, Competition competition, Date date, Arena arena) {
+    public Match(int id, Competitor sideA, Competitor sideB, int scoreA, int scoreB, Competition competition, Date date, Arena arena) {
         this.id = id;
         this.sideA = sideA;
         this.sideB = sideB;
@@ -44,11 +44,11 @@ public class Match {
         return sideB;
     }
 
-    public Float getScoreA() {
+    public int getScoreA() {
         return scoreA;
     }
 
-    public Float getScoreB() {
+    public int getScoreB() {
         return scoreB;
     }
 
@@ -64,18 +64,18 @@ public class Match {
         return arena;
     }
 
-    public void setScoreA(Float scoreA) {
+    public void setScoreA(int scoreA) {
         this.scoreA = scoreA;
     }
 
-    public void setScoreB(Float scoreB) {
+    public void setScoreB(int scoreB) {
         this.scoreB = scoreB;
     }
 
     @Override
     public String toString() {
-        return sideA +
-                " vs " + sideB +
+        return sideA.displayedName() +
+                " vs " + sideB.displayedName() +
                 " - " + date;
     }
 }
