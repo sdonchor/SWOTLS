@@ -75,7 +75,11 @@ public class VistaFederationController implements VistaContainable{
                 entryViewer.addEntry("Język", c.getLanguage() );
                 entryViewer.addEntry("Informacje kontaktowe", c.getContactInfo() );
                 entryViewer.addEntry("Informacje dodatkowe", c.getAdditionalInfo() );
-                entryViewer.addEntry("Id drużyny", String.valueOf(c.getTeamId()) );
+                Team t = c.getTeam();
+                if(t!=null)
+                    entryViewer.addEntry("Drużyna", c.getTeam().displayedName() );
+                else
+                    entryViewer.addEntry("Drużyna", "" );
             }
         });
     }

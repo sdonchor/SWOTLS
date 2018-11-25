@@ -9,9 +9,9 @@ public class Player extends Competitor {
     private String language;
     private String contactInfo;
     private String additionalInfo;
-    private Integer teamId;
+    private Team team;
 
-    public Player(int id, String name, String surname, String nickname, int elo, String language, String contactInfo, String additionalInfo, Integer teamId) {
+    public Player(int id, String name, String surname, String nickname, int elo, String language, String contactInfo, String additionalInfo, Team team) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -20,7 +20,7 @@ public class Player extends Competitor {
         this.language = language;
         this.contactInfo = contactInfo;
         this.additionalInfo = additionalInfo;
-        this.teamId = teamId;
+        this.team = team;
     }
 
     public int getId() {
@@ -55,8 +55,8 @@ public class Player extends Competitor {
         return additionalInfo;
     }
 
-    public Integer getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
     @Override
