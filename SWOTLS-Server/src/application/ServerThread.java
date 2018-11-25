@@ -36,7 +36,8 @@ public class ServerThread extends Thread{
 						oos.close();
 						os.close();
 					} catch (SQLException e) {
-						System.out.println("SQL error while gettin table");
+						//System.out.println("SQL error while gettin table");
+						e.printStackTrace();
 					}
 					
 				}

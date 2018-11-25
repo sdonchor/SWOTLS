@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Main application class.
@@ -70,12 +71,20 @@ public class Main extends Application {
 
     public static void main(String[] args) {
     	try {
-			ClientThread cThread = new ClientThread(new ServerConnection("localhost",4545));
-			cThread.start();
-		} catch (IOException e) {
+			ServerConnection sc = new ServerConnection("localhost",4545);
+			ServerData.convertContestants(sc.getTable("contestants"));
+			ServerData.convertTournaments(sc.getTable("tournaments"));
+			ServerData.convertTeams(sc.getTable("teams"));
+			ServerData.convertMatches(sc.getTable("matches"));
+			ServerData.convertArenas(sc.getTable("arenas"));
+			ServerData.convertSysUsrs(sc.getTable("system_users"));
+			sc.socketClose();
+			
+		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Server not found.");
+			e.printStackTrace();
 		}
+    	
         launch(args);
         
     }
