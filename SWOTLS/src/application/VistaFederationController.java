@@ -11,6 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -69,6 +70,7 @@ public class VistaFederationController implements VistaContainable{
             public void invalidated(Observable observable) {
                 if(contestantsPane.isExpanded()){
                     contestants = ServerData.getListOfAllContestants();
+                    contestants.put("** Dodaj **", -1);
                     ObservableList<String> ols = FXCollections.observableArrayList();
                     for (String key : contestants.keySet()) {
                         ols.add(key);
@@ -84,14 +86,21 @@ public class VistaFederationController implements VistaContainable{
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 //int i = lvContestants.getSelectionModel().getSelectedIndex();
+
                 String s = lvContestants.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
-                Player c = ServerData.getContestantById(contestants.get(s));
+                int id = contestants.get(s);
+                Player c;
+                if(id == -1)
+                    c = new Player(-1, "Jan", "jkowalski", "Kowalski", 1200, "pl", "", "", null);
+                else
+                    c = ServerData.getContestantById(id);
+
                 TabController tabCtrl = new TabController("Profil - " + c.displayedName());
                 tbpane.getTabs().add(tabCtrl.getTab());
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl);
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl, "Contestant");
                 entryViewer.addEntry("Id", String.valueOf(c.getId()) );
                 entryViewer.addEntry("Imię", c.getName() );
                 entryViewer.addEntry("Nazwisko", c.getSurname() );
@@ -105,6 +114,9 @@ public class VistaFederationController implements VistaContainable{
                     entryViewer.addEntry("Drużyna", t.displayedName() );
                 else
                     entryViewer.addEntry("Drużyna", "" );
+
+                if(id == -1)
+                    entryViewer.setEditing(true);
             }
         });
 
@@ -113,6 +125,7 @@ public class VistaFederationController implements VistaContainable{
             public void invalidated(Observable observable) {
                 if(teamsPane.isExpanded()){
                     teams = ServerData.getListOfAllTeams();
+                    teams.put("** Dodaj **", -1);
                     ObservableList<String> ols = FXCollections.observableArrayList();
                     for (String key : teams.keySet()) {
                         ols.add(key);
@@ -130,13 +143,19 @@ public class VistaFederationController implements VistaContainable{
                 String s = lvTeams.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
-                Team t = ServerData.getTeamById(teams.get(s));
+                int id = teams.get(s);
+                Team t;
+                if(id == -1)
+                    t = new Team(-1, "Smoki PK", "Kraków", null);
+                else
+                    t = ServerData.getTeamById(id);
+
                 if(t==null)
                     return;
                 TabController tabCtrl = new TabController("Drużyna - " + t.displayedName());
                 tbpane.getTabs().add(tabCtrl.getTab());
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl);
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl, "Team");
                 entryViewer.addEntry("Id", String.valueOf(t.getId()) );
                 entryViewer.addEntry("Nazwa", t.getName() );
                 entryViewer.addEntry("Skąd", t.getWhereFrom() );
@@ -145,6 +164,9 @@ public class VistaFederationController implements VistaContainable{
                     entryViewer.addEntry("Lider", p.displayedName() );
                 else
                     entryViewer.addEntry("Lider", "" );
+
+                if(id == -1)
+                    entryViewer.setEditing(true);
             }
         });
 
@@ -153,6 +175,7 @@ public class VistaFederationController implements VistaContainable{
             public void invalidated(Observable observable) {
                 if(eventsPane.isExpanded()){
                     events = ServerData.getListOfAllTournaments();
+                    events.put("** Dodaj **", -1);
                     ObservableList<String> ols = FXCollections.observableArrayList();
                     for (String key : events.keySet()) {
                         ols.add(key);
@@ -170,13 +193,19 @@ public class VistaFederationController implements VistaContainable{
                 String s = lvEvents.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
-                Competition c = ServerData.getTournamentById(events.get(s));
+                int id = events.get(s);
+                Competition c;
+                if(id == -1) {
+                    c = new Competition(-1, "Turniej szachowy", Competition.Type.SOLO, "", null);
+                } else
+                    c = ServerData.getTournamentById(id);
+
                 if(c==null)
                     return;
                 TabController tabCtrl = new TabController("Wydarzenie - " + c.getName());
                 tbpane.getTabs().add(tabCtrl.getTab());
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl);
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl, "Competition");
                 entryViewer.addEntry("Id", String.valueOf(c.getId()) );
                 entryViewer.addEntry("Nazwa", c.getName() );
                 entryViewer.addEntry("Typ", c.getType().toString() );
@@ -186,6 +215,9 @@ public class VistaFederationController implements VistaContainable{
                     entryViewer.addEntry("Założyciel", u.getLogin() );
                 else
                     entryViewer.addEntry("Założyciel", "" );
+
+                if(id == -1)
+                    entryViewer.setEditing(true);
             }
         });
 
@@ -194,6 +226,7 @@ public class VistaFederationController implements VistaContainable{
             public void invalidated(Observable observable) {
                 if(matchesPane.isExpanded()){
                     matches = ServerData.getListOfAllMatches();
+                    matches.put("** Dodaj **", -1);
                     ObservableList<String> ols = FXCollections.observableArrayList();
                     for (String key : matches.keySet()) {
                         ols.add(key);
@@ -211,13 +244,19 @@ public class VistaFederationController implements VistaContainable{
                 String s = lvMatches.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
-                Match m = ServerData.getMatchById(matches.get(s));
+                int id = matches.get(s);
+                Match m;
+                if(id == -1) {
+                    m = new Match(-1, new Team(-1, "Smoki PK", "Kraków", null), new Team(-1, "AGHenci", "Kraków", null), 2, 0, null, new Date(), null);
+                } else
+                    m = ServerData.getMatchById(id);
+
                 if(m==null)
                     return;
                 TabController tabCtrl = new TabController(m.toString());
                 tbpane.getTabs().add(tabCtrl.getTab());
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl);
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl, "Match");
                 entryViewer.addEntry("Id", String.valueOf(m.getId()) );
                 entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
                 entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
@@ -236,6 +275,9 @@ public class VistaFederationController implements VistaContainable{
                     entryViewer.addEntry("Arena", a.getName() );
                 else
                     entryViewer.addEntry("Arena", "" );
+
+                if(id == -1)
+                    entryViewer.setEditing(true);
             }
         });
 
@@ -244,6 +286,7 @@ public class VistaFederationController implements VistaContainable{
             public void invalidated(Observable observable) {
                 if(arenasPane.isExpanded()){
                     arenas = ServerData.getListOfAllArenas();
+                    arenas.put("** Dodaj **", -1);
                     ObservableList<String> ols = FXCollections.observableArrayList();
                     for (String key : arenas.keySet()) {
                         ols.add(key);
@@ -261,16 +304,25 @@ public class VistaFederationController implements VistaContainable{
                 String s = lvArenas.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
-                Arena a = ServerData.getArenaById(arenas.get(s));
+                int id = arenas.get(s);
+                Arena a;
+                if(id == -1) {
+                    a = new Arena(-1, "", "");
+                } else
+                    a = ServerData.getArenaById(id);
+
                 if(a==null)
                     return;
                 TabController tabCtrl = new TabController("Arena - " + a.getName());
                 tbpane.getTabs().add(tabCtrl.getTab());
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl);
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl, "Arena");
                 entryViewer.addEntry("Id", String.valueOf(a.getId()) );
                 entryViewer.addEntry("Nazwa", a.getName() );
                 entryViewer.addEntry("Lokalizacja", a.getLocation() );
+
+                if(id == -1)
+                    entryViewer.setEditing(true);
             }
         });
 
@@ -279,6 +331,7 @@ public class VistaFederationController implements VistaContainable{
             public void invalidated(Observable observable) {
                 if(usersPane.isExpanded()){
                     users = ServerData.getListOfAllUsers();
+                    users.put("** Dodaj **", -1);
                     ObservableList<String> ols = FXCollections.observableArrayList();
                     for (String key : users.keySet()) {
                         ols.add(key);
@@ -296,16 +349,25 @@ public class VistaFederationController implements VistaContainable{
                 String s = lvUsers.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
-                User u = ServerData.getUserById(users.get(s));
+                int id = users.get(s);
+                User u;
+                if(id == -1) {
+                    u = new User(-1, "admin", "full");
+                } else
+                    u = ServerData.getUserById(id);
+
                 if(u==null)
                     return;
                 TabController tabCtrl = new TabController("Organizator - " + u.getLogin());
                 tbpane.getTabs().add(tabCtrl.getTab());
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl);
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl, "User");
                 entryViewer.addEntry("Id", String.valueOf(u.getId()) );
                 entryViewer.addEntry("Login", u.getLogin() );
                 entryViewer.addEntry("Uprawnienia", u.getPermissions() );
+
+                if(id == -1)
+                    entryViewer.setEditing(true);
             }
         });
     }

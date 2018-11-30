@@ -1,12 +1,13 @@
 package application;
 
+import javafx.collections.ObservableList;
+
+import javax.sql.rowset.CachedRowSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.sql.rowset.CachedRowSet;
 
 public class ServerData {
     /**
@@ -275,4 +276,18 @@ public class ServerData {
     	}
     	return null;
     }
+
+	/**
+	 * Ta funkcja jest wywoływana gdy klient dodaje nowy obiekt lub edytuje istniejący. Oczekiwany efekt to zapisane tego w bazie danych.
+	 * @param data Lista wpisów. Wpis posiada atrybut (identyfikuje kolumnę w bazie) i wartość.
+	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
+	 */
+	public static void saveData(ObservableList<Entry> data, String type){
+		System.out.println(type);
+		for(Entry e : data){
+			System.out.println(e.getAttribute() + " " + e.getValue());
+		}
+
+		//TODO wysyłanie do serwera
+	}
 }

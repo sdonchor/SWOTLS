@@ -1,16 +1,12 @@
 package application;
 
-import java.io.BufferedReader;
+import javax.sql.rowset.CachedRowSet;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.sql.SQLException;
-
-import javax.sql.rowset.CachedRowSet;
 
 public class ServerConnection {
 	private Socket socket = null;

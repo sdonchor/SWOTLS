@@ -1,7 +1,6 @@
 package application;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 
 import java.io.IOException;
 
