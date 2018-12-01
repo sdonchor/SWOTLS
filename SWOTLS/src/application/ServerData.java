@@ -1,6 +1,8 @@
 package application;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.effect.PerspectiveTransform;
 
 import javax.sql.rowset.CachedRowSet;
 import java.sql.SQLException;
@@ -289,5 +291,11 @@ public class ServerData {
 		}
 
 		//TODO wysyłanie do serwera
+		Dialogs.error("Brak połączenia z serwerem.");
+	}
+
+	public static Permission logIn(String id, String pw){
+		Dialogs.error("Niezaimplementowana funkcja.", id+pw);
+		return Permission.FULL;
 	}
 }

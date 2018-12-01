@@ -4,17 +4,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.util.Callback;
-import server.Server;
 
 import java.io.IOException;
 
@@ -68,7 +64,6 @@ public class VistaEntryViewerController implements VistaContainable {
             @Override
             public void handle(TableColumn.CellEditEvent<Entry, String> t) {
                 ((Entry) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValue(t.getNewValue());
-                System.out.println("test");
             }
         });*/
     }
@@ -95,11 +90,16 @@ public class VistaEntryViewerController implements VistaContainable {
      */
     @FXML
     void buttonAction(ActionEvent event) {
-        if(editing){
-            //Zapisz
-            ServerData.saveData(table.itemsProperty().getValue(), type);
+        if(VistaLogInController.hasOrganizerPermissions()){
+            if(editing){
+                //Zapisz
+                ServerData.saveData(table.itemsProperty().getValue(), type);
+            }
+            setEditing(!editing);
+        }else {
+            Dialogs.error("Niewystarczające uprawnienia.");
+            VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, parent);
         }
-        setEditing(!editing);
     }
 
     class EditingCell extends TableCell<Entry, String> {
@@ -125,14 +125,10 @@ public class VistaEntryViewerController implements VistaContainable {
         public void cancelEdit() {
             super.cancelEdit();
 
-            System.out.println("cancel " + textField.getText());
-
             // Check to see if there's a value
             if (!textField.getText().equals("")) {
                 commitEdit(textField.getText());
                 setText( textField.getText() );
-            }else{
-                //setText(getItem());
             }
 
             setContentDisplay(ContentDisplay.TEXT_ONLY);
@@ -141,7 +137,6 @@ public class VistaEntryViewerController implements VistaContainable {
         @Override
         public void commitEdit(String newValue) {
             super.commitEdit(newValue);
-            System.out.println("commit " +  newValue);
             if(!newValue.isEmpty())
                 getTableView().getItems().get(getIndex()).setValue(textField.getText());
         }
