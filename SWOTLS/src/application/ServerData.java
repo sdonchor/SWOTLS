@@ -294,8 +294,13 @@ public class ServerData {
 		Dialogs.error("Brak połączenia z serwerem.");
 	}
 
-	public static Permission logIn(String id, String pw){
-		Dialogs.error("Niezaimplementowana funkcja.", id+pw);
-		return Permission.FULL;
+	public static void logIn(String id, String pw){
+		Dialogs.error("Niezaimplementowana funkcja.", id+" "+pw);
+		ServertriggeredEvents.permissionsChanged(Permission.FULL); //docelowo to ma być wywoływane przez serwer
+	}
+
+	public static void register(String id, String pw, Permission perm){
+		Dialogs.error("Niezaimplementowana funkcja.", id+" "+pw+" "+perm);
+		ServertriggeredEvents.dataUpdated(); //dataUpdated() docelowo będzie wywoływane przez serwer
 	}
 }

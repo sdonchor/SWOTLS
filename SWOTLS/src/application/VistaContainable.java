@@ -1,6 +1,6 @@
 package application;
 
 public interface VistaContainable {
-    public void setParent(VistaContainer parent);
-    public void init();
+    void setParent(VistaContainer parent);
+    void init();
 }

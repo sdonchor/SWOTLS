@@ -32,6 +32,10 @@ public class VistaLogInController implements VistaContainable {
         return false;
     }
 
+    public static void setPermission(Permission permission) {
+        VistaLogInController.permission = permission;
+    }
+
     /*public VistaLogInController(VistaContainer parent){
         this.parent = parent;
         FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_LOGIN));
@@ -57,8 +61,8 @@ public class VistaLogInController implements VistaContainable {
 
     @FXML
     void submit(ActionEvent event) {
-        //VistaNavigator.loadVista(VistaNavigator.VISTA_2, parent);
-        permission = ServerData.logIn(idField.getText(), pwField.getText());
+        ServerData.logIn(idField.getText(), pwField.getText());
+        parent.close();
     }
 
 }

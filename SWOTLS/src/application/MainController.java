@@ -28,5 +28,5 @@ public class MainController extends VistaContainer  {
         Platform.exit();
     }
 
-
+    public void close() { Platform.exit(); }
 }

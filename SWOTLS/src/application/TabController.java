@@ -2,6 +2,8 @@ package application;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -44,7 +46,18 @@ public class TabController extends VistaContainer {
      *
      * @param node the vista node to be swapped in.
      */
+    @Override
     public void setVista(Node node) {
         vistaHolder.getChildren().setAll(node);
+    }
+
+    @Override
+    public void close(){
+        EventHandler<Event> handler = tab.getOnClosed();
+        if (null != handler) {
+            handler.handle(null);
+        } else {
+            tab.getTabPane().getTabs().remove(tab);
+        }
     }
 }
