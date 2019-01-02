@@ -217,29 +217,23 @@ public class VistaFederationController implements VistaContainable, Refreshable{
                 if(s==null)
                     return;
                 int id = events.get(s);
-                Competition c;
+
                 if(id == -1) {
                     //Dodaj
-                    c = new Competition(-1, "Turniej szachowy", Competition.Type.SOLO, "", null);
-                } else
-                    c = ServerData.getTournamentById(id);
+                    if(VistaLogInController.hasOrganizerPermissions()){
+                        new VistaCompetitionCreatorController(newTab("Stwórz turniej"));
+                    }else {
+                        Dialogs.error("Niewystarczające uprawnienia.");
+                        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, newTab("Zaloguj się"));
+                    }
+                    return;
+                    //c = new Competition(-1, "Turniej szachowy", Competition.Type.SOLO, "", null);
+                }
 
+                Competition c = ServerData.getTournamentById(id);
                 if(c==null)
                     return;
-
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Wydarzenie - " + c.getName()), "Competition");
-                entryViewer.addEntry("Id", String.valueOf(c.getId()) );
-                entryViewer.addEntry("Nazwa", c.getName() );
-                entryViewer.addEntry("Typ", c.getType().toString() );
-                entryViewer.addEntry("Informacje dodatkowe", c.getAdditionalInfo() );
-                User u = c.getCreator();
-                if(u!=null)
-                    entryViewer.addEntry("Założyciel", u.getLogin() );
-                else
-                    entryViewer.addEntry("Założyciel", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaCompetitionController(parent, c);
             }
         });
 
@@ -359,7 +353,7 @@ public class VistaFederationController implements VistaContainable, Refreshable{
                 if(id == -1) {
                     //Dodaj - Sprawdzenie uprawnień i Rejestracja
                     if(VistaLogInController.hasFullPermissions()){
-                        VistaRegistrationController registration = new VistaRegistrationController(newTab("Rejestracja organizatora"));
+                        new VistaRegistrationController(newTab("Rejestracja organizatora"));
                     }else {
                         Dialogs.error("Niewystarczające uprawnienia.");
                         VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, newTab("Zaloguj się"));

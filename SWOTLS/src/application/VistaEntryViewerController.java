@@ -20,7 +20,7 @@ public class VistaEntryViewerController implements VistaContainable {
     @FXML private TableView<Entry> table;
     @FXML private TableColumn<Entry, String> attributeColumn;
     @FXML private TableColumn<Entry, String> valueColumn;
-    @FXML private Button button;
+    @FXML private Button actionButton;
     private boolean editing = false;
     private String type;
 
@@ -75,10 +75,10 @@ public class VistaEntryViewerController implements VistaContainable {
     public void setEditing(boolean editing) {
         this.editing = editing;
         if(editing){
-            button.setText("Zapisz");
+            actionButton.setText("Zapisz");
             valueColumn.setEditable(true);
         }else{
-            button.setText("Edytuj");
+            actionButton.setText("Edytuj");
             valueColumn.setEditable(false);
         }
     }
@@ -93,9 +93,24 @@ public class VistaEntryViewerController implements VistaContainable {
         if(VistaLogInController.hasOrganizerPermissions()){
             if(editing){
                 //Zapisz
-                ServerData.saveData(table.itemsProperty().getValue(), type);
+                ServerData.saveEntry(table.itemsProperty().getValue(), type);
             }
             setEditing(!editing);
+        }else {
+            Dialogs.error("Niewystarczające uprawnienia.");
+            VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, parent);
+        }
+    }
+
+    @FXML
+    void buttonDelete(ActionEvent event) {
+        if(VistaLogInController.hasOrganizerPermissions()){
+            int id = Integer.valueOf(data.get(0).getValue()); //Integer.valueOf(table.itemsProperty().getValue().get(0).getValue());
+            if( id>=0 ){
+                //Usuń z bazy
+                ServerData.deleteEntry(id, type);
+            }
+            parent.close();
         }else {
             Dialogs.error("Niewystarczające uprawnienia.");
             VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, parent);

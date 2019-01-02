@@ -22,4 +22,8 @@ public class ServertriggeredEvents {
     public static void permissionsChanged(Permission p) {
         VistaLogInController.setPermission(p);
     }
+
+    public static void error(String msg){
+        Dialogs.error(msg, "Błąd po stronie serwera!");
+    }
 }

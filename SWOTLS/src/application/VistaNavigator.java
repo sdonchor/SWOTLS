@@ -18,10 +18,11 @@ public class VistaNavigator {
     public static final String MAIN    = "/application/main.fxml";
     public static final String VISTA_LOGIN = "/application/vistaLogIn.fxml";
     public static final String VISTA_REGISTER = "/application/vistaRegistration.fxml";
-    public static final String VISTA_2 = "/application/vista2.fxml";
     public static final String VISTA_FEDERATION = "/application/vistaFederation.fxml";
     public static final String VISTA_HOLDER = "/application/vistaHolder.fxml";
     public static final String VISTA_ENTRY = "/application/vistaEntryViewer.fxml";
+    public static final String VISTA_COMPETITION_CREATOR = "/application/vistaCompetitionCreator.fxml";
+    public static final String VISTA_COMPETITION = "/application/vistaCompetition.fxml";
 
     /**
      * Loads the vista specified by the fxml file into the

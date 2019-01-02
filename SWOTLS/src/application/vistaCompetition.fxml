@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="vistaEvent" minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VistaFederationController">
+<StackPane fx:id="vistaEvent" minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
       <BorderPane>
          <center>
@@ -21,56 +21,38 @@
                          <children>
                              <Accordion minHeight="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
                                  <panes>
-                                     <TitledPane fx:id="eventsPane" animated="false" minHeight="0.0" minWidth="0.0" text="Wydarzenia">
+                                     <TitledPane fx:id="competitorsPane" animated="false" minHeight="0.0" minWidth="0.0" text="Uczestnicy">
                                          <content>
                                              <AnchorPane minHeight="0.0" minWidth="0.0">
                                                  <children>
-                                                     <ListView fx:id="lvEvents" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                     <ListView fx:id="lvCompetitors" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                  </children>
                                              </AnchorPane>
                                          </content>
                                      </TitledPane>
-                                     <TitledPane fx:id="contestantsPane" animated="false" minHeight="0.0" minWidth="0.0" text="Zawodnicy">
+                                     <TitledPane fx:id="unplannedPane" animated="false" minHeight="0.0" minWidth="0.0" text="Mecze niezaplanowane">
                                          <content>
                                              <AnchorPane minHeight="0.0" minWidth="0.0">
                                                  <children>
-                                                     <ListView fx:id="lvContestants" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                     <ListView fx:id="lvUnplanned" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                  </children>
                                              </AnchorPane>
                                          </content>
                                      </TitledPane>
-                                     <TitledPane fx:id="teamsPane" animated="false" minHeight="0.0" minWidth="0.0" text="Drużyny">
+                                     <TitledPane fx:id="plannedPane" animated="false" minHeight="0.0" minWidth="0.0" text="Mecze zaplanowane">
                                          <content>
                                              <AnchorPane minHeight="0.0" minWidth="0.0">
                                                  <children>
-                                                     <ListView fx:id="lvTeams" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                     <ListView fx:id="lvPlanned" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                  </children>
                                              </AnchorPane>
                                          </content>
                                      </TitledPane>
-                                     <TitledPane fx:id="matchesPane" animated="false" minHeight="0.0" minWidth="0.0" text="Mecze">
+                                     <TitledPane fx:id="finishedPane" animated="false" minHeight="0.0" minWidth="0.0" text="Mecze zakończone">
                                          <content>
                                              <AnchorPane minHeight="0.0" minWidth="0.0">
                                                  <children>
-                                                     <ListView fx:id="lvMatches" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                 </children>
-                                             </AnchorPane>
-                                         </content>
-                                     </TitledPane>
-                                     <TitledPane fx:id="arenasPane" animated="false" minHeight="0.0" minWidth="0.0" text="Areny">
-                                         <content>
-                                             <AnchorPane minHeight="0.0" minWidth="0.0">
-                                                 <children>
-                                                     <ListView fx:id="lvArenas" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                 </children>
-                                             </AnchorPane>
-                                         </content>
-                                     </TitledPane>
-                                     <TitledPane fx:id="usersPane" animated="false" minHeight="0.0" minWidth="0.0" text="Organizatorzy">
-                                         <content>
-                                             <AnchorPane minHeight="0.0" minWidth="0.0">
-                                                 <children>
-                                                     <ListView fx:id="lvUsers" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                     <ListView fx:id="lvFinished" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                  </children>
                                              </AnchorPane>
                                          </content>
@@ -91,7 +73,7 @@
              </SplitPane>
          </center>
           <bottom>
-              <Label fx:id="bottomLabel" maxHeight="17.0" text="Perspektywa federacji" BorderPane.alignment="CENTER" />
+              <Label fx:id="bottomLabel" maxHeight="17.0" text="Perspektywa wydarzenia" BorderPane.alignment="CENTER" />
           </bottom>
       </BorderPane>
     </children>

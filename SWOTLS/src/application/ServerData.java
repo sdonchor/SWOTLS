@@ -284,23 +284,71 @@ public class ServerData {
 	 * @param data Lista wpisów. Wpis posiada atrybut (identyfikuje kolumnę w bazie) i wartość.
 	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
 	 */
-	public static void saveData(ObservableList<Entry> data, String type){
+	public static void saveEntry(ObservableList<Entry> data, String type){
 		System.out.println(type);
 		for(Entry e : data){
 			System.out.println(e.getAttribute() + " " + e.getValue());
 		}
 
 		//TODO wysyłanie do serwera
-		Dialogs.error("Brak połączenia z serwerem.");
+		Dialogs.error("Niezaimplementowana funkcja.");
+		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
+	}
+
+	/**
+	 * Ta funkcja jest wywoływane gdy klient usuwa obiekt. Oczekiwany efekt to usunięcie odpowiedniego wpisu w bazie danych.
+	 * @param id Id wpisu (wiersza, obiektu) do usunięcia.
+	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
+	 */
+	public static void deleteEntry(int id, String type){
+		Dialogs.error("Niezaimplementowana funkcja.", id+" "+type);
+		//TODO wysłanie do serwera żeby usunął podany wpis z bazy danych
+		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
 	}
 
 	public static void logIn(String id, String pw){
 		Dialogs.error("Niezaimplementowana funkcja.", id+" "+pw);
-		ServertriggeredEvents.permissionsChanged(Permission.FULL); //docelowo to ma być wywoływane przez serwer
+		ServertriggeredEvents.permissionsChanged(Permission.FULL); //TODO docelowo to ma być wywoływane przez serwer z odpowiednimi dla zalogowanego konta uprawnieniami
 	}
 
 	public static void register(String id, String pw, Permission perm){
 		Dialogs.error("Niezaimplementowana funkcja.", id+" "+pw+" "+perm);
-		ServertriggeredEvents.dataUpdated(); //dataUpdated() docelowo będzie wywoływane przez serwer
+		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
+	}
+
+	public static void newTournament(String name, String system, String type, String additional){
+		Dialogs.error("Nazwa: " + name + " System: " + system + " Typ: " + type + " Dodatkowe info: " + additional, "Niezaimplementowana funkcja.");
+		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
+	}
+
+	public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){
+		//TODO teraz pobiera wszystkich zawodników, a powinno tylko zapisanych do podanego turnieju
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		for(int i = 0; i<contestants.size();i++)
+		{
+			map.put(contestants.get(i).displayedName(), contestants.get(i).getId());
+		}
+		return map;
+	}
+
+	public static Map<String, Integer> getListOfUnplannedMatches(int competitionId){
+		//TODO powinno pobierać (tylko) niezaplanowane mecze w podanym turnieju
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("2Pesteczka vs Unity Female", 0);
+		return map;
+	}
+
+	public static Map<String, Integer> getListOfPlannedMatches(int competitionId){
+		//TODO powinno pobierać (tylko) zaplanowane mecze w podanym turnieju
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("Smoki vs Wilki 02.02.2019 19:00", 0);
+		return map;
+	}
+
+	public static Map<String, Integer> getListOfFinishedMatches(int competitionId){
+		//TODO powinno pobierać (tylko) zakończone mecze w podanym turnieju
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("PK vs AGH (2:0)", 0);
+		return map;
 	}
 }
