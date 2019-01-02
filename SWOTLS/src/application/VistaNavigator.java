@@ -23,6 +23,7 @@ public class VistaNavigator {
     public static final String VISTA_ENTRY = "/application/vistaEntryViewer.fxml";
     public static final String VISTA_COMPETITION_CREATOR = "/application/vistaCompetitionCreator.fxml";
     public static final String VISTA_COMPETITION = "/application/vistaCompetition.fxml";
+    public static final String VISTA_COMPETITOR_CHOOSER = "/application/vistaCompetitorChooser.fxml";
 
     /**
      * Loads the vista specified by the fxml file into the

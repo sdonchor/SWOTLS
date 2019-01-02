@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
@@ -65,6 +66,12 @@ public class VistaFederationController implements VistaContainable, Refreshable{
     private TitledPane arenasPane;
     @FXML
     private TitledPane usersPane;
+    @FXML
+    private Label bottomLabel;
+
+    public void setBottomLabel(String s){
+        bottomLabel.setText(s);
+    }
 
     private TabController newTab(String title){
         TabController tabCtrl = new TabController(title);

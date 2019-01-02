@@ -57,6 +57,15 @@
                                              </AnchorPane>
                                          </content>
                                      </TitledPane>
+                              <TitledPane fx:id="resultsPane" animated="false" layoutX="10.0" layoutY="85.0" minHeight="0.0" minWidth="0.0" text="Wyniki">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0">
+                                       <children>
+                                          <ListView fx:id="lvResults" layoutX="-1.0" layoutY="-3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </TitledPane>
                                  </panes>
                              </Accordion>
                          </children>

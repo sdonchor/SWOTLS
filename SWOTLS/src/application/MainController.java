@@ -15,8 +15,6 @@ public class MainController extends VistaContainer  {
     /** Holder of a switchable vista. */
     @FXML
     private StackPane vistaHolder;
-    @FXML
-    private Label bottomLabel;
 
     /**
      * Replaces the vista displayed in the vista holder with a new vista.
@@ -32,8 +30,4 @@ public class MainController extends VistaContainer  {
     }
 
     public void close() { Platform.exit(); }
-
-    public void setBottomLabel(String s){
-        bottomLabel.setText(s);
-    }
 }

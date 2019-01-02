@@ -25,13 +25,13 @@
                </VBox.margin>
             </TextField>
             <Label text="System rozgrywek" />
-            <ComboBox fx:id="systemBox" prefWidth="150.0">
+            <ComboBox fx:id="systemBox">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" />
                </VBox.margin>
             </ComboBox>
             <Label layoutX="28.0" layoutY="72.0" text="Typ uczestników" />
-            <ComboBox fx:id="typeBox1" layoutX="15.0" layoutY="127.0" prefWidth="150.0">
+            <ComboBox fx:id="typeBox" layoutX="15.0" layoutY="127.0">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" />
                </VBox.margin>

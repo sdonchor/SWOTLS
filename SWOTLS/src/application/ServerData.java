@@ -324,7 +324,7 @@ public class ServerData {
 	public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){
 		//TODO teraz pobiera wszystkich zawodników, a powinno tylko zapisanych do podanego turnieju
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		for(int i = 0; i<contestants.size();i++)
+		for(int i = 2; i<contestants.size();i++)
 		{
 			map.put(contestants.get(i).displayedName(), contestants.get(i).getId());
 		}
@@ -350,5 +350,20 @@ public class ServerData {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("PK vs AGH (2:0)", 0);
 		return map;
+	}
+
+	public static void addCompetitorToCompetition(int competitorId, int competitionId){
+		//TODO powinno zapisywać zawodnika lub drużynę (w zależnościu od typu podanego turnieju) do wydarzenia
+		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
+	}
+
+	/**
+	 * Przechodzi do następnego etapu podanego turnieju.
+	 * @param competitionId Id turnieju, w którym ma nastąpić przejście do następnego etapu.
+	 */
+	public static void nextStage(int competitionId){
+		//TODO serwer powinien sprawdzić czy można przejść (czy wyniki wszystkich meczy zostały wprowadzone) - jeżeli tak, to ma wygenerować mecze dla następnego etapu lub ogłosić zwycięzcę (lub dokonać awansów i spadków w przypadku ligi) jeżeli to był ostatni etap
+		ServertriggeredEvents.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy."); //TODO taki lub podobny komunikat ma wywoływać serwer jeżeli nie można przejść
+		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer - po przejściu do następnego etapu
 	}
 }

@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
@@ -65,6 +66,8 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             entryViewer.addEntry("Założyciel", u.getLogin() );
         else
             entryViewer.addEntry("Założyciel", "" );
+
+        updateBottomLabel();
     }
 
     @FXML
@@ -85,6 +88,16 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private TitledPane finishedPane;
     @FXML
     private TitledPane competitorsPane;
+    @FXML
+    private Label bottomLabel;
+
+    private void updateBottomLabel()
+    {
+        if(competition.getStage()>0)
+            bottomLabel.setText("Perspektywa wydarzenia: " + competition.getName() + " - Etap " + competition.getStage());
+        else
+            bottomLabel.setText("Perspektywa wydarzenia: " + competition.getName() + " - Zapisy");
+    }
 
     private TabController newTab(String title){
         TabController tabCtrl = new TabController(title);
@@ -92,9 +105,9 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         return tabCtrl;
     }
 
-    private void reloadPane(Map<String, Integer> from, ListView<String> to){
+    private void reloadPane(Map<String, Integer> from, ListView<String> to, String actionString){
         to.getSelectionModel().clearSelection();
-        from.put("** Dodaj **", -1);
+        from.put(actionString, -1);
         ObservableList<String> ols = FXCollections.observableArrayList();
         for (String key : from.keySet()) {
             ols.add(key);
@@ -106,16 +119,16 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     public void refresh(){
         if(competitorsPane.isExpanded()){
             competitors = ServerData.getListOfCompetitionContestants(competition.getId());
-            reloadPane(competitors, lvCompetitors);
+            reloadPane(competitors, lvCompetitors, "** Dodaj **");
         }else if(unplannedPane.isExpanded()){
             unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-            reloadPane(unplanned, lvUnplanned);
+            reloadPane(unplanned, lvUnplanned, "** Następny etap **");
         }else if(plannedPane.isExpanded()){
             planned = ServerData.getListOfPlannedMatches(competition.getId());
-            reloadPane(planned, lvPlanned);
+            reloadPane(planned, lvPlanned, "** Następny etap **");
         }else if(finishedPane.isExpanded()){
             finished = ServerData.getListOfFinishedMatches(competition.getId());
-            reloadPane(finished, lvFinished);
+            reloadPane(finished, lvFinished, "** Następny etap **");
         }
     }
 
@@ -125,7 +138,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(competitorsPane.isExpanded()){
                     competitors = ServerData.getListOfCompetitionContestants(competition.getId());
-                    reloadPane(competitors, lvCompetitors);
+                    reloadPane(competitors, lvCompetitors, "** Dodaj **");
                 }else {
                     lvCompetitors.getSelectionModel().clearSelection();
                 }
@@ -144,7 +157,13 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 Player c;
                 if(id == -1) {
                     //Dodaj
-                    c = new Player(-1, "Jan", "jkowalski", "Kowalski", 1200, "pl", "", "", null);
+                    if(VistaLogInController.hasOrganizerPermissions())
+                        new VistaCompetitorChooserController(newTab("Dodaj uczestników"), competitors, competition);
+                    else{
+                        Dialogs.error("Niewystarczające uprawnienia.");
+                        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, newTab("Zaloguj się"));
+                    }
+                    return;
                 }else
                     c = ServerData.getContestantById(id);
 
@@ -173,7 +192,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(plannedPane.isExpanded()){
                     planned = ServerData.getListOfPlannedMatches(competition.getId());
-                    reloadPane(planned, lvPlanned);
+                    reloadPane(planned, lvPlanned, "** Następny etap **");
                 }else {
                     lvPlanned.getSelectionModel().clearSelection();
                 }
@@ -187,16 +206,16 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(s==null)
                     return;
                 int id = planned.get(s);
-                Match m;
-                if(id == -1) {
-                    //Dodaj
-                    m = new Match(-1, new Team(-1, "Smoki PK", "Kraków", null), new Team(-1, "AGHenci", "Kraków", null), 2, 0, null, new Date(), null);
-                } else
-                    m = ServerData.getMatchById(id);
 
+                if(id == -1) {
+                    //Przejdź
+                    ServerData.nextStage(competition.getId());
+                    return;
+                }
+
+                Match m = ServerData.getMatchById(id);
                 if(m==null)
                     return;
-
                 VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()), "Match");
                 entryViewer.addEntry("Id", String.valueOf(m.getId()) );
                 entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
@@ -227,7 +246,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(unplannedPane.isExpanded()){
                     unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-                    reloadPane(unplanned, lvUnplanned);
+                    reloadPane(unplanned, lvUnplanned, "** Następny etap **");
                 }else {
                     lvUnplanned.getSelectionModel().clearSelection();
                 }
@@ -244,8 +263,9 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
                 Match m;
                 if(id == -1) {
-                    //Dodaj
-                    m = new Match(-1, new Team(-1, "Smoki PK", "Kraków", null), new Team(-1, "AGHenci", "Kraków", null), 2, 0, null, new Date(), null);
+                    //Przejdź
+                    ServerData.nextStage(competition.getId());
+                    return;
                 } else
                     m = ServerData.getMatchById(id);
 
@@ -282,7 +302,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(finishedPane.isExpanded()){
                     finished = ServerData.getListOfFinishedMatches(competition.getId());
-                    reloadPane(finished, lvFinished);
+                    reloadPane(finished, lvFinished, "** Następny etap **");
                 }else {
                     lvFinished.getSelectionModel().clearSelection();
                 }
@@ -298,8 +318,9 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 int id = finished.get(s);
                 Match m;
                 if(id == -1) {
-                    //Dodaj
-                    m = new Match(-1, new Team(-1, "Smoki PK", "Kraków", null), new Team(-1, "AGHenci", "Kraków", null), 2, 0, null, new Date(), null);
+                    //Przejdź
+                    ServerData.nextStage(competition.getId());
+                    return;
                 } else
                     m = ServerData.getMatchById(id);
 

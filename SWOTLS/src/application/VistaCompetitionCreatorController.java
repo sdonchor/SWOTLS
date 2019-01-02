@@ -48,17 +48,18 @@ public class VistaCompetitionCreatorController implements VistaContainable {
                         "Wieloklasowa liga"
                 );
         systemBox.setItems(options);
-        options =
+
+        ObservableList<String> options2 =
                 FXCollections.observableArrayList(
                         "Indywidualny",
                         "Drużynowy"
                 );
-        typeBox.setItems(options);
+        typeBox.setItems(options2);
     }
 
     @FXML
     void submit(ActionEvent event) {
-        if(typeBox.getValue()==null){
+        if(typeBox.getValue()==null || systemBox.getValue()==null){
             Dialogs.error("Wybierz typ turnieju.", "Nie wybrano typu turnieju!");
         }else {
             ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
