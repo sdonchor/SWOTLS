@@ -81,11 +81,12 @@ public class VistaFederationController implements VistaContainable, Refreshable{
 
     private void reloadPane(Map<String, Integer> from, ListView<String> to){
         to.getSelectionModel().clearSelection();
-        from.put("** Dodaj **", -1);
         ObservableList<String> ols = FXCollections.observableArrayList();
+        ols.add("** Dodaj **");
         for (String key : from.keySet()) {
             ols.add(key);
         }
+        from.put("** Dodaj **", -1);
         to.setItems(ols);
     }
 

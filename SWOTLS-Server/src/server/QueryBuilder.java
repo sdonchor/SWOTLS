@@ -61,7 +61,7 @@ public class QueryBuilder {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int contestantInsertion(Contestant contestant) throws SQLException
+	public int contestantInsertion(Player contestant) throws SQLException
 	{
 		
 		String query=null;

@@ -1,6 +1,6 @@
 package server;
 
-public class Contestant {
+public class Player extends Competitor {
 	private String name;
 	private String surname;
 	private String nickname;
@@ -10,7 +10,7 @@ public class Contestant {
 	private String additional_info;
 	private int team_id;
 	
-	public Contestant(String name, String surname, String nickname, int score, String language, String contact_info, String additional_info,int team_id)
+	public Player(String name, String surname, String nickname, int score, String language, String contact_info, String additional_info, int team_id)
 	{
 		this.setName(name);
 		this.setSurname(surname);

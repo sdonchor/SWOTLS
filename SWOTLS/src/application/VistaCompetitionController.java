@@ -91,6 +91,13 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     @FXML
     private Label bottomLabel;
 
+    private void nextSage(){
+        if(unplanned.size()>1&&planned.size()>1)
+            Dialogs.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy.", "Nie można przejść do następnego etapu");
+        else
+            ServerData.nextStage(competition.getId());
+    }
+
     private void updateBottomLabel()
     {
         if(competition.getStage()>0)
@@ -105,17 +112,27 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         return tabCtrl;
     }
 
+    /**
+     * Przepisuje klucze z danej mapy do ListView dodając na jego sczycie dodatkowy wpis określony jako "actionString". (Metoda wywoływana przy rozwijaniu panelu)
+     * @param from Mapa, której klucze zostają przepisane do podanej listy. Dodatkowo doztanie do niej dodany wpis z kluczem "actionString" i wartością -1, co oznacza akcję, którą można wybrać w kontekście listy.
+     * @param to Lista, do której załadować dane. (Przekazujemy listę, której zawartość będzie wyświetlana przez panel)
+     * @param actionString Wpis umieszczony na szczycie listy oznaczający akcję, którą można wybrać w kontekście listy. (np. "** Dodaj **")
+     */
     private void reloadPane(Map<String, Integer> from, ListView<String> to, String actionString){
         to.getSelectionModel().clearSelection();
-        from.put(actionString, -1);
         ObservableList<String> ols = FXCollections.observableArrayList();
+        ols.add(actionString);
         for (String key : from.keySet()) {
             ols.add(key);
         }
+        from.put(actionString, -1);
         to.setItems(ols);
     }
 
     @Override
+    /**
+     * Sprawdza, który panel jest otwarty i przeładowywuje w nim dane.
+     */
     public void refresh(){
         if(competitorsPane.isExpanded()){
             competitors = ServerData.getListOfCompetitionContestants(competition.getId());
@@ -209,7 +226,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
                 if(id == -1) {
                     //Przejdź
-                    ServerData.nextStage(competition.getId());
+                    nextSage();
                     return;
                 }
 
@@ -264,7 +281,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 Match m;
                 if(id == -1) {
                     //Przejdź
-                    ServerData.nextStage(competition.getId());
+                    nextSage();
                     return;
                 } else
                     m = ServerData.getMatchById(id);
@@ -319,7 +336,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 Match m;
                 if(id == -1) {
                     //Przejdź
-                    ServerData.nextStage(competition.getId());
+                    nextSage();
                     return;
                 } else
                     m = ServerData.getMatchById(id);
