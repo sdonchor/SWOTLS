@@ -131,9 +131,13 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
     @Override
     /**
-     * Sprawdza, który panel jest otwarty i przeładowywuje w nim dane.
+     * Odświeża dane turnieju.
      */
     public void refresh(){
+        competition = ServerData.getTournamentById(competition.getId());
+        updateBottomLabel();
+
+        //Sprawdza, który panel jest otwarty i przeładowywuje w nim dane.
         if(competitorsPane.isExpanded()){
             competitors = ServerData.getListOfCompetitionContestants(competition.getId());
             reloadPane(competitors, lvCompetitors, "** Dodaj **");

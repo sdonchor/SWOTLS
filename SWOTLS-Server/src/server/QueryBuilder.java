@@ -70,7 +70,7 @@ public class QueryBuilder {
 		stmt.setString(1,contestant.getName());
 		stmt.setString(2,contestant.getSurname());
 		stmt.setString(3,contestant.getNickname());
-		stmt.setInt(4,contestant.getScore());
+		stmt.setInt(4,contestant.getElo());
 		stmt.setString(5,contestant.getLanguage());
 		stmt.setString(6,contestant.getContact_info());
 		stmt.setString(7,contestant.getAdditional_info());

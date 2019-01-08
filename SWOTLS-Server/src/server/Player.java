@@ -4,18 +4,18 @@ public class Player extends Competitor {
 	private String name;
 	private String surname;
 	private String nickname;
-	private int score;
+	private int elo;
 	private String language;
 	private String contact_info;
 	private String additional_info;
 	private int team_id;
 	
-	public Player(String name, String surname, String nickname, int score, String language, String contact_info, String additional_info, int team_id)
+	public Player(String name, String surname, String nickname, int elo, String language, String contact_info, String additional_info, int team_id)
 	{
 		this.setName(name);
 		this.setSurname(surname);
 		this.setNickname(nickname);
-		this.setScore(score);
+		this.setElo(elo);
 		this.setLanguage(language);
 		this.setContact_info(contact_info);
 		this.setAdditional_info(additional_info);
@@ -46,12 +46,12 @@ public class Player extends Competitor {
 		this.nickname = nickname;
 	}
 
-	public int getScore() {
-		return score;
+	public int getElo() {
+		return elo;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public void setElo(int elo) {
+		this.elo = elo;
 	}
 
 	public String getLanguage() {

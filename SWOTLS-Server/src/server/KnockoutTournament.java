@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public class KnockoutTournament extends Tournament {
 
+    /**
+     * Zakańcza etap zapisów i przechodzi do pierwszego etapu (generuje mecze startowe).
+     */
     public void endEntriesStage(){
         ArrayList<Competitor> competitors = new ArrayList<>(); //TODO pobrać listę uczestników (zawodników albo drużyn)
 
@@ -20,10 +23,24 @@ public class KnockoutTournament extends Tournament {
         //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
     }
 
+    public void saveResult(){ //prawdopodobnie klasa Match jako parametr będzie
+        //TODO Remisy są niedopuszczalne w tym systemie, jeżeli remis to wyślij błąd (ServertriggeredEvents->error(String msg))
+        //TODO Przegranego oznacza jako odpadniętego z turnieju
+        //TODO Zaktualizostać ranking uczestników meczu
+        //EloRatingSystem.updateRating();
+        //TODO Zaktualizować wynik i status uczestnika w turnieju, a następnie wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
+    }
+
+    /**
+     * Zakańcza aktualny erap (generuje raport) i przechodzi do następnego (generuje mecze dla pozostałych w następnym etapie uczestników).
+     */
     public void nextStage(){
         //Uwaga: do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
 
-        //TODO Wylosować nowe pary meczowe tylko spośród graczy którzy jeszcze nie odpadli (wygrali w poprzednim etapie) i utworzyć dla nich mecze oznaczone jako niezaplanowane
-        
+        //TODO Wygenerować prosty raport z listą przegranych (osób które już odpadły) i listą wygranych (osób które jeszcze biorą udział w turnieju)
+        //TODO Wylosować nowe pary meczowe tylko spośród graczy którzy jeszcze nie odpadli (wygrali w poprzednim etapie) i utworzyć dla nich mecze oznaczone jako niezaplanowane (jeżeli został tylko jeden gracz to wysłać komunikat o zwycięzcy).
+        //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
     }
+
+
 }

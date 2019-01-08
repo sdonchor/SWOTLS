@@ -1,4 +1,4 @@
-package application;
+package server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,6 @@ public class Team extends Competitor {
         return players;
     }
 
-    @Override
     public String displayedName() {
         return name;
     }
