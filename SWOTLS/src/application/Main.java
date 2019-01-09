@@ -69,20 +69,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-    	try {
-			ServerConnection sc = new ServerConnection("localhost",4545);
-			ServerData.convertContestants(sc.getTable("contestants"));
-			ServerData.convertTournaments(sc.getTable("tournaments"));
-			ServerData.convertTeams(sc.getTable("teams"));
-			ServerData.convertMatches(sc.getTable("matches"));
-			ServerData.convertArenas(sc.getTable("arenas"));
-			ServerData.convertSysUsrs(sc.getTable("system_users"));
-			sc.socketClose();
-			
-		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	
+    	ServerData.initializeServerConnection();
     	
         launch(args);
         

@@ -5,6 +5,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.effect.PerspectiveTransform;
 
 import javax.sql.rowset.CachedRowSet;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +25,26 @@ public class ServerData {
 	public static ArrayList<Match> matches = new ArrayList<Match>();
 	public static ArrayList<Arena> arenas = new ArrayList<Arena>();
 	public static ArrayList<User> sys_users = new ArrayList<User>();
+	private static ServerConnection sc;
+	private static String currentUser;
+	private static Permission perm;
 
+	public static void initializeServerConnection() {
+		try {
+			sc = new ServerConnection("localhost",4545);
+			ServerData.convertContestants(sc.getTable("contestants"));
+			ServerData.convertTournaments(sc.getTable("tournaments"));
+			ServerData.convertTeams(sc.getTable("teams"));
+			ServerData.convertMatches(sc.getTable("matches"));
+			ServerData.convertArenas(sc.getTable("arenas"));
+			ServerData.convertSysUsrs(sc.getTable("system_users"));
+			sc.socketClose();
+			
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static void convertContestants(CachedRowSet crs) {
 		try {
 			while(crs.next()) {
@@ -301,23 +322,43 @@ public class ServerData {
 	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
 	 */
 	public static void deleteEntry(int id, String type){
-		Dialogs.error("Niezaimplementowana funkcja.", id+" "+type);
-		//TODO wysłanie do serwera żeby usunął podany wpis z bazy danych
+		
+		sc.entryRemoval(id,type);
 		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
 	}
 
 	public static void logIn(String id, String pw){
-		Dialogs.error("Niezaimplementowana funkcja.", id+" "+pw);
+		if(sc.verifyLogin(id,pw))
+		{
+			perm = sc.getCurrentUserPerms();
+			currentUser = sc.getCurrentUserName();
+		}
 		ServertriggeredEvents.permissionsChanged(Permission.FULL); //TODO docelowo to ma być wywoływane przez serwer z odpowiednimi dla zalogowanego konta uprawnieniami
 	}
 
 	public static void register(String id, String pw, Permission perm){
-		Dialogs.error("Niezaimplementowana funkcja.", id+" "+pw+" "+perm);
+		if(sc.getCurrentUserPerms()==Permission.FULL)
+		{
+			if(!sc.createNewUser(id,pw,perm))
+				Dialogs.error("Nie udało się utworzyć użytkownika ", id);
+		}
+		else
+		{
+			Dialogs.error("Brak uprawnień");
+		}
 		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
 	}
 
 	public static void newTournament(String name, String system, String type, String additional){
-		Dialogs.error("Nazwa: " + name + " System: " + system + " Typ: " + type + " Dodatkowe info: " + additional, "Niezaimplementowana funkcja.");
+		if(sc.getCurrentUserPerms()==Permission.ORGANIZER || sc.getCurrentUserPerms()==Permission.FULL)
+		{
+			if(!sc.createNewTournament(name,system,type,additional))
+			{
+				Dialogs.error("Nie udało się utworzyć turnieju");
+			}
+		}
+		else
+			Dialogs.error("Brak uprawnień");
 		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
 	}
 

@@ -69,4 +69,28 @@ public class ServerConnection {
 			e.printStackTrace();
 		}
 	}
+	public boolean entryRemoval(int id, String type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public Permission getCurrentUserPerms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public String getCurrentUserName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public boolean verifyLogin(String id, String pw) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public boolean createNewUser(String id, String pw, Permission perm) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public boolean createNewTournament(String name, String system, String type, String additional) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
