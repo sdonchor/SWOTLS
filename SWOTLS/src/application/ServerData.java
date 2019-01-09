@@ -319,7 +319,10 @@ public class ServerData {
 	/**
 	 * Ta funkcja jest wywoływane gdy klient usuwa obiekt. Oczekiwany efekt to usunięcie odpowiedniego wpisu w bazie danych.
 	 * @param id Id wpisu (wiersza, obiektu) do usunięcia.
-	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
+	 * 
+	 * @param type nazwa tabeli z której należy usunąć rekord (tournaments,matches,contestants,system_users,teams)
+	 * 
+	 * 
 	 */
 	public static boolean deleteEntry(int id, String type){
 		boolean success=false;
