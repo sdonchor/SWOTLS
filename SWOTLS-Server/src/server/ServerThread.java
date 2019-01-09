@@ -35,6 +35,36 @@ public class ServerThread extends Thread{
 					}
 					
 				}
+				if(message.contains("remove-record")){
+					String[] request = message.split(";");
+					String tablename = request[1];
+					int id = Integer.parseInt(request[2]);
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().removeFromTable(tablename,id);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						
+					} catch (SQLException e) {
+						if(e.getMessage().contains("foreign key constraint fails"))
+						{
+							sr.setBoolTypeResponse(false);
+							sr.setStringTypeResponse("fk-check");
+							oos.writeObject(sr);
+						}
+					
+					}
+					oos.close();
+					os.close();
+					
+					
+				}
 			}
 		} catch (IOException e) {
 			System.out.println("Connection lost.");

@@ -115,4 +115,37 @@ public class QueryBuilder {
 		crs.populate(rs);
 		return crs;
 	}//
+	public boolean removeFromTable(String tablename, int id) throws SQLException {
+		String idType;
+		switch(tablename) {
+		case "contestants":
+			idType="contestant_id";
+			break;
+		case "tournaments":
+			idType="tournament_id";
+			break;
+		case "teams":
+			idType="team_id";
+			break;
+		case "arenas":
+			idType="arena_id";
+			break;
+		case "matches":
+			idType="matches_id";
+			break;
+		case "system_users":
+			idType="sys_usr_id";
+			break;
+		default:
+			idType="unrecognized";
+			break;
+		}
+		if(idType.equals("unrecognized")) return false;
+		String query = "DELETE FROM "+tablename+" WHERE "+idType+"="+id;
+		PreparedStatement stmt = connection.prepareStatement(query);
+		int rows = stmt.executeUpdate();
+		if(rows==1) return true;
+		else
+			return false;
+	}
 }

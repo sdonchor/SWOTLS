@@ -321,10 +321,17 @@ public class ServerData {
 	 * @param id Id wpisu (wiersza, obiektu) do usunięcia.
 	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
 	 */
-	public static void deleteEntry(int id, String type){
-		
-		sc.entryRemoval(id,type);
+	public static boolean deleteEntry(int id, String type){
+		boolean success=false;
+		try {
+			success=sc.entryRemoval(id,type);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			success=false;
+			e.printStackTrace();
+		}
 		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
+		return success;
 	}
 
 	public static void logIn(String id, String pw){
@@ -344,7 +351,7 @@ public class ServerData {
 		}
 		else
 		{
-			Dialogs.error("Brak uprawnień");
+			//TODO error: brak uprawnień
 		}
 		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
 	}
@@ -358,7 +365,7 @@ public class ServerData {
 			}
 		}
 		else
-			Dialogs.error("Brak uprawnień");
+			//TODO error: brak uprawnień
 		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
 	}
 

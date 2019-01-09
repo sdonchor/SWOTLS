@@ -1,6 +1,9 @@
 package application;
 
 import javax.sql.rowset.CachedRowSet;
+
+import server.ServerResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -19,8 +22,10 @@ public class ServerConnection {
 		//this.socket=new Socket(address,port);
 	}
 	public void sendServerRequest(String request) throws IOException {
+		socketOpen();
 		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
 		printWriter.println(request);
+		socketClose();
 	}
 	public boolean getNewRequest() {
 		return newRequest;
@@ -69,9 +74,38 @@ public class ServerConnection {
 			e.printStackTrace();
 		}
 	}
-	public boolean entryRemoval(int id, String type) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * Wysyła do serwera prośbę o usunięcie rekordu o podanym id z podanej tabeli
+	 * @param id
+	 * @param type (matches/contestants/tournaments/arenas/teams)
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public boolean entryRemoval(int id, String type) throws IOException, ClassNotFoundException {
+		
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "remove-record;"+type+";"+id;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			if(sr!=null&& sr.getStringTypeResponse()!=null &&sr.getStringTypeResponse().equals("fk-check"))
+			{
+				ServertriggeredEvents.error("Rekord powiązany z innym rekordem. Proszę najpierw usunąć powiązany rekord.");
+				System.out.println("Can't delete entry because of foreign key constraints.");
+			}
+			return false;
+		}
+		
 	}
 	public Permission getCurrentUserPerms() {
 		// TODO Auto-generated method stub
