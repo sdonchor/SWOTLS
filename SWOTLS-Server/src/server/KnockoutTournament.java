@@ -19,6 +19,7 @@ public class KnockoutTournament extends Tournament {
         //TODO Jeżeli nie to albo przerwać i wysłać błąd (ServertriggeredEvents->error(String msg)) albo uzupełnić wirtualnymi zawodnikami "wolny los".
 
         //TODO Wylosować pary meczowe i utworzyć mecze (każdy uczestnik ma tylko jeden mecz w danym etapie) - mecze te mają być oznaczone jako niezaplanowane
+        //TODO Zwiększyć wartość "etap turnieju" z 0 na 1 (0 oznacza zapisy, które właśnie się zakończyły i rozpoczyna się pierwszy etap)
 
         //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
     }
@@ -37,8 +38,9 @@ public class KnockoutTournament extends Tournament {
     public void nextStage(){
         //Uwaga: do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
 
+        //TODO Jeżeli turniej jest już zakończony (etap -1) to przerwać i wysłać komunikat o zwycięzcy
         //TODO Wygenerować prosty raport z listą przegranych (osób które już odpadły) i listą wygranych (osób które jeszcze biorą udział w turnieju)
-        //TODO Wylosować nowe pary meczowe tylko spośród graczy którzy jeszcze nie odpadli (wygrali w poprzednim etapie) i utworzyć dla nich mecze oznaczone jako niezaplanowane (jeżeli został tylko jeden gracz to wysłać komunikat o zwycięzcy).
+        //TODO Wylosować nowe pary meczowe tylko spośród graczy którzy jeszcze nie odpadli (wygrali w poprzednim etapie) i utworzyć dla nich mecze oznaczone jako niezaplanowane (jeżeli został tylko jeden gracz to wysłać komunikat o zwycięzcy i oznaczyć etap turnieju jako -1 czyli zakończony).
         //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
     }
 
