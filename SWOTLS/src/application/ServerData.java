@@ -308,6 +308,8 @@ public class ServerData {
 	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
 	 */
 	public static void saveEntry(ObservableList<Entry> data, String type){
+	    //UWAGA! To chyba jednak nie będzie używane, bo zrobię osobne edytory dla każdego typu danych.
+
 		System.out.println(type);
 		for(Entry e : data){
 			System.out.println(e.getAttribute() + " " + e.getValue());
@@ -315,7 +317,7 @@ public class ServerData {
 
 		//TODO wysyłanie do serwera
 		Dialogs.error("Niezaimplementowana funkcja.");
-		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer
+		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
 	/**
@@ -335,14 +337,14 @@ public class ServerData {
 			success=false;
 			e.printStackTrace();
 		}
-		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer chyba że klient się zatrzymuje i czeka na odpowieź
+		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 		return success;
 	}
 
 	public static void logIn(String id, String pw){
 		if(sc.verifyLogin(id,pw))
 		{
-            ServertriggeredEvents.permissionsChanged(sc.getCurrentUserPerms()); //TODO docelowo to ma być wywoływane przez serwer chyba że zostawiamy tak jak jest
+            ServertriggeredEvents.permissionsChanged(sc.getCurrentUserPerms()); //wywoływane gdy serwer potwierdzi zmianę uprawnień
 			currentUser = sc.getCurrentUserName();
 		}
 	}
@@ -357,7 +359,7 @@ public class ServerData {
 		{
 			Dialogs.insufficientPermissions();
 		}
-		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer chyba że zostawiamy tak jak jest
+		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
 	public static void newTournament(String name, String system, String type, String additional){
@@ -370,7 +372,7 @@ public class ServerData {
 		}
 		else
 			Dialogs.insufficientPermissions();
-		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer chyba że zostawiamy tak jak jest
+		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
     /**
@@ -379,7 +381,17 @@ public class ServerData {
      */
 	public static void newPlayer(String name, String surname, String nickname, String contact, String language, String additional, int teamid){
 	    Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowego gracza
-        ServertriggeredEvents.dataUpdated();
+        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
+    }
+
+    public static void newTeam(String name, String from, int leaderId){
+        Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowej drużyny
+        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
+    }
+
+    public static void newArena(String name, String location){
+        Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowej arena
+        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
 
 	public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){
@@ -415,7 +427,7 @@ public class ServerData {
 
 	public static void addCompetitorToCompetition(int competitorId, int competitionId){
 		//TODO powinno zapisywać zawodnika lub drużynę (w zależnościu od typu podanego turnieju) do wydarzenia
-		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer (chyba ze klient poczeka na serwer zanim dojdzie do tej linijki)
+		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
 	/**
@@ -425,6 +437,7 @@ public class ServerData {
 	public static void nextStage(int competitionId){
 		//TODO serwer powinien sprawdzić czy można przejść (czy wyniki wszystkich meczy zostały wprowadzone) - jeżeli tak, to ma wygenerować mecze dla następnego etapu lub ogłosić zwycięzcę (lub dokonać awansów i spadków w przypadku ligi) jeżeli to był ostatni etap
 		ServertriggeredEvents.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy."); //TODO taki lub podobny komunikat ma wywoływać serwer jeżeli nie można przejść
-		ServertriggeredEvents.dataUpdated(); //TODO dataUpdated() docelowo będzie wywoływane przez serwer - po przejściu do następnego etapu (chyba ze klient poczeka na serwer zanim dojdzie do tej linijki)
+		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
+
 }

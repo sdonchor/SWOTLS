@@ -82,14 +82,16 @@ public class VistaFederationController implements VistaContainable, Refreshable,
         return tabCtrl;
     }
 
-    private void reloadPane(Map<String, Integer> from, ListView<String> to){
+    private void reloadPane(Map<String, Integer> from, ListView<String> to, String actionString){
         to.getSelectionModel().clearSelection();
         ObservableList<String> ols = FXCollections.observableArrayList();
-        ols.add("** Dodaj **");
+        if(actionString!=null)
+            ols.add(actionString);
         for (String key : from.keySet()) {
             ols.add(key);
         }
-        from.put("** Dodaj **", -1);
+        if(actionString!=null)
+            from.put(actionString, -1);
         to.setItems(ols);
     }
 
@@ -97,22 +99,22 @@ public class VistaFederationController implements VistaContainable, Refreshable,
     public void refresh(){
         if(contestantsPane.isExpanded()){
             contestants = ServerData.getListOfAllContestants();
-            reloadPane(contestants, lvContestants);
+            reloadPane(contestants, lvContestants, "** Dodaj **");
         }else if(teamsPane.isExpanded()){
             teams = ServerData.getListOfAllTeams();
-            reloadPane(teams, lvTeams);
+            reloadPane(teams, lvTeams, "** Dodaj **");
         }else if(eventsPane.isExpanded()){
             events = ServerData.getListOfAllTournaments();
-            reloadPane(events, lvEvents);
+            reloadPane(events, lvEvents, "** Dodaj **");
         }else if(matchesPane.isExpanded()){
             matches = ServerData.getListOfAllMatches();
-            reloadPane(matches, lvMatches);
+            reloadPane(matches, lvMatches, null);
         }else if(arenasPane.isExpanded()){
             arenas = ServerData.getListOfAllArenas();
-            reloadPane(arenas, lvArenas);
+            reloadPane(arenas, lvArenas, "** Dodaj **");
         }else if(usersPane.isExpanded()){
             users = ServerData.getListOfAllUsers();
-            reloadPane(users, lvUsers);
+            reloadPane(users, lvUsers, "** Dodaj **");
         }
     }
 
@@ -122,7 +124,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
             public void invalidated(Observable observable) {
                 if(contestantsPane.isExpanded()){
                     contestants = ServerData.getListOfAllContestants();
-                    reloadPane(contestants, lvContestants);
+                    reloadPane(contestants, lvContestants, "** Dodaj **");
                 }else {
                     lvContestants.getSelectionModel().clearSelection();
                 }
@@ -177,7 +179,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
             public void invalidated(Observable observable) {
                 if(teamsPane.isExpanded()){
                     teams = ServerData.getListOfAllTeams();
-                    reloadPane(teams, lvTeams);
+                    reloadPane(teams, lvTeams, "** Dodaj **");
                 }else {
                     lvTeams.getSelectionModel().clearSelection();
                 }
@@ -194,7 +196,14 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 Team t;
                 if(id == -1){
                     //Dodaj
-                    t = new Team(-1, "Smoki PK", "Kraków", null);
+                    if(VistaLogInController.hasOrganizerPermissions()){
+                        new VistaTeamCreatorController(newTab("Dodaj drużynę"));
+                    }else {
+                        Dialogs.insufficientPermissions();
+                    }
+
+                    return;
+                    //t = new Team(-1, "Smoki PK", "Kraków", null);
                 }else
                     t = ServerData.getTeamById(id);
 
@@ -221,7 +230,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
             public void invalidated(Observable observable) {
                 if(eventsPane.isExpanded()){
                     events = ServerData.getListOfAllTournaments();
-                    reloadPane(events, lvEvents);
+                    reloadPane(events, lvEvents, "** Dodaj **");
                 }else {
                     lvEvents.getSelectionModel().clearSelection();
                 }
@@ -241,8 +250,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                     if(VistaLogInController.hasOrganizerPermissions()){
                         new VistaCompetitionCreatorController(newTab("Stwórz turniej"));
                     }else {
-                        Dialogs.error("Niewystarczające uprawnienia.");
-                        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, newTab("Zaloguj się"));
+                        Dialogs.insufficientPermissions();
                     }
                     return;
                     //c = new Competition(-1, "Turniej szachowy", Competition.Type.SOLO, "", null);
@@ -260,7 +268,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
             public void invalidated(Observable observable) {
                 if(matchesPane.isExpanded()){
                     matches = ServerData.getListOfAllMatches();
-                    reloadPane(matches, lvMatches);
+                    reloadPane(matches, lvMatches, null);
                 }else {
                     lvMatches.getSelectionModel().clearSelection();
                 }
@@ -314,7 +322,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
             public void invalidated(Observable observable) {
                 if(arenasPane.isExpanded()){
                     arenas = ServerData.getListOfAllArenas();
-                    reloadPane(arenas, lvArenas);
+                    reloadPane(arenas, lvArenas, "** Dodaj **");
                 }else {
                     lvArenas.getSelectionModel().clearSelection();
                 }
@@ -331,7 +339,14 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 Arena a;
                 if(id == -1) {
                     //Dodaj
-                    a = new Arena(-1, "", "");
+                    if(VistaLogInController.hasOrganizerPermissions()){
+                        new VistaArenaCreatorController(newTab("Dodaj arenę"));
+                    }else {
+                        Dialogs.insufficientPermissions();
+                    }
+
+                    return;
+                    //a = new Arena(-1, "", "");
                 } else
                     a = ServerData.getArenaById(id);
 
@@ -353,7 +368,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
             public void invalidated(Observable observable) {
                 if(usersPane.isExpanded()){
                     users = ServerData.getListOfAllUsers();
-                    reloadPane(users, lvUsers);
+                    reloadPane(users, lvUsers, "** Dodaj **");
                 }else {
                     lvUsers.getSelectionModel().clearSelection();
                 }
@@ -373,8 +388,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                     if(VistaLogInController.hasFullPermissions()){
                         new VistaRegistrationController(newTab("Rejestracja organizatora"));
                     }else {
-                        Dialogs.error("Niewystarczające uprawnienia.");
-                        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, newTab("Zaloguj się"));
+                        Dialogs.insufficientPermissions();
                     }
                     return;
                 }
