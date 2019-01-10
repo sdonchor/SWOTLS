@@ -7,7 +7,7 @@ public class KnockoutTournament extends Tournament {
     /**
      * Zakańcza etap zapisów i przechodzi do pierwszego etapu (generuje mecze startowe).
      */
-    public void endEntriesStage(){
+    public static void endEntriesStage(int tournamentId){
         ArrayList<Competitor> competitors = new ArrayList<>(); //TODO pobrać listę uczestników (zawodników albo drużyn)
 
         // Zasadniczo system pucharowy stosuje się w rozgrywkach, których liczba uczestników jest potęgą
@@ -24,7 +24,11 @@ public class KnockoutTournament extends Tournament {
         //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
     }
 
-    public void saveResult(){ //prawdopodobnie klasa Match jako parametr będzie
+    /**
+     * Zapisuje wynik meczu i oznacza go jako zakończony. Na podstawie wprowadzonego wyniku oblicza uaktualnia ranking i punktację uczestników.
+     * @param matchId Identyfikator meczu w bazie danych.
+     */
+    public static void saveResult(int matchId){ //prawdopodobnie klasa Match jako parametr będzie albo id meczu żeby go z bazy pobrać
         //TODO Remisy są niedopuszczalne w tym systemie, jeżeli remis to wyślij błąd (ServertriggeredEvents->error(String msg))
         //TODO Przegranego oznacza jako odpadniętego z turnieju
         //TODO Zaktualizostać ranking uczestników meczu
@@ -33,9 +37,9 @@ public class KnockoutTournament extends Tournament {
     }
 
     /**
-     * Zakańcza aktualny erap (generuje raport) i przechodzi do następnego (generuje mecze dla pozostałych w następnym etapie uczestników).
+     * Zakańcza aktualny etap (generuje raport) i przechodzi do następnego (generuje mecze dla pozostałych w następnym etapie uczestników).
      */
-    public void nextStage(){
+    public static void nextStage(int tournamentId){
         //Uwaga: do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
 
         //TODO Jeżeli turniej jest już zakończony (etap -1) to przerwać i wysłać komunikat o zwycięzcy
