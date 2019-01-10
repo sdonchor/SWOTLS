@@ -21,6 +21,11 @@ public class Dialogs {
         alert.showAndWait();
     }
 
+    public static void insufficientPermissions(){
+        Dialogs.error("Nie posiadasz wystarczających uprawnień!", "Niewystarczające uprawnienia");
+        MainController.openLogInTab();
+    }
+
     public static ServerConnection connect() {
         Dialog<ServerConnection> dialog = new Dialog<>();
         dialog.setTitle("Połącz");

@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Controller class for the first vista.
  */
-public class VistaFederationController implements VistaContainable, Refreshable{
+public class VistaFederationController implements VistaContainable, Refreshable, TabContainer{
     private Map<String, Integer> contestants;
     private Map<String, Integer> teams;
     private Map<String, Integer> events;
@@ -38,6 +38,8 @@ public class VistaFederationController implements VistaContainable, Refreshable{
         lvContestants.setItems(ols);
 
         ServertriggeredEvents.addDataUpdateListener(this);
+
+        MainController.setTabContainer(this);
     }
 
     @FXML
@@ -73,7 +75,8 @@ public class VistaFederationController implements VistaContainable, Refreshable{
         bottomLabel.setText(s);
     }
 
-    private TabController newTab(String title){
+    @Override
+    public TabController newTab(String title){
         TabController tabCtrl = new TabController(title);
         tbpane.getTabs().add(tabCtrl.getTab());
         return tabCtrl;
@@ -138,7 +141,14 @@ public class VistaFederationController implements VistaContainable, Refreshable{
                 Player c;
                 if(id == -1) {
                     //Dodaj
-                    c = new Player(-1, "Jan", "jkowalski", "Kowalski", 1200, "pl", "", "", null);
+                    if(VistaLogInController.hasOrganizerPermissions()){
+                        new VistaPlayerCreatorController(newTab("Dodaj zawodnika"));
+                    }else {
+                        Dialogs.insufficientPermissions();
+                    }
+
+                    //c = new Player(-1, "Jan", "jkowalski", "Kowalski", 1200, "pl", "", "", null);
+                    return;
                 }else
                     c = ServerData.getContestantById(id);
 

@@ -2,7 +2,7 @@ package application;
 
 import javax.sql.rowset.CachedRowSet;
 
-import server.ServerResponse;
+import server.ServerResponse2;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,7 +91,7 @@ public class ServerConnection {
 		
 		InputStream is = socket.getInputStream();
 		ObjectInputStream ois = new ObjectInputStream(is);
-		ServerResponse sr = (ServerResponse)ois.readObject();
+		ServerResponse2 sr = (ServerResponse2)ois.readObject();
 		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
 		{
 			return true;

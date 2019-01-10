@@ -42,7 +42,7 @@ public class ServerThread extends Thread{
 					
 					OutputStream os = socket.getOutputStream();
 					ObjectOutputStream oos = new ObjectOutputStream(os);
-					ServerResponse sr = new ServerResponse();
+					ServerResponse2 sr = new ServerResponse2();
 					sr.setResponseType("boolean");
 					
 					boolean success;

@@ -15,12 +15,13 @@ import javafx.scene.control.TitledPane;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Controller class for the first vista.
  */
-public class VistaCompetitionController implements VistaContainable, Refreshable{
+public class VistaCompetitionController implements VistaContainable, Refreshable, TabContainer{
     private VistaContainer parent;
     private Competition competition;
 
@@ -40,8 +41,8 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     }
 
     private Map<String, Integer> competitors;
-    private Map<String, Integer> unplanned;
-    private Map<String, Integer> planned;
+    private Map<String, Integer> unplanned = new HashMap<>();
+    private Map<String, Integer> planned = new HashMap<>();
     private Map<String, Integer> finished;
     @Override
     public void setParent(VistaContainer parent) {
@@ -68,6 +69,8 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             entryViewer.addEntry("Założyciel", "" );
 
         updateBottomLabel();
+
+        MainController.setTabContainer(this);
     }
 
     @FXML
@@ -106,7 +109,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             bottomLabel.setText("Perspektywa wydarzenia: " + competition.getName() + " - Zapisy");
     }
 
-    private TabController newTab(String title){
+    public TabController newTab(String title){
         TabController tabCtrl = new TabController(title);
         tbpane.getTabs().add(tabCtrl.getTab());
         return tabCtrl;

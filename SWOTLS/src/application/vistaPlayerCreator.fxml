@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?scenebuilder-stylesheet vista.css?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="vista1" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <children>
+        <Label text="Imię" />
+        <TextField fx:id="nameField" alignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin></TextField>
+            <Label text="Nazwisko" />
+            <TextField fx:id="surnameField" alignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Pseudonim" />
+            <TextField fx:id="nicknameField" alignment="CENTER" layoutX="15.0" layoutY="74.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
+            </TextField>
+            <Label layoutX="30.0" layoutY="104.0" text="Język" />
+            <TextField fx:id="languageField" alignment="CENTER" layoutX="15.0" layoutY="121.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
+            </TextField>
+            <Label layoutX="46.0" layoutY="151.0" text="Informacje kontaktowe" />
+            <TextField fx:id="contactField" alignment="CENTER" layoutX="15.0" layoutY="168.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
+            </TextField>
+            <Label layoutX="10.0" layoutY="198.0" text="Informacje dodatkowe" />
+            <TextField fx:id="additionalField" alignment="CENTER" layoutX="15.0" layoutY="215.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Drużyna" />
+            <ComboBox fx:id="teamBox">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
+            </ComboBox>
+        <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" text="Stwórz">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin></Button>
+      </children>
+    </VBox>
+  </children>
+</StackPane>

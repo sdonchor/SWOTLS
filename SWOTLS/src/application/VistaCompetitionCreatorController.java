@@ -62,6 +62,11 @@ public class VistaCompetitionCreatorController implements VistaContainable {
         if(typeBox.getValue()==null || systemBox.getValue()==null){
             Dialogs.error("Wybierz typ turnieju.", "Nie wybrano typu turnieju!");
         }else {
+            if(!VistaLogInController.hasOrganizerPermissions()){
+                Dialogs.insufficientPermissions();
+                return;
+            }
+
             ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
             parent.close();
         }

@@ -15,9 +15,9 @@
         <menus>
             <Menu mnemonicParsing="false" text="Przejdź do">
                 <items>
-                    <MenuItem fx:id="menuLogIn" mnemonicParsing="false" onAction="#closeAppAction" text="Logowanie" />
-                  <MenuItem fx:id="menuFederation" mnemonicParsing="false" onAction="#closeAppAction" text="Widok federacji" />
-                  <MenuItem fx:id="menuTimetable" mnemonicParsing="false" onAction="#closeAppAction" text="Terminarz" />
+                    <MenuItem fx:id="menuLogIn" mnemonicParsing="false" onAction="#openLogInTab" text="Logowanie" />
+                  <MenuItem fx:id="menuFederation" mnemonicParsing="false" onAction="#goToFederationView" text="Widok federacji" />
+                  <MenuItem fx:id="menuTimetable" mnemonicParsing="false" onAction="#openTimetable" text="Terminarz" />
                   <MenuItem fx:id="menuClose" mnemonicParsing="false" onAction="#closeAppAction" text="Zamknij" />
                 </items>
             </Menu>
