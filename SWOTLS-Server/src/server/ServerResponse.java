@@ -2,7 +2,7 @@ package server;
 
 import java.io.Serializable;
 
-public class ServerResponse2 implements Serializable{
+public class ServerResponse implements Serializable{
 	private static final long serialVersionUID = 1865829841529993145L;
 	private String responseType="";
 	private boolean boolTypeResponse=false;;
