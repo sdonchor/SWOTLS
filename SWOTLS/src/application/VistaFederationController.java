@@ -263,38 +263,10 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 if(s==null)
                     return;
                 int id = matches.get(s);
-                Match m;
-                if(id == -1) {
-                    //Dodaj
-                    m = new Match(-1, new Team(-1, "Smoki PK", "Kraków", null), new Team(-1, "AGHenci", "Kraków", null), 2, 0, null, new Date(), null);
-                } else
-                    m = ServerData.getMatchById(id);
-
+                Match m = ServerData.getMatchById(id);
                 if(m==null)
                     return;
-
-                VistaEntryViewerController entryViewer = new VistaMatchViewerController(newTab(m.toString()));
-                entryViewer.addEntry("Id", String.valueOf(m.getId()) );
-                entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
-                entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
-                entryViewer.addEntry("Wynik A", String.valueOf(m.getScoreA()) );
-                entryViewer.addEntry("Wynik B", String.valueOf(m.getScoreB()) );
-                entryViewer.addEntry("Data", String.valueOf(m.getDate()) );
-
-                Competition c = m.getCompetition();
-                if(c!=null)
-                    entryViewer.addEntry("Wydarzenie", c.getName() );
-                else
-                    entryViewer.addEntry("Wydarzenie", "" );
-
-                Arena a = m.getArena();
-                if(a!=null)
-                    entryViewer.addEntry("Arena", a.getName() );
-                else
-                    entryViewer.addEntry("Arena", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaMatchViewerController(newTab(m.toString()), m);
             }
         });
 

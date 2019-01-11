@@ -3,6 +3,8 @@ package application;
 import javax.sql.rowset.CachedRowSet;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -365,14 +367,34 @@ public class ServerData {
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
-	public static void newTournament(String name, String system, String type, String additional, int operatorId){
+	public static void newTournament(String name, String system, String type, String additional){
+	    int iSystem = 0;
+	    if(system.equals("Pucharowy"))
+	        iSystem = 1;
+	    else if(system.equals("Szwajcarski"))
+	        iSystem = 2;
+	    else if(system.equals("Kołowy"))
+	        iSystem = 3;
+        else if(system.equals("McMahona"))
+            iSystem = 4;
+        else if(system.equals("Wieloklasowa liga"))
+            iSystem = 5;
+
+        int operatorId = 0; //TODO weź Id gościa, który już jest zalogowany - skoro on tworzy turniej to niech on będzie operatorem
+
 		if(sc.getCurrentUserPerms()==Permission.ORGANIZER || sc.getCurrentUserPerms()==Permission.FULL)
 		{
-			if(!sc.createNewTournament(name,system,type,additional,operatorId))
-			{
-				Dialogs.error("Nie udało się utworzyć turnieju");
-			}
-		}
+            try {
+                if(!sc.createNewTournament(name,iSystem,type,additional,operatorId))
+                {
+                    Dialogs.error("Nie udało się utworzyć turnieju");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 		else
 			Dialogs.insufficientPermissions();
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
@@ -430,6 +452,12 @@ public class ServerData {
         new VistaArenaViewerController(MainController.newTab(arena.getName()), arena);
     }
 
+    public static void planMatch(int matchId, LocalDateTime localDate, int arenaId){
+        Date date = Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant()); //konwersja z LocalDateTime do Date
+        //TODO ustawienie daty meczu i areny (oznaczenie jako zaplanowany - czyli ma podaną datę, ale jeszcze nie wprowadzony wynik)
+        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy operację
+    }
+
     /**
      * Pobriera listę uczestników danego turnieju.
      * @param competitionId Id turnieju, z którego pobrać uczestników (zawodników lub drużyn, w zależności od typu turnieju).
@@ -446,28 +474,28 @@ public class ServerData {
 	}
 
 	public static Map<String, Integer> getListOfUnplannedMatches(int competitionId){
-		//TODO powinno pobierać (tylko) niezaplanowane mecze w podanym turnieju
+		//TODO powinno pobierać (tylko) niezaplanowane mecze w podanym turnieju (czyli takie które nie mają podanej daty ani wyniku)
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("2Pesteczka vs Unity Female", 0);
 		return map;
 	}
 
     public static Map<String, Integer> getListOfAllPlannedMatches(){
-        //TODO powinno pobierać (tylko) zaplanowane mecze ze wszystkich turniejów
+        //TODO powinno pobierać (tylko) zaplanowane mecze ze wszystkich turniejów (czyli takie które mają datę, a nie mają wyniku)
         Map<String, Integer> map = new HashMap<String, Integer>();
         map = getListOfAllMatches(); //Dla testów tymczasowo pobieram wszystkie mecze - domyślnie powinno pobierać tylko zaplanowane niezakończone.
         return map;
     }
 
 	public static Map<String, Integer> getListOfPlannedMatches(int competitionId){
-		//TODO powinno pobierać (tylko) zaplanowane mecze w podanym turnieju
+		//TODO powinno pobierać (tylko) zaplanowane mecze w podanym turnieju (czyli takie które mają datę, a nie mają wyniku)
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("Smoki vs Wilki 02.02.2019 19:00", 0);
 		return map;
 	}
 
 	public static Map<String, Integer> getListOfFinishedMatches(int competitionId){
-		//TODO powinno pobierać (tylko) zakończone mecze w podanym turnieju
+		//TODO powinno pobierać (tylko) zakończone mecze w podanym turnieju (mają datę i wynik)
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("PK vs AGH (2:0)", 0);
 		return map;
