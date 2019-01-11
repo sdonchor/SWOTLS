@@ -8,11 +8,11 @@ public class SystemUser {
 	private String login;
 	private String pw_hash;
 	private String permissions;
-	public SystemUser(String login, String pw_hash)
+	public SystemUser(String login, String pw_hash, String permissions)
 	{
 		this.login=login;
 		this.pw_hash=pw_hash;
-		//this.permissions=permissions;
+		this.permissions=permissions;
 	}
 	public String getLogin() {
 		return login;

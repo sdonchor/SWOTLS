@@ -115,7 +115,7 @@ public class ServerConnection {
 		return null;
 	}
 	public boolean verifyLogin(String id, String pw) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 	public boolean createNewUser(String id, String pw, Permission perm) throws IOException, ClassNotFoundException {
@@ -137,8 +137,22 @@ public class ServerConnection {
 			return false;
 		}
 	}
-	public boolean createNewTournament(String name, String system, String type, String additional) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean createNewTournament(String name, int system, String type, String additional,int operator) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "create-tournament;"+name+";"+system+";"+type+";"+additional+";"+operator;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

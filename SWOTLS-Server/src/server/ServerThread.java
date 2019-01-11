@@ -7,6 +7,7 @@ import java.sql.SQLException;
 //
 public class ServerThread extends Thread{
 	private Socket socket;
+	private SystemUser currentUser = null;
 	DatabaseHandler dbH=null;
 	public ServerThread(Socket socket,DatabaseHandler dbH) {
 		this.dbH=dbH;
@@ -50,7 +51,6 @@ public class ServerThread extends Thread{
 						success = dbH.getQueryBuilder().removeFromTable(tablename,id);
 						sr.setBoolTypeResponse(success);
 						oos.writeObject(sr);
-						
 					} catch (SQLException e) {
 						if(e.getMessage().contains("foreign key constraint fails"))
 						{
@@ -58,12 +58,38 @@ public class ServerThread extends Thread{
 							sr.setStringTypeResponse("fk-check");
 							oos.writeObject(sr);
 						}
-					
 					}
 					oos.close();
 					os.close();
+				}
+				if(message.contains("create-tournament")){
+					String[] request = message.split(";");
+					String name = request[1];
+					String system = request[2];
+					String type = request[3];
+					String additional = request[4];
+					int operator = Integer.parseInt(request[5]);
 					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
 					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().createTournament(name,system,type,additional,operator);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+					} catch (SQLException e) {
+						if(e.getMessage().contains("foreign key constraint fails"))
+						{
+							sr.setBoolTypeResponse(false);
+							sr.setStringTypeResponse("fk-check");
+							oos.writeObject(sr);
+						}
+					}
+					oos.close();
+					os.close();
 				}
 			}
 		} catch (IOException e) {

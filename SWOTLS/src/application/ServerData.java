@@ -365,10 +365,10 @@ public class ServerData {
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
-	public static void newTournament(String name, String system, String type, String additional){
+	public static void newTournament(String name, String system, String type, String additional, int operatorId){
 		if(sc.getCurrentUserPerms()==Permission.ORGANIZER || sc.getCurrentUserPerms()==Permission.FULL)
 		{
-			if(!sc.createNewTournament(name,system,type,additional))
+			if(!sc.createNewTournament(name,system,type,additional,operatorId))
 			{
 				Dialogs.error("Nie udało się utworzyć turnieju");
 			}
