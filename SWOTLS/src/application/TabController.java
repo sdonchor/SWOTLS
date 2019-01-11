@@ -30,7 +30,6 @@ public class TabController extends VistaContainer {
             e.printStackTrace();
         }
         this.tab = new Tab(tabName, node);
-        //VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, this);
     }
 
     public Tab getTab() {

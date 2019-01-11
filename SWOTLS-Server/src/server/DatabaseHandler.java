@@ -1,10 +1,11 @@
 package server;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class DatabaseHandler {
 	private Connection connect = null;

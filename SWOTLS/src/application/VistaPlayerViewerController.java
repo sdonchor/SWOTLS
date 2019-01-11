@@ -6,8 +6,8 @@ import javafx.fxml.FXML;
 public class VistaPlayerViewerController extends VistaEntryViewerController {
     private Player player;
 
-    public VistaPlayerViewerController(VistaContainer parent, String type, Player player){
-        super(parent, type);
+    public VistaPlayerViewerController(VistaContainer parent, Player player){
+        super(parent);
         this.player = player;
         addEntry("Id", String.valueOf(player.getId()) );
         addEntry("Imię", player.getName() );
@@ -31,6 +31,17 @@ public class VistaPlayerViewerController extends VistaEntryViewerController {
         }else {
             Dialogs.insufficientPermissions();
         }
+    }
+
+    @FXML
+    private void buttonDelete(ActionEvent event) {
+        if(!VistaLogInController.hasOrganizerPermissions()){
+            Dialogs.insufficientPermissions();
+            return;
+        }
+
+        ServerData.deletePlayer(player.getId());
+        getParent().close();
     }
 
 }

@@ -1,14 +1,6 @@
 package application;
 
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.effect.PerspectiveTransform;
-
 import javax.sql.rowset.CachedRowSet;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -303,30 +295,9 @@ public class ServerData {
     }
 
 	/**
-	 * Ta funkcja jest wywoływana gdy klient dodaje nowy obiekt lub edytuje istniejący. Oczekiwany efekt to zapisane tego w bazie danych.
-	 * @param data Lista wpisów. Wpis posiada atrybut (identyfikuje kolumnę w bazie) i wartość.
-	 * @param type Określa typ danych - czy jest to Arena, Competition, Competitor, Match, Player, Team, User. (identyfikuje encję w bazie)
-	 */
-	public static void saveEntry(ObservableList<Entry> data, String type){
-	    //UWAGA! To chyba jednak nie będzie używane, bo zrobię osobne edytory dla każdego typu danych.
-
-		System.out.println(type);
-		for(Entry e : data){
-			System.out.println(e.getAttribute() + " " + e.getValue());
-		}
-
-		//TODO wysyłanie do serwera
-		Dialogs.error("Niezaimplementowana funkcja.");
-		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
-	}
-
-	/**
 	 * Ta funkcja jest wywoływane gdy klient usuwa obiekt. Oczekiwany efekt to usunięcie odpowiedniego wpisu w bazie danych.
 	 * @param id Id wpisu (wiersza, obiektu) do usunięcia.
-	 * 
-	 * @param type nazwa tabeli z której należy usunąć rekord (tournaments,matches,contestants,system_users,teams)
-	 * 
-	 * 
+	 * @param type nazwa tabeli z której należy usunąć rekord (tournaments,matches,contestants,system_users,teams,arenas)
 	 */
 	public static boolean deleteEntry(int id, String type){
 		boolean success=false;
@@ -340,6 +311,30 @@ public class ServerData {
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 		return success;
 	}
+
+	public static void deleteTournament(int tournamentId){
+	    deleteEntry(tournamentId, "tournaments");
+    }
+
+    public static void deleteMatch(int matchId){
+        deleteEntry(matchId, "matches");
+    }
+
+    public static void deletePlayer(int playerId){
+        deleteEntry(playerId, "contestants");
+    }
+
+    public static void deleteUser(int userId){
+        deleteEntry(userId, "system_users");
+    }
+
+    public static void deleteTeam(int teamId){
+	    deleteEntry(teamId, "teams");
+    }
+
+    public static void deleteArena(int arenaId){
+        deleteEntry(arenaId, "arenas");
+    }
 
 	public static void logIn(String id, String pw){
 		if(sc.verifyLogin(id,pw))
@@ -403,7 +398,10 @@ public class ServerData {
      */
     public static void editPlayer(int playerId, String name, String surname, String nickname, String contact, String language, String additional, int teamid){
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja zawodnika
-        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy edycję
+
+        //Poniższe wywoływane gdy serwer zakończy edycję
+        Player player = getContestantById(playerId);
+        new VistaPlayerViewerController(MainController.newTab(player.getName()), player);
     }
 
     public static void newTeam(String name, String from, int leaderId){
@@ -413,7 +411,10 @@ public class ServerData {
 
     public static void editTeam(int teamId, String name, String from, int leaderId){
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja drużyny
-        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy edycję
+
+        //Poniższe wywoływane gdy serwer zakończy edycję
+        Team team = getTeamById(teamId);
+        new VistaTeamViewerController(MainController.newTab(team.getName()), team);
     }
 
     public static void newArena(String name, String location){
@@ -423,10 +424,18 @@ public class ServerData {
 
     public static void editArena(int arenaId, String name, String location){
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja areny
-        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy edycję
+
+        //Poniższe wywoływane gdy serwer zakończy edycję
+        Arena arena = getArenaById(arenaId);
+        new VistaArenaViewerController(MainController.newTab(arena.getName()), arena);
     }
 
-	public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){
+    /**
+     * Pobriera listę uczestników danego turnieju.
+     * @param competitionId Id turnieju, z którego pobrać uczestników (zawodników lub drużyn, w zależności od typu turnieju).
+     * @return Mapa zawierająca jako klucz nazwę nazwodnika, a jako wartość jego id. (analogicznie inne tego typu metody)
+     */
+    public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){
 		//TODO teraz pobiera wszystkich zawodników, a powinno tylko zapisanych do podanego turnieju
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		for(int i = 2; i<contestants.size();i++)
@@ -443,6 +452,13 @@ public class ServerData {
 		return map;
 	}
 
+    public static Map<String, Integer> getListOfAllPlannedMatches(){
+        //TODO powinno pobierać (tylko) zaplanowane mecze ze wszystkich turniejów
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map = getListOfAllMatches(); //Dla testów tymczasowo pobieram wszystkie mecze - domyślnie powinno pobierać tylko zaplanowane niezakończone.
+        return map;
+    }
+
 	public static Map<String, Integer> getListOfPlannedMatches(int competitionId){
 		//TODO powinno pobierać (tylko) zaplanowane mecze w podanym turnieju
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -456,6 +472,19 @@ public class ServerData {
 		map.put("PK vs AGH (2:0)", 0);
 		return map;
 	}
+
+    public static Map<String, Integer> getListOfReports(int competitionId){
+        //TODO powinno pobierać listę
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map.put("PK vs AGH (2:0)", 0);
+        return map;
+    }
+
+    public static String getReportById(int reportId){
+        //TODO powinno zwracać raport o podanym id w formie Stringa
+        String s = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla mattis blandit velit, sed elementum.";
+        return s;
+    }
 
 	public static void addCompetitorToCompetition(int competitorId, int competitionId){
 		//TODO powinno zapisywać zawodnika lub drużynę (w zależnościu od typu podanego turnieju) do wydarzenia

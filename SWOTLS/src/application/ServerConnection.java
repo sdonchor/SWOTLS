@@ -1,10 +1,8 @@
 package application;
 
-import javax.sql.rowset.CachedRowSet;
-
 import server.ServerResponse;
 
-
+import javax.sql.rowset.CachedRowSet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;

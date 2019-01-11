@@ -6,8 +6,8 @@ import javafx.fxml.FXML;
 public class VistaArenaViewerController extends VistaEntryViewerController {
     private Arena arena;
 
-    public VistaArenaViewerController(VistaContainer parent, String type, Arena a){
-        super(parent, type);
+    public VistaArenaViewerController(VistaContainer parent, Arena a){
+        super(parent);
         this.arena = a;
         addEntry("Id", String.valueOf(a.getId()) );
         addEntry("Nazwa", a.getName() );
@@ -21,6 +21,17 @@ public class VistaArenaViewerController extends VistaEntryViewerController {
         }else {
             Dialogs.insufficientPermissions();
         }
+    }
+
+    @FXML
+    private void buttonDelete(ActionEvent event) {
+        if(!VistaLogInController.hasOrganizerPermissions()){
+            Dialogs.insufficientPermissions();
+            return;
+        }
+
+        ServerData.deleteArena(arena.getId());
+        getParent().close();
     }
 
 }

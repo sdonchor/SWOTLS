@@ -4,11 +4,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Main controller class for the entire layout.
@@ -33,7 +31,12 @@ public class MainController extends VistaContainer  {
     }
 
     public static void setTabContainer(TabContainer toSet) {
+        ServertriggeredEvents.clearDataUpdateListeners();
         tabContainer = toSet;
+    }
+
+    public static TabController newTab(String title){
+        return tabContainer.newTab(title);
     }
 
     public static void openLogInTab(){
@@ -47,7 +50,12 @@ public class MainController extends VistaContainer  {
 
     @FXML
     private void openTimetable(ActionEvent event){
-        //TODO VistaNavigator.loadVista(VistaNavigator.TIMETABLE, tabContainer.newTab("Terminarz"));
+        String s = "Wszystkie niezakończone, ale zaplanowane mecze w federacji:\n";
+        Map<String, Integer> matches = ServerData.getListOfAllPlannedMatches();
+        for(String match : matches.keySet()){
+            s += match + "\n";
+        }
+        new VistaReportViewerController(tabContainer.newTab("Terminarz"), s);
     }
 
     @FXML

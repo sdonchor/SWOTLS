@@ -49,9 +49,8 @@ public class VistaFederationController implements VistaContainable, Refreshable,
         ObservableList<String> ols = FXCollections.observableArrayList();
         lvContestants.setItems(ols);
 
-        ServertriggeredEvents.addDataUpdateListener(this);
-
         MainController.setTabContainer(this);
+        ServertriggeredEvents.addDataUpdateListener(this);
     }
 
     @FXML
@@ -166,7 +165,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 Player p = ServerData.getContestantById(id);
                 if(p==null)
                     return;
-                new VistaPlayerViewerController(newTab("Profil - " + p.displayedName()), "Contestant", p);
+                new VistaPlayerViewerController(newTab("Profil - " + p.displayedName()), p);
             }
         });
 
@@ -203,7 +202,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 Team t = ServerData.getTeamById(id);
                 if(t==null)
                     return;
-                new VistaTeamViewerController(newTab("Drużyna - " + t.displayedName()), "Team", t);
+                new VistaTeamViewerController(newTab("Drużyna - " + t.displayedName()), t);
             }
         });
 
@@ -274,7 +273,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 if(m==null)
                     return;
 
-                VistaEntryViewerController entryViewer = new VistaMatchViewerController(newTab(m.toString()), "Match");
+                VistaEntryViewerController entryViewer = new VistaMatchViewerController(newTab(m.toString()));
                 entryViewer.addEntry("Id", String.valueOf(m.getId()) );
                 entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
                 entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
@@ -332,7 +331,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 Arena a = ServerData.getArenaById(id);
                 if(a==null)
                     return;
-                new VistaArenaViewerController(newTab("Arena - " + a.getName()), "Arena", a);
+                new VistaArenaViewerController(newTab("Arena - " + a.getName()), a);
             }
         });
 

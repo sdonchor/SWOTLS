@@ -14,7 +14,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +33,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private Map<String, Integer> unplanned = new HashMap<>();
     private Map<String, Integer> planned = new HashMap<>();
     private Map<String, Integer> finished;
+    private Map<String, Integer> reports;
     @Override
     public void init(VistaContainer parent){
         this.parent = parent;
@@ -50,9 +50,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         ObservableList<String> ols = FXCollections.observableArrayList();
         lvCompetitors.setItems(ols);
 
-        ServertriggeredEvents.addDataUpdateListener(this);
-
-        VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Wydarzenie - " + competition.getName()), "Competition");
+        VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Wydarzenie - " + competition.getName()));
         entryViewer.addEntry("Id", String.valueOf(competition.getId()) );
         entryViewer.addEntry("Nazwa", competition.getName() );
         entryViewer.addEntry("Typ", competition.getType().toString() );
@@ -66,6 +64,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         updateBottomLabel();
 
         MainController.setTabContainer(this);
+        ServertriggeredEvents.addDataUpdateListener(this);
     }
 
     @FXML
@@ -77,6 +76,8 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     @FXML
     private ListView<String> lvCompetitors;
     @FXML
+    private ListView<String> lvResults;
+    @FXML
     private TabPane tbpane;
     @FXML
     private TitledPane plannedPane;
@@ -86,6 +87,8 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private TitledPane finishedPane;
     @FXML
     private TitledPane competitorsPane;
+    @FXML
+    private TitledPane resultsPane;
     @FXML
     private Label bottomLabel;
 
@@ -185,7 +188,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 }else
                     c = ServerData.getContestantById(id);
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Profil - " + c.displayedName()), "Contestant");
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Profil - " + c.displayedName()));
                 entryViewer.addEntry("Id", String.valueOf(c.getId()) );
                 entryViewer.addEntry("Imię", c.getName() );
                 entryViewer.addEntry("Nazwisko", c.getSurname() );
@@ -234,7 +237,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 Match m = ServerData.getMatchById(id);
                 if(m==null)
                     return;
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()), "Match");
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()));
                 entryViewer.addEntry("Id", String.valueOf(m.getId()) );
                 entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
                 entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
@@ -290,7 +293,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(m==null)
                     return;
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()), "Match");
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()));
                 entryViewer.addEntry("Id", String.valueOf(m.getId()) );
                 entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
                 entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
@@ -345,7 +348,62 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(m==null)
                     return;
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()), "Match");
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()));
+                entryViewer.addEntry("Id", String.valueOf(m.getId()) );
+                entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
+                entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
+                entryViewer.addEntry("Wynik A", String.valueOf(m.getScoreA()) );
+                entryViewer.addEntry("Wynik B", String.valueOf(m.getScoreB()) );
+                entryViewer.addEntry("Data", String.valueOf(m.getDate()) );
+
+                Competition c = m.getCompetition();
+                if(c!=null)
+                    entryViewer.addEntry("Wydarzenie", c.getName() );
+                else
+                    entryViewer.addEntry("Wydarzenie", "" );
+
+                Arena a = m.getArena();
+                if(a!=null)
+                    entryViewer.addEntry("Arena", a.getName() );
+                else
+                    entryViewer.addEntry("Arena", "" );
+
+                if(id == -1)
+                    entryViewer.setEditing(true);
+            }
+        });
+
+        resultsPane.expandedProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                if(resultsPane.isExpanded()){
+                    reports = ServerData.getListOfReports(competition.getId());
+                    reloadPane(reports, lvResults, "** Następny etap **");
+                }else {
+                    lvFinished.getSelectionModel().clearSelection();
+                }
+            }
+        });
+
+        lvFinished.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String s = lvFinished.getSelectionModel().getSelectedItem();
+                if(s==null)
+                    return;
+                int id = finished.get(s);
+                Match m;
+                if(id == -1) {
+                    //Przejdź
+                    nextSage();
+                    return;
+                } else
+                    m = ServerData.getMatchById(id);
+
+                if(m==null)
+                    return;
+
+                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()));
                 entryViewer.addEntry("Id", String.valueOf(m.getId()) );
                 entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
                 entryViewer.addEntry("Strona B", m.getSideB().displayedName() );

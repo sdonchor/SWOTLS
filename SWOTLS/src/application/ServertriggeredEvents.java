@@ -13,6 +13,12 @@ public class ServertriggeredEvents {
     public static void addDataUpdateListener(Refreshable toAdd) {
         dataUpdateListeners.add(toAdd);
     }
+    public static void removeDataUpdateListener(Refreshable toRemove) {
+        dataUpdateListeners.remove(toRemove);
+    }
+    public static void clearDataUpdateListeners() {
+        dataUpdateListeners.clear();
+    }
 
     public static void dataUpdated(){
         for (Refreshable l : dataUpdateListeners)

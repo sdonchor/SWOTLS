@@ -22,16 +22,8 @@ public class VistaEntryViewerController implements VistaContainable {
     @FXML private TableColumn<Entry, String> valueColumn;
     @FXML private Button actionButton;
     private boolean editing = false;
-    private String type;
-    private VistaContainable editor;
 
-    public VistaEntryViewerController(VistaContainer parent, String type, VistaContainable editor){
-        this(parent, type);
-        this.editor = editor;
-    }
-
-    public VistaEntryViewerController(VistaContainer parent, String type){
-        this.type = type;
+    public VistaEntryViewerController(VistaContainer parent){
         this.init(parent);
     }
 
@@ -92,11 +84,9 @@ public class VistaEntryViewerController implements VistaContainable {
 
     @FXML
     private void buttonEdit(ActionEvent event) {
-        if(VistaLogInController.hasOrganizerPermissions()){
-            if(editor!=null){
+        Dialogs.error("Nie można edytować tego typu danych.");
 
-            }
-
+        /*if(VistaLogInController.hasOrganizerPermissions()){
             if(editing){
                 //Zapisz
                 ServerData.saveEntry(table.itemsProperty().getValue(), type);
@@ -104,12 +94,14 @@ public class VistaEntryViewerController implements VistaContainable {
             setEditing(!editing);
         }else {
             Dialogs.insufficientPermissions();
-        }
+        }*/
     }
 
     @FXML
     private void buttonDelete(ActionEvent event) {
-        if(VistaLogInController.hasOrganizerPermissions()){
+        Dialogs.error("Nie można usuwać tego typu danych.");
+
+        /*if(VistaLogInController.hasOrganizerPermissions()){
             int id = Integer.valueOf(data.get(0).getValue()); //Integer.valueOf(table.itemsProperty().getValue().get(0).getValue());
             if( id>=0 ){
                 //Usuń z bazy
@@ -118,7 +110,7 @@ public class VistaEntryViewerController implements VistaContainable {
             parent.close();
         }else {
             Dialogs.insufficientPermissions();
-        }
+        }*/
     }
 
     private class EditingCell extends TableCell<Entry, String> {

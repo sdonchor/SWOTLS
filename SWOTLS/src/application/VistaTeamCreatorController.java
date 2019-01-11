@@ -84,5 +84,4 @@ public class VistaTeamCreatorController implements VistaContainable {
 
         parent.close();
     }
-
 }

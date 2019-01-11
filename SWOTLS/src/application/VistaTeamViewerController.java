@@ -6,8 +6,8 @@ import javafx.fxml.FXML;
 public class VistaTeamViewerController extends VistaEntryViewerController {
     private Team team;
 
-    public VistaTeamViewerController(VistaContainer parent, String type, Team t){
-        super(parent, type);
+    public VistaTeamViewerController(VistaContainer parent, Team t){
+        super(parent);
         this.team = t;
         addEntry("Id", String.valueOf(t.getId()) );
         addEntry("Nazwa", t.getName() );
@@ -26,6 +26,17 @@ public class VistaTeamViewerController extends VistaEntryViewerController {
         }else {
             Dialogs.insufficientPermissions();
         }
+    }
+
+    @FXML
+    private void buttonDelete(ActionEvent event) {
+        if(!VistaLogInController.hasOrganizerPermissions()){
+            Dialogs.insufficientPermissions();
+            return;
+        }
+
+        ServerData.deleteTeam(team.getId());
+        getParent().close();
     }
 
 }

@@ -5,7 +5,6 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Optional;
 
 public class Dialogs {
