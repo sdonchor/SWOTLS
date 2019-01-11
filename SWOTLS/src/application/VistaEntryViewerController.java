@@ -23,10 +23,21 @@ public class VistaEntryViewerController implements VistaContainable {
     @FXML private Button actionButton;
     private boolean editing = false;
     private String type;
+    private VistaContainable editor;
+
+    public VistaEntryViewerController(VistaContainer parent, String type, VistaContainable editor){
+        this(parent, type);
+        this.editor = editor;
+    }
 
     public VistaEntryViewerController(VistaContainer parent, String type){
-        this.parent = parent;
         this.type = type;
+        this.init(parent);
+    }
+
+    @Override
+    public void init(VistaContainer parent){
+        this.parent = parent;
         FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_ENTRY));
         loader.setController(this);
         try {
@@ -34,15 +45,7 @@ public class VistaEntryViewerController implements VistaContainable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.init();
-    }
 
-    @Override
-    public void setParent(VistaContainer parent) {
-        this.parent = parent;
-    }
-    @Override
-    public void init(){
         data = FXCollections.observableArrayList();
 
         // Ustawienie danych dla tabeli
@@ -68,6 +71,10 @@ public class VistaEntryViewerController implements VistaContainable {
         });*/
     }
 
+    protected VistaContainer getParent() {
+        return parent;
+    }
+
     public void addEntry(String attribute, String value){
         data.add(new Entry(attribute, value));
     }
@@ -83,27 +90,25 @@ public class VistaEntryViewerController implements VistaContainable {
         }
     }
 
-    /**
-     * Event handler fired when the user requests a new vista.
-     *
-     * @param event the event that triggered the handler.
-     */
     @FXML
-    void buttonAction(ActionEvent event) {
+    private void buttonEdit(ActionEvent event) {
         if(VistaLogInController.hasOrganizerPermissions()){
+            if(editor!=null){
+
+            }
+
             if(editing){
                 //Zapisz
                 ServerData.saveEntry(table.itemsProperty().getValue(), type);
             }
             setEditing(!editing);
         }else {
-            Dialogs.error("Niewystarczające uprawnienia.");
-            VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, parent);
+            Dialogs.insufficientPermissions();
         }
     }
 
     @FXML
-    void buttonDelete(ActionEvent event) {
+    private void buttonDelete(ActionEvent event) {
         if(VistaLogInController.hasOrganizerPermissions()){
             int id = Integer.valueOf(data.get(0).getValue()); //Integer.valueOf(table.itemsProperty().getValue().get(0).getValue());
             if( id>=0 ){
@@ -112,12 +117,11 @@ public class VistaEntryViewerController implements VistaContainable {
             }
             parent.close();
         }else {
-            Dialogs.error("Niewystarczające uprawnienia.");
-            VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, parent);
+            Dialogs.insufficientPermissions();
         }
     }
 
-    class EditingCell extends TableCell<Entry, String> {
+    private class EditingCell extends TableCell<Entry, String> {
 
         private TextField textField;
 

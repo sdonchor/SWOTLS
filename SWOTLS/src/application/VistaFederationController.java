@@ -7,11 +7,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -26,12 +28,22 @@ public class VistaFederationController implements VistaContainable, Refreshable,
     private Map<String, Integer> arenas;
     private Map<String, Integer> users;
     private VistaContainer parent;
-    @Override
-    public void setParent(VistaContainer parent) {
-        this.parent = parent;
+
+    public VistaFederationController(VistaContainer parent){
+        init(parent);
     }
+
     @Override
-    public void init(){
+    public void init(VistaContainer parent){
+        this.parent = parent;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_FEDERATION));
+        loader.setController(this);
+        try {
+            parent.setVista(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         selectMenu();
 
         ObservableList<String> ols = FXCollections.observableArrayList();
@@ -140,7 +152,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 if(s==null)
                     return;
                 int id = contestants.get(s);
-                Player c;
+
                 if(id == -1) {
                     //Dodaj
                     if(VistaLogInController.hasOrganizerPermissions()){
@@ -148,29 +160,13 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                     }else {
                         Dialogs.insufficientPermissions();
                     }
-
-                    //c = new Player(-1, "Jan", "jkowalski", "Kowalski", 1200, "pl", "", "", null);
                     return;
-                }else
-                    c = ServerData.getContestantById(id);
+                }
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Profil - " + c.displayedName()), "Contestant");
-                entryViewer.addEntry("Id", String.valueOf(c.getId()) );
-                entryViewer.addEntry("Imię", c.getName() );
-                entryViewer.addEntry("Nazwisko", c.getSurname() );
-                entryViewer.addEntry("Pseudonim", c.getNickname() );
-                entryViewer.addEntry("Ranking Elo", String.valueOf(c.getElo()) );
-                entryViewer.addEntry("Język", c.getLanguage() );
-                entryViewer.addEntry("Informacje kontaktowe", c.getContactInfo() );
-                entryViewer.addEntry("Informacje dodatkowe", c.getAdditionalInfo() );
-                Team t = c.getTeam();
-                if(t!=null)
-                    entryViewer.addEntry("Drużyna", t.displayedName() );
-                else
-                    entryViewer.addEntry("Drużyna", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                Player p = ServerData.getContestantById(id);
+                if(p==null)
+                    return;
+                new VistaPlayerViewerController(newTab("Profil - " + p.displayedName()), "Contestant", p);
             }
         });
 
@@ -193,7 +189,6 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 if(s==null)
                     return;
                 int id = teams.get(s);
-                Team t;
                 if(id == -1){
                     //Dodaj
                     if(VistaLogInController.hasOrganizerPermissions()){
@@ -203,25 +198,12 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                     }
 
                     return;
-                    //t = new Team(-1, "Smoki PK", "Kraków", null);
-                }else
-                    t = ServerData.getTeamById(id);
+                }
 
+                Team t = ServerData.getTeamById(id);
                 if(t==null)
                     return;
-
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Drużyna - " + t.displayedName()), "Team");
-                entryViewer.addEntry("Id", String.valueOf(t.getId()) );
-                entryViewer.addEntry("Nazwa", t.getName() );
-                entryViewer.addEntry("Skąd", t.getWhereFrom() );
-                Player p = t.getLeader();
-                if(p!=null)
-                    entryViewer.addEntry("Lider", p.displayedName() );
-                else
-                    entryViewer.addEntry("Lider", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaTeamViewerController(newTab("Drużyna - " + t.displayedName()), "Team", t);
             }
         });
 
@@ -292,7 +274,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 if(m==null)
                     return;
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()), "Match");
+                VistaEntryViewerController entryViewer = new VistaMatchViewerController(newTab(m.toString()), "Match");
                 entryViewer.addEntry("Id", String.valueOf(m.getId()) );
                 entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
                 entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
@@ -336,7 +318,6 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                 if(s==null)
                     return;
                 int id = arenas.get(s);
-                Arena a;
                 if(id == -1) {
                     //Dodaj
                     if(VistaLogInController.hasOrganizerPermissions()){
@@ -346,20 +327,12 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                     }
 
                     return;
-                    //a = new Arena(-1, "", "");
-                } else
-                    a = ServerData.getArenaById(id);
+                }
 
+                Arena a = ServerData.getArenaById(id);
                 if(a==null)
                     return;
-
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Arena - " + a.getName()), "Arena");
-                entryViewer.addEntry("Id", String.valueOf(a.getId()) );
-                entryViewer.addEntry("Nazwa", a.getName() );
-                entryViewer.addEntry("Lokalizacja", a.getLocation() );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaArenaViewerController(newTab("Arena - " + a.getName()), "Arena", a);
             }
         });
 
@@ -393,19 +366,7 @@ public class VistaFederationController implements VistaContainable, Refreshable,
                     return;
                 }
 
-                User u = ServerData.getUserById(id);
-                if(u==null)
-                    return;
-                TabController tabCtrl = new TabController("Organizator - " + u.getLogin());
-                tbpane.getTabs().add(tabCtrl.getTab());
-
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(tabCtrl, "User");
-                entryViewer.addEntry("Id", String.valueOf(u.getId()) );
-                entryViewer.addEntry("Login", u.getLogin() );
-                entryViewer.addEntry("Uprawnienia", u.getPermissions() );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaLogInController(newTab("Zaloguj się"), s);
             }
         });
     }

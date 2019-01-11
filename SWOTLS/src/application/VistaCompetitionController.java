@@ -26,9 +26,17 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private Competition competition;
 
     public VistaCompetitionController(VistaContainer parent, Competition competition){
-        this.parent = parent;
         this.competition = competition;
+        this.init(parent);
+    }
 
+    private Map<String, Integer> competitors;
+    private Map<String, Integer> unplanned = new HashMap<>();
+    private Map<String, Integer> planned = new HashMap<>();
+    private Map<String, Integer> finished;
+    @Override
+    public void init(VistaContainer parent){
+        this.parent = parent;
         FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_COMPETITION));
         loader.setController(this);
         try {
@@ -37,19 +45,6 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             e.printStackTrace();
         }
 
-        this.init();
-    }
-
-    private Map<String, Integer> competitors;
-    private Map<String, Integer> unplanned = new HashMap<>();
-    private Map<String, Integer> planned = new HashMap<>();
-    private Map<String, Integer> finished;
-    @Override
-    public void setParent(VistaContainer parent) {
-        this.parent = parent;
-    }
-    @Override
-    public void init(){
         selectMenu();
 
         ObservableList<String> ols = FXCollections.observableArrayList();
@@ -184,8 +179,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                     if(VistaLogInController.hasOrganizerPermissions())
                         new VistaCompetitorChooserController(newTab("Dodaj uczestników"), competitors, competition);
                     else{
-                        Dialogs.error("Niewystarczające uprawnienia.");
-                        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, newTab("Zaloguj się"));
+                        Dialogs.insufficientPermissions();
                     }
                     return;
                 }else

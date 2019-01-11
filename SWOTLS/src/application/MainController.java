@@ -37,12 +37,12 @@ public class MainController extends VistaContainer  {
     }
 
     public static void openLogInTab(){
-        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, tabContainer.newTab("Zaloguj się"));
+        new VistaLogInController(tabContainer.newTab("Zaloguj się"));
     }
 
     @FXML
     private void openLogInTab(ActionEvent event){
-        VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, tabContainer.newTab("Zaloguj się"));
+        new VistaLogInController(tabContainer.newTab("Zaloguj się"));
     }
 
     @FXML
@@ -52,7 +52,7 @@ public class MainController extends VistaContainer  {
 
     @FXML
     private void goToFederationView(ActionEvent event){
-        VistaNavigator.loadVista(VistaNavigator.VISTA_FEDERATION, this);
+        new VistaFederationController(this);
     }
 
     public void close() { Platform.exit(); }

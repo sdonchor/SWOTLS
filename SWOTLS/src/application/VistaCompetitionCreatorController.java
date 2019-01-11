@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -15,8 +16,19 @@ import java.io.IOException;
  */
 public class VistaCompetitionCreatorController implements VistaContainable {
     private VistaContainer parent;
+    private int editId = -1;
 
     public VistaCompetitionCreatorController(VistaContainer parent){
+        this.init(parent);
+    }
+
+    @FXML private TextField nameField;
+    @FXML private TextField additionalField;
+    @FXML private ComboBox<String> typeBox;
+    @FXML private ComboBox<String> systemBox;
+    @FXML private Button actionButton;
+
+    public void init(VistaContainer parent){
         this.parent = parent;
         FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_COMPETITION_CREATOR));
         loader.setController(this);
@@ -25,20 +37,7 @@ public class VistaCompetitionCreatorController implements VistaContainable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.init();
-    }
 
-    @FXML private TextField nameField;
-    @FXML private TextField additionalField;
-    @FXML private ComboBox<String> typeBox;
-    @FXML private ComboBox<String> systemBox;
-
-    @Override
-    public void setParent(VistaContainer parent) {
-        this.parent = parent;
-    }
-    @Override
-    public void init(){
         ObservableList<String> options =
                 FXCollections.observableArrayList(
                         "Pucharowy",
@@ -67,7 +66,11 @@ public class VistaCompetitionCreatorController implements VistaContainable {
                 return;
             }
 
-            ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
+            if(editId==-1)
+                ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
+            else
+                ServerData.editTournament(editId, nameField.getText(), additionalField.getText());
+
             parent.close();
         }
     }

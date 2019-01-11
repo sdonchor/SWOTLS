@@ -13,15 +13,7 @@ import java.io.IOException;
  */
 public class VistaRegistrationController implements VistaContainable {
     public VistaRegistrationController(VistaContainer parent){
-        this.parent = parent;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_REGISTER));
-        loader.setController(this);
-        try {
-            parent.setVista(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.init();
+        this.init(parent);
     }
 
     private VistaContainer parent;
@@ -30,11 +22,16 @@ public class VistaRegistrationController implements VistaContainable {
     @FXML private PasswordField pwConfirm;
 
     @Override
-    public void setParent(VistaContainer parent) {
+    public void init(VistaContainer parent){
         this.parent = parent;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_REGISTER));
+        loader.setController(this);
+        try {
+            parent.setVista(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    @Override
-    public void init(){}
 
     @FXML
     void submit(ActionEvent event) {

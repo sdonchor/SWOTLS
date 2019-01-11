@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -17,8 +18,31 @@ import java.util.Map;
 public class VistaTeamCreatorController implements VistaContainable {
     private VistaContainer parent;
     private Map<String, Integer> players;
+    private int editId = -1;
 
     public VistaTeamCreatorController(VistaContainer parent){
+        this.init(parent);
+    }
+
+    public VistaTeamCreatorController(VistaContainer parent, Team t){
+        this.init(parent);
+        this.editId = t.getId();
+        actionButton.setText("Zapisz");
+        nameField.setText(t.getName());
+        fromField.setText(t.getWhereFrom());
+
+        Player p = t.getLeader();
+        if(p!=null)
+            leaderBox.setValue(p.getName());
+    }
+
+    @FXML private TextField nameField;
+    @FXML private TextField fromField;
+    @FXML private ComboBox<String> leaderBox;
+    @FXML private Button actionButton;
+
+    @Override
+    public void init(VistaContainer parent){
         this.parent = parent;
         FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_TEAM_CREATOR));
         loader.setController(this);
@@ -27,19 +51,7 @@ public class VistaTeamCreatorController implements VistaContainable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.init();
-    }
 
-    @FXML private TextField nameField;
-    @FXML private TextField fromField;
-    @FXML private ComboBox<String> leaderBox;
-
-    @Override
-    public void setParent(VistaContainer parent) {
-        this.parent = parent;
-    }
-    @Override
-    public void init(){
         ObservableList<String> options = FXCollections.observableArrayList();
         players = ServerData.getListOfAllContestants();
         for(String s : players.keySet()){
@@ -65,7 +77,11 @@ public class VistaTeamCreatorController implements VistaContainable {
             return;
         }
 
-        ServerData.newTeam(nameField.getText(), fromField.getText(), players.get(leaderBox.getValue()));
+        if(editId==-1)
+            ServerData.newTeam(nameField.getText(), fromField.getText(), players.get(leaderBox.getValue()));
+        else
+            ServerData.editTeam(editId, nameField.getText(), fromField.getText(), players.get(leaderBox.getValue()));
+
         parent.close();
     }
 

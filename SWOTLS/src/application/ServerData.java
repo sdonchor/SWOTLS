@@ -375,13 +375,27 @@ public class ServerData {
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
+    public static void editTournament(int tournamentId, String name, String additional){
+        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja turnieju
+        ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
+    }
+
     /**
      * Dodaje nowego zawodnika
      * @param teamid Id drużyny, -1 jeżeli gracz ma nie mieć drużyny.
      */
 	public static void newPlayer(String name, String surname, String nickname, String contact, String language, String additional, int teamid){
-	    Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowego gracza
+	    Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowego zawodnika
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
+    }
+
+    /**
+     * Edytuje istniejącego zawodnika
+     * @param teamid Id drużyny, -1 jeżeli gracz ma nie mieć drużyny (drużyna ustawiona na "** Brak **").
+     */
+    public static void editPlayer(int playerId, String name, String surname, String nickname, String contact, String language, String additional, int teamid){
+        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja zawodnika
+        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy edycję
     }
 
     public static void newTeam(String name, String from, int leaderId){
@@ -389,9 +403,19 @@ public class ServerData {
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
 
+    public static void editTeam(int teamId, String name, String from, int leaderId){
+        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja drużyny
+        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy edycję
+    }
+
     public static void newArena(String name, String location){
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowej arena
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
+    }
+
+    public static void editArena(int arenaId, String name, String location){
+        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja areny
+        ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy edycję
     }
 
 	public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){

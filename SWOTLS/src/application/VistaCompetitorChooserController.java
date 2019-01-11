@@ -21,9 +21,16 @@ public class VistaCompetitorChooserController implements VistaContainable {
     private Competition competition;
 
     public VistaCompetitorChooserController(VistaContainer parent, Map<String, Integer> addedContestants, Competition competition){
-        this.parent = parent;
         this.addedContestants = addedContestants;
         this.competition = competition;
+        this.init(parent);
+    }
+
+    @FXML private ComboBox<String> competitorBox;
+
+    @Override
+    public void init(VistaContainer parent){
+        this.parent = parent;
         FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_COMPETITOR_CHOOSER));
         loader.setController(this);
         try {
@@ -31,17 +38,11 @@ public class VistaCompetitorChooserController implements VistaContainable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.init();
+
+        init();
     }
 
-    @FXML private ComboBox<String> competitorBox;
-
-    @Override
-    public void setParent(VistaContainer parent) {
-        this.parent = parent;
-    }
-    @Override
-    public void init(){
+    private void init(){
         ObservableList<String> options = FXCollections.observableArrayList();
         contestants = ServerData.getListOfAllContestants();
         for(String s : contestants.keySet()){
@@ -64,8 +65,7 @@ public class VistaCompetitorChooserController implements VistaContainable {
             addedContestants.put(s, id);
             init();
         }else {
-            Dialogs.error("Niewystarczające uprawnienia.");
-            VistaNavigator.loadVista(VistaNavigator.VISTA_LOGIN, parent);
+            Dialogs.insufficientPermissions();
         }
     }
 

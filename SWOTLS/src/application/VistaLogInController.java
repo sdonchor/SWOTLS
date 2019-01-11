@@ -36,7 +36,21 @@ public class VistaLogInController implements VistaContainable {
         VistaLogInController.permission = permission;
     }
 
-    /*public VistaLogInController(VistaContainer parent){
+    public VistaLogInController(VistaContainer parent){
+        this.init(parent);
+    }
+
+    public VistaLogInController(VistaContainer parent, String loginId){
+        this.init(parent);
+        idField.setText(loginId);
+    }
+
+    private VistaContainer parent;
+    @FXML private TextField idField;
+    @FXML private PasswordField pwField;
+
+    @Override
+    public void init(VistaContainer parent){
         this.parent = parent;
         FXMLLoader loader = new FXMLLoader(getClass().getResource(VistaNavigator.VISTA_LOGIN));
         loader.setController(this);
@@ -45,19 +59,7 @@ public class VistaLogInController implements VistaContainable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.init();
-    }*/
-
-    private VistaContainer parent;
-    @FXML private TextField idField;
-    @FXML private PasswordField pwField;
-
-    @Override
-    public void setParent(VistaContainer parent) {
-        this.parent = parent;
     }
-    @Override
-    public void init(){}
 
     @FXML
     void submit(ActionEvent event) {

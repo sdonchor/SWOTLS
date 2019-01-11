@@ -11,14 +11,14 @@
 
 <StackPane fx:id="vistaProfile" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <children>
-    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+    <VBox alignment="CENTER">
       <children>
-            <StackPane prefHeight="213.0" prefWidth="100.0">
+            <StackPane>
                <children>
                   <TableView fx:id="table" editable="true" minHeight="170.0" minWidth="92.0">
                      <columns>
-                        <TableColumn fx:id="attributeColumn" prefWidth="48.0" text="Atrybut" />
-                        <TableColumn fx:id="valueColumn" prefWidth="51.0" text="Wartość" />
+                        <TableColumn fx:id="attributeColumn" prefWidth="-1.0" text="Atrybut" />
+                        <TableColumn fx:id="valueColumn" prefWidth="-1.0" text="Wartość" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -26,9 +26,9 @@
                   </TableView>
                </children>
             </StackPane>
-            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="TOP_CENTER">
                <children>
-              <Button fx:id="actionButton" alignment="CENTER" mnemonicParsing="false" onAction="#buttonAction" text="Edytuj">
+              <Button fx:id="actionButton" alignment="CENTER" mnemonicParsing="false" onAction="#buttonEdit" text="Edytuj">
                      <HBox.margin>
                         <Insets bottom="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
