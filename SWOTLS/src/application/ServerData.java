@@ -352,12 +352,20 @@ public class ServerData {
 	public static void register(String id, String pw, Permission perm){
 		if(sc.getCurrentUserPerms()==Permission.FULL)
 		{
-			if(!sc.createNewUser(id,pw,perm))
-				Dialogs.error("Nie udało się utworzyć użytkownika ", id);
+			try {
+				if(!sc.createNewUser(id,pw,perm))
+					System.out.println("fail");
+				else
+					System.out.println("success");
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}
+				//Dialogs.error("Nie udało się utworzyć użytkownika ", id);
 		}
 		else
 		{
-			Dialogs.insufficientPermissions();
+			
+			//Dialogs.insufficientPermissions();
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}

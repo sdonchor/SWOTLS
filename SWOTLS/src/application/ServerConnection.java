@@ -2,7 +2,8 @@ package application;
 
 import javax.sql.rowset.CachedRowSet;
 
-import server.ServerResponse2;
+import server.ServerResponse;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,7 +92,7 @@ public class ServerConnection {
 		
 		InputStream is = socket.getInputStream();
 		ObjectInputStream ois = new ObjectInputStream(is);
-		ServerResponse2 sr = (ServerResponse2)ois.readObject();
+		ServerResponse sr = (ServerResponse)ois.readObject();
 		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
 		{
 			return true;
@@ -109,7 +110,7 @@ public class ServerConnection {
 	}
 	public Permission getCurrentUserPerms() {
 		// TODO Auto-generated method stub
-		return null;
+		return Permission.FULL;
 	}
 	public String getCurrentUserName() {
 		// TODO Auto-generated method stub
@@ -119,9 +120,24 @@ public class ServerConnection {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	public boolean createNewUser(String id, String pw, Permission perm) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean createNewUser(String id, String pw, Permission perm) throws IOException, ClassNotFoundException {
+		String perm_string=perm.name();
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "create-user;"+id+";"+pw+";"+perm_string;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	public boolean createNewTournament(String name, String system, String type, String additional) {
 		// TODO Auto-generated method stub

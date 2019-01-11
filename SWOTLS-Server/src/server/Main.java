@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 
 public class Main extends Application {
@@ -25,7 +26,6 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		//launch(args);
-
 		//DB TEST BEGIN
 		String address="sql.sdonchor.nazwa.pl";
 	    String username="sdonchor_SWOTLS-DB";
@@ -35,6 +35,7 @@ public class Main extends Application {
 
 		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
 		db.connect();
+		
 		//DB TEST END
 		
 		//SERVER TEST BEGIN

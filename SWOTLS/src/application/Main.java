@@ -71,6 +71,7 @@ public class Main extends Application {
     public static void main(String[] args) {
     	
     	ServerData.initializeServerConnection();
+    	//ServerData.register("test", "test", Permission.FULL); przykładowa rejestracja użytkownika
         launch(args);
         
     }
