@@ -23,8 +23,15 @@ public class ServerData {
 	public static ArrayList<Arena> arenas = new ArrayList<Arena>();
 	public static ArrayList<User> sys_users = new ArrayList<User>();
 	private static ServerConnection sc;
-	private static User currentUser;
+	private static User currentUser=null;
 
+	public static Permission getCurrentUserPerms() {
+		if(currentUser!=null) {
+			return Permission.valueOf(currentUser.getPermissions());
+		}
+		else
+			return Permission.GUEST;
+	}
 	public static void initializeServerConnection() {
 		try {
 			sc = new ServerConnection("localhost",4545);
@@ -337,18 +344,17 @@ public class ServerData {
     public static void deleteArena(int arenaId){
         deleteEntry(arenaId, "arenas");
     }
-
+    
 	public static void logIn(String id, String pw){
 		try {
 			if(sc.verifyLogin(id,pw))
 			{
-				System.out.println("success");
-				//change sc.getCurr(..)
-			    ServertriggeredEvents.permissionsChanged(sc.getCurrentUserPerms()); //wywoływane gdy serwer potwierdzi zmianę uprawnień
+				System.out.println("log in success");
+			    ServertriggeredEvents.permissionsChanged(ServerData.getCurrentUserPerms()); //wywoływane gdy serwer potwierdzi zmianę uprawnień
 			}
 			else
 			{
-				System.out.println("fail");
+				System.out.println("log in fail");
 			}
 			
 		} catch (ClassNotFoundException | IOException e) {
@@ -358,16 +364,16 @@ public class ServerData {
 	}
 
 	public static void register(String id, String pw, Permission perm){
-		if(sc.getCurrentUserPerms()==Permission.FULL)
+		if(ServerData.getCurrentUserPerms()==Permission.FULL)
 		{
 			try {
 				if(!sc.createNewUser(id,pw,perm))
 				{
-					System.out.println("fail");
+					System.out.println("register fail");
 					Dialogs.error("Nie udało się utworzyć użytkownika ", id);
 				}
 				else
-					System.out.println("success");
+					System.out.println("register success");
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
@@ -393,12 +399,11 @@ public class ServerData {
         else if(system.equals("Wieloklasowa liga"))
             iSystem = 5;
 
-        int operatorId = 0; //TODO weź Id gościa, który już jest zalogowany - skoro on tworzy turniej to niech on będzie operatorem
-
-		if(sc.getCurrentUserPerms()==Permission.ORGANIZER || sc.getCurrentUserPerms()==Permission.FULL)
+       
+		if(ServerData.getCurrentUserPerms()==Permission.ORGANIZER || ServerData.getCurrentUserPerms()==Permission.FULL)
 		{
             try {
-                if(!sc.createNewTournament(name,iSystem,type,additional,operatorId))
+                if(!sc.createNewTournament(name,iSystem,type,additional))
                 {
                     Dialogs.error("Nie udało się utworzyć turnieju");
                 }

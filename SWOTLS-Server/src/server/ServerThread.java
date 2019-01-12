@@ -45,7 +45,7 @@ public class ServerThread extends Thread{
 					ObjectOutputStream oos = new ObjectOutputStream(os);
 					ServerResponse sr = new ServerResponse();
 					sr.setResponseType("boolean");
-					
+					//usuwaj wszystkie powiązane anyways
 					boolean success;
 					try {
 						success = dbH.getQueryBuilder().removeFromTable(tablename,id);
@@ -149,7 +149,7 @@ public class ServerThread extends Thread{
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("Connection lost.");
+			System.out.println("Connection closed.");
 		}
 	}
 }
