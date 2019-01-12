@@ -1,6 +1,8 @@
 package application;
 
 import javax.sql.rowset.CachedRowSet;
+
+import java.awt.Dialog;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -315,7 +317,7 @@ public class ServerData {
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			success=false;
-			e.printStackTrace();
+			
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 		return success;
@@ -380,8 +382,8 @@ public class ServerData {
 		}
 		else
 		{
-			
-			Dialogs.insufficientPermissions();
+			System.out.println("no perms");
+			//uncomment Dialogs.insufficientPermissions();
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}

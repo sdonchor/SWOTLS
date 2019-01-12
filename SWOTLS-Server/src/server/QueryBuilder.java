@@ -61,24 +61,11 @@ public class QueryBuilder {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int contestantInsertion(Player contestant) throws SQLException
-	{
-		
-		String query=null;
-		query = insertion + " contestants VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public void connectionExceptionTest() throws SQLException{
+		String query = "SELECT 1";
 		PreparedStatement stmt = connection.prepareStatement(query);
-		stmt.setString(1,contestant.getName());
-		stmt.setString(2,contestant.getSurname());
-		stmt.setString(3,contestant.getNickname());
-		stmt.setInt(4,contestant.getElo());
-		stmt.setString(5,contestant.getLanguage());
-		stmt.setString(6,contestant.getContact_info());
-		stmt.setString(7,contestant.getAdditional_info());
-		if(contestant.getTeam_id()!=-1)
-			stmt.setInt(8,contestant.getTeam_id());
-		else
-			stmt.setNull(8, contestant.getTeam_id());
-		return stmt.executeUpdate();	
+		stmt.executeQuery();
+		
 	}
 	/**
 	 * Returns true if login and password hash match a record in the database.
@@ -165,11 +152,11 @@ public class QueryBuilder {
 			return false;
 	}
 	public boolean createUser(String login, String pw, String perms) throws SQLException {
-		String query = "INSERT INTO system_users(login,pw_hash,permissions) VALUES ('$login','$pw_hash','$perms')";
-		query = query.replace("$login", login);
-		query = query.replace("$pw_hash", SystemUser.hashString(pw));
-		query = query.replace("$perms", perms);
+		String query = "INSERT INTO system_users(login,pw_hash,permissions) VALUES (?,?,?)";
 		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, login);
+		stmt.setString(2, SystemUser.hashString(pw));
+		stmt.setString(3, perms);
 		int rows = stmt.executeUpdate();
 		if(rows==1) return true;
 		else

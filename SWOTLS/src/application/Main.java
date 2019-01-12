@@ -72,9 +72,9 @@ public class Main extends Application {
     	
     	ServerData.initializeServerConnection();
     	
-    	//ServerData.register("testuser", "test", Permission.FULL); //przykładowa rejestracja użytkownika
+    	ServerData.register("testuser", "test", Permission.FULL); //przykładowa rejestracja użytkownika
     	ServerData.logIn("testuser", "test"); //przykładowy login administratora
-    	//ServerData.newPlayer("aaa","eee","eeeeea","aaaaa","pl","",-1); //przykładowa rejestracja gracza bez drużyny
+    	ServerData.newPlayer("aaa","eee","eeeeea","aaaaa","pl","",-1); //przykładowa rejestracja gracza bez drużyny
     
         launch(args);
         

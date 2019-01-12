@@ -28,7 +28,21 @@ public class DatabaseHandler {
 	 * @return
 	 */
 	public QueryBuilder getQueryBuilder() {
+		if(!isConnected())
+		{
+			System.out.println("Database disconnected, attempting reconnection...");
+			connect();
+		}
 		return queryBuilder;
+	}
+	public boolean isConnected() {
+		try {
+			queryBuilder.connectionExceptionTest();
+			return true;
+		} catch (SQLException e) {
+			
+			return false;
+		}
 	}
 	/**
 	 * Connects to the database.

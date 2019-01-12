@@ -26,6 +26,7 @@ public class ServerThread extends Thread{
 					OutputStream os = socket.getOutputStream();
 					ObjectOutputStream oos = new ObjectOutputStream(os);
 					try {
+						
 						CachedRowSet crs = dbH.getQueryBuilder().getTable(tableName);
 						oos.writeObject(crs);
 						oos.close();
@@ -172,7 +173,6 @@ public class ServerThread extends Thread{
 						sr.setBoolTypeResponse(false);
 						oos.writeObject(sr);
 						System.out.println("SQLException when adding a user.");
-						e.printStackTrace();
 					}
 					oos.close();
 					os.close();
