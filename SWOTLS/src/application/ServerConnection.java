@@ -69,8 +69,7 @@ public class ServerConnection {
 		try {
 			socket=new Socket(address,port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Couldn't connect to server.");
 		}
 	}
 	/**
@@ -185,5 +184,12 @@ public class ServerConnection {
 		{
 			return false;
 		}
+	}
+	public void logOut() throws IOException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "log-out";
+		printWriter.println(request);
+		
 	}
 }

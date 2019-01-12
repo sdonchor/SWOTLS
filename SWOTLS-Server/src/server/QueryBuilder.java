@@ -138,7 +138,7 @@ public class QueryBuilder {
 			return false;
 	}
 	public boolean createTournament(String name, String system, String type, String additional, int operator) throws SQLException{
-		String query = "INSERT INTO tournaments(name,type,operator,additional_info,system) VALUES ('$name','$type',$operator,'$additional',$system)";
+		String query = "INSERT INTO tournaments(name,type,operator,additional_info,system) VALUES (?,?,?,?,?)";
 		query = query.replace("$name",name);
 		query = query.replace("$type",type);
 		query = query.replace("$operator",Integer.toString(operator));
@@ -146,6 +146,12 @@ public class QueryBuilder {
 		query = query.replace("$system",system);
 		
 		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, name);
+		stmt.setString(2, type);
+		stmt.setInt(3,operator);
+		stmt.setString(4, additional);
+		stmt.setInt(5, Integer.valueOf(system));
+		
 		int rows = stmt.executeUpdate();
 		if(rows==1) return true;
 		else

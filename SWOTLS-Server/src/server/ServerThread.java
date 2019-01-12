@@ -1,19 +1,36 @@
 package server;
 
 import javax.sql.rowset.CachedRowSet;
+
 import java.io.*;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 //
 public class ServerThread extends Thread{
 	private Socket socket;
 	private SystemUser currentUser = null;
 	DatabaseHandler dbH=null;
+	String remoteIP=null;
 	public ServerThread(Socket socket,DatabaseHandler dbH) {
 		this.dbH=dbH;
 		this.socket=socket;
+		
+	}
+	public String getCleanIP() {
+		String currIP=socket.getRemoteSocketAddress().toString();
+		String[] split = currIP.split(":");
+		return split[0];
+	}
+	public void updateUser() {
+		if(LoggedInList.getUserByIP(remoteIP)!=null)
+		{
+			currentUser=LoggedInList.getUserByIP(remoteIP);
+		}
 	}
 	public void run() {
+		this.remoteIP=getCleanIP();
+		updateUser();
 		try {
 			String message=null;
 			BufferedReader bufferedReader = new BufferedReader ( new InputStreamReader(socket.getInputStream()));
@@ -64,12 +81,19 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("create-tournament")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							System.out.println("Can't create tournament - no user or no permissions");
+							continue;
+						}
+					}
 					String[] request = message.split(";");
 					String name = request[1];
 					String system = request[2];
 					String type = request[3];
 					String additional = request[4];
+					
 					int operator = currentUser.getId();
 					
 					OutputStream os = socket.getOutputStream();
@@ -83,7 +107,10 @@ public class ServerThread extends Thread{
 						sr.setBoolTypeResponse(success);
 						oos.writeObject(sr);
 					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
 						System.out.println("SQLException when adding a tournament.");
+						e.printStackTrace();
 					}
 					oos.close();
 					os.close();
@@ -135,8 +162,10 @@ public class ServerThread extends Thread{
 						{
 							sr.setBoolTypeResponse(true);
 							currentUser=fetchedUser;
+							LoggedInList.addUser(getCleanIP(), fetchedUser);
 							uid = fetchedUser.getId();
 							sr.setStringTypeResponse(fetchedUser.getPermissions());
+							
 						}
 						sr.setIntTypeResponse(uid);
 						oos.writeObject(sr);
@@ -176,6 +205,10 @@ public class ServerThread extends Thread{
 					}
 					oos.close();
 					os.close();
+				}
+				if(message.contains("log-out")) {
+					LoggedInList.removeUserByIP(getCleanIP());
+					System.out.println("User logged out");
 				}
 			}
 		} catch (IOException e) {

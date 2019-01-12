@@ -7,6 +7,11 @@ import java.security.NoSuchAlgorithmException;
 public class SystemUser {
 	private int id;
 	private String login;
+	@Override
+	public String toString() {
+		return "SystemUser [id=" + id + ", login=" + login + ", pw_hash=" + pw_hash + ", permissions=" + permissions
+				+ "]";
+	}
 	private String pw_hash;
 	private String permissions;
 	

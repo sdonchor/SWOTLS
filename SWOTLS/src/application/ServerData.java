@@ -43,11 +43,10 @@ public class ServerData {
 			ServerData.convertMatches(sc.getTable("matches"));
 			ServerData.convertArenas(sc.getTable("arenas"));
 			ServerData.convertSysUsrs(sc.getTable("system_users"));
-			sc.socketClose();
+		//	sc.socketClose();
 			
 		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Couldn't connect to server.");
 		}
 	}
 	public static void convertContestants(CachedRowSet crs) {
@@ -364,7 +363,16 @@ public class ServerData {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Wylogowuje użytkownika, powinna się wywoływać przy każdym zamknięciu klienta.
+	 */
+	public static void logOut() {
+		try {
+			sc.logOut();
+		} catch (IOException e) {
+			System.out.println("Couldn't send logout request.");
+		}
+	}
 	public static void register(String id, String pw, Permission perm){
 		if(ServerData.getCurrentUserPerms()==Permission.FULL)
 		{
@@ -407,7 +415,7 @@ public class ServerData {
             try {
                 if(!sc.createNewTournament(name,iSystem,type,additional))
                 {
-                    Dialogs.error("Nie udało się utworzyć turnieju");
+                   //uncomment this Dialogs.error("Nie udało się utworzyć turnieju");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -416,7 +424,7 @@ public class ServerData {
             }
         }
 		else
-			Dialogs.insufficientPermissions();
+			//uncomment Dialogs.insufficientPermissions();
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
