@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class McMahonTournament extends Tournament {
     /* System McMahona, to uogólnienie systemu szwajcarskiego. Może być używany w turniejach gier mających system rankingowy.
-       Przed rozpoczęciem rozgrywek gracze są szeregowani na podstawie rankingu (podobnie, jak w systemie szwajcarskim),
-       a następnie dzieleni na grupy w zależności od siły. W każdej grupie gracze otrzymują pewną liczbę punktów
-       początkowych. W najczęściej stosowanej wersji systemu gracze z najsłabszej dostają po 0 punktów McMahona,
-       nieco silniejsi - po 1 punkt, następni - po 2 itd. Należy skonstruować metodę przeliczania rankingu na początkowe
-       punkty turniejowe. Np. w przypadku rankingu szachowego można przyjąć 1 punkt McMahona za każde 100 punktów ELO.
+       Przed rozpoczęciem rozgrywek gracze są szeregowani na podstawie rankingu, a następnie dzieleni na grupy
+       w zależności od siły. W każdej grupie gracze otrzymują pewną liczbę punktów początkowych. W najczęściej
+       stosowanej wersji systemu gracze z najsłabszej dostają po 0 punktów McMahona, nieco silniejsi - po 1 punkt,
+       następni - po 2 itd. Należy skonstruować metodę przeliczania rankingu na początkowe punkty turniejowe.
+       Np. w przypadku rankingu szachowego można przyjąć 1 punkt McMahona za każde 100 punktów ELO.
     */
 
     /**

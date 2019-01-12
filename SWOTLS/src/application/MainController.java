@@ -55,6 +55,7 @@ public class MainController extends VistaContainer  {
         for(String match : matches.keySet()){
             s += match + "\n";
         }
+        s +="\n Aby zaplanować mecz, przejdź do perspektywy wybranego wydarzenia i wybierz niezaplanowany mecz z listy (rozwijanego panelu) po lewej stronie.";
         new VistaReportViewerController(tabContainer.newTab("Terminarz"), s);
     }
 
