@@ -110,13 +110,28 @@ public class ServerConnection {
 		// TODO Auto-generated method stub
 		return Permission.FULL;
 	}
-	public String getCurrentUserName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public boolean verifyLogin(String id, String pw) {
+	public boolean verifyLogin(String id, String pw) throws IOException, ClassNotFoundException {
 		
-		return false;
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "verify-login;"+id+";"+pw;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("int") && sr.getBoolTypeResponse())
+		{
+			int uid = sr.getIntTypeResponse();
+			String perms = sr.getStringTypeResponse();
+			ServerData.setCurrentUser(new User(uid,id,perms));
+			System.out.println("Successfully logged in "+ServerData.getCurrentUser());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	public boolean createNewUser(String id, String pw, Permission perm) throws IOException, ClassNotFoundException {
 		String perm_string=perm.name();

@@ -17,7 +17,12 @@ public class User {
         return permissions;
     }
 
-    public User(int id, String login, String permissions) {
+    @Override
+	public String toString() {
+		return "User [id=" + id + ", login=" + login + ", permissions=" + permissions + "]";
+	}
+
+	public User(int id, String login, String permissions) {
         this.id = id;
         this.login = login;
         this.permissions = permissions;

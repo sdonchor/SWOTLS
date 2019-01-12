@@ -5,13 +5,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SystemUser {
+	private int id;
 	private String login;
 	private String pw_hash;
 	private String permissions;
-	public SystemUser(String login, String pw_hash, String permissions)
+	
+	public SystemUser(int id, String login, String permissions)
 	{
 		this.login=login;
-		this.pw_hash=pw_hash;
+		this.id=id;
 		this.permissions=permissions;
 	}
 	public String getLogin() {
@@ -50,5 +52,11 @@ public class SystemUser {
 			return null;
 		}
 		
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

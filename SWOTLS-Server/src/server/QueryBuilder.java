@@ -87,22 +87,24 @@ public class QueryBuilder {
 	 * @return
 	 * @throws SQLException
 	 */
-	public boolean verifySystemLogin(SystemUser sysusr) throws SQLException
+	public SystemUser verifySystemLogin(String login, String pw) throws SQLException
 	{
 		String query = "SELECT * FROM system_users WHERE login = ?";
 		PreparedStatement stmt = connection.prepareStatement(query);
-		stmt.setString(1, sysusr.getLogin());
+		stmt.setString(1, login);
 		ResultSet result = stmt.executeQuery();
 		if(result.next())
 		{
 			String savedHash = result.getString("pw_hash");
-			if(sysusr.getPw_hash().equals(savedHash))
-				return true;
+			int uid = result.getInt("sys_usr_id");
+			String perms = result.getString("permissions");
+			if(SystemUser.hashString(pw).equals(savedHash))
+				return new SystemUser(uid,login,perms);
 			else
-				return false;
+				return null;
 		}
 		else
-			return false;
+			return null;
 	
 	}
 	public CachedRowSet getTable(String tableName) throws SQLException {
@@ -161,5 +163,17 @@ public class QueryBuilder {
 		if(rows==1) return true;
 		else
 			return false;
+	}
+	public boolean createUser(String login, String pw, String perms) throws SQLException {
+		String query = "INSERT INTO system_users(login,pw_hash,permissions) VALUES ('$login','$pw_hash','$perms')";
+		query = query.replace("$login", login);
+		query = query.replace("$pw_hash", SystemUser.hashString(pw));
+		query = query.replace("$perms", perms);
+		PreparedStatement stmt = connection.prepareStatement(query);
+		int rows = stmt.executeUpdate();
+		if(rows==1) return true;
+		else
+			return false;
+		
 	}
 }

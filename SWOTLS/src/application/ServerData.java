@@ -23,7 +23,7 @@ public class ServerData {
 	public static ArrayList<Arena> arenas = new ArrayList<Arena>();
 	public static ArrayList<User> sys_users = new ArrayList<User>();
 	private static ServerConnection sc;
-	private static String currentUser;
+	private static User currentUser;
 
 	public static void initializeServerConnection() {
 		try {
@@ -339,10 +339,21 @@ public class ServerData {
     }
 
 	public static void logIn(String id, String pw){
-		if(sc.verifyLogin(id,pw))
-		{
-            ServertriggeredEvents.permissionsChanged(sc.getCurrentUserPerms()); //wywoływane gdy serwer potwierdzi zmianę uprawnień
-			currentUser = sc.getCurrentUserName();
+		try {
+			if(sc.verifyLogin(id,pw))
+			{
+				System.out.println("success");
+				//change sc.getCurr(..)
+			    ServertriggeredEvents.permissionsChanged(sc.getCurrentUserPerms()); //wywoływane gdy serwer potwierdzi zmianę uprawnień
+			}
+			else
+			{
+				System.out.println("fail");
+			}
+			
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -351,18 +362,20 @@ public class ServerData {
 		{
 			try {
 				if(!sc.createNewUser(id,pw,perm))
+				{
 					System.out.println("fail");
+					Dialogs.error("Nie udało się utworzyć użytkownika ", id);
+				}
 				else
 					System.out.println("success");
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
-				//Dialogs.error("Nie udało się utworzyć użytkownika ", id);
 		}
 		else
 		{
 			
-			//Dialogs.insufficientPermissions();
+			Dialogs.insufficientPermissions();
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
@@ -540,4 +553,10 @@ public class ServerData {
         //TODO wprowadzenie wyniku meczu (po stronie serwera wyłołać metodę dla odpowiedniego systemu turniejowego)
 	    ServertriggeredEvents.dataUpdated();
     }
+	public static User getCurrentUser() {
+		return currentUser;
+	}
+	public static void setCurrentUser(User currentUser) {
+		ServerData.currentUser = currentUser;
+	}
 }
