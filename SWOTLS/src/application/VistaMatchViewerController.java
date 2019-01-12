@@ -2,8 +2,12 @@ package application;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 public class VistaMatchViewerController extends VistaEntryViewerController {
+    @FXML private Button actionButton;
+    @FXML private Button deleteButton;
+
     public VistaMatchViewerController(VistaContainer parent, Match m){
         super(parent);
         addEntry("Id", String.valueOf(m.getId()) );
@@ -24,6 +28,9 @@ public class VistaMatchViewerController extends VistaEntryViewerController {
             addEntry("Arena", a.getName() );
         else
             addEntry("Arena", "" );
+
+        actionButton.setVisible(false);
+        deleteButton.setVisible(false);
     }
 
     @FXML

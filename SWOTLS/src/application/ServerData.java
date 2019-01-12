@@ -452,6 +452,12 @@ public class ServerData {
         new VistaArenaViewerController(MainController.newTab(arena.getName()), arena);
     }
 
+    /**
+     * Oznacza mecz jako zaplanowany - ustawia mu datę i arenę.
+     * @param matchId Id meczu, który zaplanować.
+     * @param localDate Data meczu.
+     * @param arenaId Id areny, która przypisać do meczu. (-1 gdy arena nie została określona)
+     */
     public static void planMatch(int matchId, LocalDateTime localDate, int arenaId){
         Date date = Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant()); //konwersja z LocalDateTime do Date
         //TODO ustawienie daty meczu i areny (oznaczenie jako zaplanowany - czyli ma podaną datę, ale jeszcze nie wprowadzony wynik)
@@ -476,7 +482,7 @@ public class ServerData {
 	public static Map<String, Integer> getListOfUnplannedMatches(int competitionId){
 		//TODO powinno pobierać (tylko) niezaplanowane mecze w podanym turnieju (czyli takie które nie mają podanej daty ani wyniku)
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("2Pesteczka vs Unity Female", 0);
+		map.put("2Pesteczka vs Unity Female", 3);
 		return map;
 	}
 
@@ -490,28 +496,28 @@ public class ServerData {
 	public static Map<String, Integer> getListOfPlannedMatches(int competitionId){
 		//TODO powinno pobierać (tylko) zaplanowane mecze w podanym turnieju (czyli takie które mają datę, a nie mają wyniku)
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("Smoki vs Wilki 02.02.2019 19:00", 0);
+		map.put("Smoki vs Wilki 02.02.2019 19:00", 3);
 		return map;
 	}
 
 	public static Map<String, Integer> getListOfFinishedMatches(int competitionId){
 		//TODO powinno pobierać (tylko) zakończone mecze w podanym turnieju (mają datę i wynik)
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("PK vs AGH (2:0)", 0);
+		map.put("PK vs AGH (2:0)", 3);
 		return map;
 	}
 
     public static Map<String, Integer> getListOfReports(int competitionId){
         //TODO powinno pobierać listę
         Map<String, Integer> map = new HashMap<String, Integer>();
-        map.put("PK vs AGH (2:0)", 0);
+        map.put("Raport - Etap 1 - Sezon 2", 3);
         return map;
     }
 
-    public static String getReportById(int reportId){
+    public static Report getReportById(int reportId){
         //TODO powinno zwracać raport o podanym id w formie Stringa
         String s = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla mattis blandit velit, sed elementum.";
-        return s;
+        return new Report("Raport - Etap 1 - Sezon 2", s);
     }
 
 	public static void addCompetitorToCompetition(int competitorId, int competitionId){
@@ -525,8 +531,13 @@ public class ServerData {
 	 */
 	public static void nextStage(int competitionId){
 		//TODO serwer powinien sprawdzić czy można przejść (czy wyniki wszystkich meczy zostały wprowadzone) - jeżeli tak, to ma wygenerować mecze dla następnego etapu lub ogłosić zwycięzcę (lub dokonać awansów i spadków w przypadku ligi) jeżeli to był ostatni etap
+        //TODO ^^ czyli wywołać metodę nextStage() (lub endEntriesStage() jeżeli zakończony etap to 0 czyli zapisy) dla odpowiedniego systemu turniejowego
 		ServertriggeredEvents.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy."); //TODO taki lub podobny komunikat ma wywoływać serwer jeżeli nie można przejść
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
+    public static void setScore(int matchId, int scoreA, int scoreB) {
+        //TODO wprowadzenie wyniku meczu (po stronie serwera wyłołać metodę dla odpowiedniego systemu turniejowego)
+	    ServertriggeredEvents.dataUpdated();
+    }
 }

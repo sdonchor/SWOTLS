@@ -8,10 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,16 +47,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         ObservableList<String> ols = FXCollections.observableArrayList();
         lvCompetitors.setItems(ols);
 
-        VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Wydarzenie - " + competition.getName()));
-        entryViewer.addEntry("Id", String.valueOf(competition.getId()) );
-        entryViewer.addEntry("Nazwa", competition.getName() );
-        entryViewer.addEntry("Typ", competition.getType().toString() );
-        entryViewer.addEntry("Informacje dodatkowe", competition.getAdditionalInfo() );
-        User u = competition.getCreator();
-        if(u!=null)
-            entryViewer.addEntry("Założyciel", u.getLogin() );
-        else
-            entryViewer.addEntry("Założyciel", "" );
+        new VistaCompetitionViewerController(newTab("Wydarzenie - " + competition.getName()), competition);
 
         updateBottomLabel();
 
@@ -93,6 +81,11 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private Label bottomLabel;
 
     private void nextSage(){
+        if(!VistaLogInController.hasOrganizerPermissions()){
+            Dialogs.insufficientPermissions();
+            return;
+        }
+
         if(unplanned.size()>1&&planned.size()>1)
             Dialogs.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy.", "Nie można przejść do następnego etapu");
         else
@@ -107,9 +100,12 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             bottomLabel.setText("Perspektywa wydarzenia: " + competition.getName() + " - Zapisy");
     }
 
+    @Override
     public TabController newTab(String title){
         TabController tabCtrl = new TabController(title);
-        tbpane.getTabs().add(tabCtrl.getTab());
+        Tab tab = tabCtrl.getTab();
+        tbpane.getTabs().add(tab);
+        tbpane.getSelectionModel().select(tab);
         return tabCtrl;
     }
 
@@ -122,11 +118,13 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private void reloadPane(Map<String, Integer> from, ListView<String> to, String actionString){
         to.getSelectionModel().clearSelection();
         ObservableList<String> ols = FXCollections.observableArrayList();
-        ols.add(actionString);
+        if(actionString!=null)
+            ols.add(actionString);
         for (String key : from.keySet()) {
             ols.add(key);
         }
-        from.put(actionString, -1);
+        if(actionString!=null)
+            from.put(actionString, -1);
         to.setItems(ols);
     }
 
@@ -144,10 +142,20 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             reloadPane(competitors, lvCompetitors, "** Dodaj **");
         }else if(unplannedPane.isExpanded()){
             unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-            reloadPane(unplanned, lvUnplanned, "** Następny etap **");
+
+            String actionString = null;
+            if(unplanned.size()>0)
+                actionString = "** Następny etap **";
+
+            reloadPane(unplanned, lvUnplanned, actionString);
         }else if(plannedPane.isExpanded()){
             planned = ServerData.getListOfPlannedMatches(competition.getId());
-            reloadPane(planned, lvPlanned, "** Następny etap **");
+
+            String actionString = null;
+            if(planned.size()>0)
+                actionString = "** Następny etap **";
+
+            reloadPane(planned, lvPlanned, actionString);
         }else if(finishedPane.isExpanded()){
             finished = ServerData.getListOfFinishedMatches(competition.getId());
             reloadPane(finished, lvFinished, "** Następny etap **");
@@ -170,13 +178,10 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         lvCompetitors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                //int i = lvContestants.getSelectionModel().getSelectedIndex();
-
                 String s = lvCompetitors.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
                 int id = competitors.get(s);
-                Player c;
                 if(id == -1) {
                     //Dodaj
                     if(VistaLogInController.hasOrganizerPermissions())
@@ -185,26 +190,12 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                         Dialogs.insufficientPermissions();
                     }
                     return;
-                }else
-                    c = ServerData.getContestantById(id);
+                }
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab("Profil - " + c.displayedName()));
-                entryViewer.addEntry("Id", String.valueOf(c.getId()) );
-                entryViewer.addEntry("Imię", c.getName() );
-                entryViewer.addEntry("Nazwisko", c.getSurname() );
-                entryViewer.addEntry("Pseudonim", c.getNickname() );
-                entryViewer.addEntry("Ranking Elo", String.valueOf(c.getElo()) );
-                entryViewer.addEntry("Język", c.getLanguage() );
-                entryViewer.addEntry("Informacje kontaktowe", c.getContactInfo() );
-                entryViewer.addEntry("Informacje dodatkowe", c.getAdditionalInfo() );
-                Team t = c.getTeam();
-                if(t!=null)
-                    entryViewer.addEntry("Drużyna", t.displayedName() );
-                else
-                    entryViewer.addEntry("Drużyna", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                Player c = ServerData.getContestantById(id);
+                if(c==null)
+                    return;
+                new VistaPlayerViewerController(newTab("Profil - " + c.displayedName()), c);
             }
         });
 
@@ -213,7 +204,11 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(plannedPane.isExpanded()){
                     planned = ServerData.getListOfPlannedMatches(competition.getId());
-                    reloadPane(planned, lvPlanned, "** Następny etap **");
+                    String actionString = null;
+                    if(planned.size()>0)
+                        actionString = "** Następny etap **";
+
+                    reloadPane(planned, lvPlanned, actionString);
                 }else {
                     lvPlanned.getSelectionModel().clearSelection();
                 }
@@ -237,28 +232,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 Match m = ServerData.getMatchById(id);
                 if(m==null)
                     return;
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()));
-                entryViewer.addEntry("Id", String.valueOf(m.getId()) );
-                entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
-                entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
-                entryViewer.addEntry("Wynik A", String.valueOf(m.getScoreA()) );
-                entryViewer.addEntry("Wynik B", String.valueOf(m.getScoreB()) );
-                entryViewer.addEntry("Data", String.valueOf(m.getDate()) );
-
-                Competition c = m.getCompetition();
-                if(c!=null)
-                    entryViewer.addEntry("Wydarzenie", c.getName() );
-                else
-                    entryViewer.addEntry("Wydarzenie", "" );
-
-                Arena a = m.getArena();
-                if(a!=null)
-                    entryViewer.addEntry("Arena", a.getName() );
-                else
-                    entryViewer.addEntry("Arena", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaScoreSetterController(newTab("Wprowadź wynik - " + m.toString()), m);
             }
         });
 
@@ -267,7 +241,10 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(unplannedPane.isExpanded()){
                     unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-                    reloadPane(unplanned, lvUnplanned, "** Następny etap **");
+                    String actionString = null;
+                    if(unplanned.size()>0)
+                        actionString = "** Następny etap **";
+                    reloadPane(unplanned, lvUnplanned, actionString);
                 }else {
                     lvUnplanned.getSelectionModel().clearSelection();
                 }
@@ -314,39 +291,18 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(s==null)
                     return;
                 int id = finished.get(s);
-                Match m;
+
                 if(id == -1) {
                     //Przejdź
                     nextSage();
                     return;
-                } else
-                    m = ServerData.getMatchById(id);
+                }
+                Match m = ServerData.getMatchById(id);
 
                 if(m==null)
                     return;
 
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()));
-                entryViewer.addEntry("Id", String.valueOf(m.getId()) );
-                entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
-                entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
-                entryViewer.addEntry("Wynik A", String.valueOf(m.getScoreA()) );
-                entryViewer.addEntry("Wynik B", String.valueOf(m.getScoreB()) );
-                entryViewer.addEntry("Data", String.valueOf(m.getDate()) );
-
-                Competition c = m.getCompetition();
-                if(c!=null)
-                    entryViewer.addEntry("Wydarzenie", c.getName() );
-                else
-                    entryViewer.addEntry("Wydarzenie", "" );
-
-                Arena a = m.getArena();
-                if(a!=null)
-                    entryViewer.addEntry("Arena", a.getName() );
-                else
-                    entryViewer.addEntry("Arena", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaMatchViewerController(newTab(m.toString()), m);
             }
         });
 
@@ -362,46 +318,17 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             }
         });
 
-        lvFinished.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        lvResults.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                String s = lvFinished.getSelectionModel().getSelectedItem();
+                String s = lvResults.getSelectionModel().getSelectedItem();
                 if(s==null)
                     return;
-                int id = finished.get(s);
-                Match m;
-                if(id == -1) {
-                    //Przejdź
-                    nextSage();
+                int id = reports.get(s);
+                Report report = ServerData.getReportById(id);
+                if(report==null)
                     return;
-                } else
-                    m = ServerData.getMatchById(id);
-
-                if(m==null)
-                    return;
-
-                VistaEntryViewerController entryViewer = new VistaEntryViewerController(newTab(m.toString()));
-                entryViewer.addEntry("Id", String.valueOf(m.getId()) );
-                entryViewer.addEntry("Strona A", m.getSideA().displayedName() );
-                entryViewer.addEntry("Strona B", m.getSideB().displayedName() );
-                entryViewer.addEntry("Wynik A", String.valueOf(m.getScoreA()) );
-                entryViewer.addEntry("Wynik B", String.valueOf(m.getScoreB()) );
-                entryViewer.addEntry("Data", String.valueOf(m.getDate()) );
-
-                Competition c = m.getCompetition();
-                if(c!=null)
-                    entryViewer.addEntry("Wydarzenie", c.getName() );
-                else
-                    entryViewer.addEntry("Wydarzenie", "" );
-
-                Arena a = m.getArena();
-                if(a!=null)
-                    entryViewer.addEntry("Arena", a.getName() );
-                else
-                    entryViewer.addEntry("Arena", "" );
-
-                if(id == -1)
-                    entryViewer.setEditing(true);
+                new VistaReportViewerController(newTab(report.getTitle()), report.getReport());
             }
         });
     }

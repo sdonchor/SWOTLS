@@ -84,33 +84,25 @@ public class VistaEntryViewerController implements VistaContainable {
 
     @FXML
     private void buttonEdit(ActionEvent event) {
-        Dialogs.error("Nie można edytować tego typu danych.");
-
-        /*if(VistaLogInController.hasOrganizerPermissions()){
+        if(VistaLogInController.hasOrganizerPermissions()){
             if(editing){
                 //Zapisz
-                ServerData.saveEntry(table.itemsProperty().getValue(), type);
+                Dialogs.error("Nie można zapisać do bazy tego typu danych.");
             }
             setEditing(!editing);
         }else {
             Dialogs.insufficientPermissions();
-        }*/
+        }
     }
 
     @FXML
     private void buttonDelete(ActionEvent event) {
-        Dialogs.error("Nie można usuwać tego typu danych.");
-
-        /*if(VistaLogInController.hasOrganizerPermissions()){
-            int id = Integer.valueOf(data.get(0).getValue()); //Integer.valueOf(table.itemsProperty().getValue().get(0).getValue());
-            if( id>=0 ){
-                //Usuń z bazy
-                ServerData.deleteEntry(id, type);
-            }
+        if(VistaLogInController.hasOrganizerPermissions()){
+            Dialogs.error("Nie można usuwać z bazy tego typu danych.");
             parent.close();
         }else {
             Dialogs.insufficientPermissions();
-        }*/
+        }
     }
 
     private class EditingCell extends TableCell<Entry, String> {

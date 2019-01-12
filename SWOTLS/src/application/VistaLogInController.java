@@ -12,7 +12,7 @@ import java.io.IOException;
  * Controller class for the login vista.
  */
 public class VistaLogInController implements VistaContainable {
-    private static Permission permission = Permission.GUEST;
+    private static Permission permission = Permission.FULL;
 
     public static boolean hasFullPermissions(){
         if(permission == Permission.FULL)

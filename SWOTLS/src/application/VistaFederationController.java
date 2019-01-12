@@ -8,10 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.util.Date;
@@ -89,7 +86,9 @@ public class VistaFederationController implements VistaContainable, Refreshable,
     @Override
     public TabController newTab(String title){
         TabController tabCtrl = new TabController(title);
-        tbpane.getTabs().add(tabCtrl.getTab());
+        Tab tab = tabCtrl.getTab();
+        tbpane.getTabs().add(tab);
+        tbpane.getSelectionModel().select(tab);
         return tabCtrl;
     }
 

@@ -21,4 +21,5 @@ public class VistaNavigator {
     public static final String VISTA_ARENA_CREATOR = "/application/vistaArenaCreator.fxml";
     public static final String VISTA_REPORT_VIEWER = "/application/vistaReportViewer.fxml";
     public static final String VISTA_MATCH_PLANNER = "/application/vistaMatchPlanner.fxml";
+    public static final String VISTA_SCORE_SETTER = "/application/vistaScoreSetter.fxml";
 }
