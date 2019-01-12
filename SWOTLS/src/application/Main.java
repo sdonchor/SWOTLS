@@ -80,7 +80,12 @@ public class Main extends Application {
     	catch(NullPointerException e) {
     		System.out.println("Connection not found.");
     	}
-    	
-        
+
+    }
+
+    @Override
+    public void stop(){
+        System.out.println("Stage is closing");
+        ServerData.logOut();
     }
 }
