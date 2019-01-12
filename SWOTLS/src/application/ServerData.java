@@ -428,7 +428,19 @@ public class ServerData {
      * @param teamid Id drużyny, -1 jeżeli gracz ma nie mieć drużyny.
      */
 	public static void newPlayer(String name, String surname, String nickname, String contact, String language, String additional, int teamid){
-	    Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowego zawodnika
+		try {
+			if(sc.addNewPlayer(name,surname,nickname,contact,language,additional,teamid)) {
+				System.out.println("add player success");
+			}
+			else
+			{
+				System.out.println("add player fail");
+				//Dialogs.error("Nie udało się dodać gracza.");
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
 

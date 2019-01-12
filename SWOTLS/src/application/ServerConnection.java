@@ -167,4 +167,23 @@ public class ServerConnection {
 			return false;
 		}
 	}
+	public boolean addNewPlayer(String name, String surname, String nickname, String contact, String language,
+			String additional, int teamid) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "add-player;"+name+";"+surname+";"+nickname+";"+contact+";"+language+";"+additional+";"+teamid;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

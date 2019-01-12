@@ -176,4 +176,35 @@ public class QueryBuilder {
 			return false;
 		
 	}
+	public boolean addPlayer(String name, String nickname, String surname, String contact, String language,
+			String additional, String teamid) throws SQLException {
+		String query;
+		if(!teamid.equals("-1"))
+		{
+			 query = "INSERT INTO contestants(name,nickname,surname,language,contact_info,additional_info,team_id) "
+					+ "VALUES(?,?,?,?,?,?,?)";
+		}
+		else
+		{
+			 query = "INSERT INTO contestants(name,nickname,surname,language,contact_info,additional_info) "
+					+ "VALUES(?,?,?,?,?,?)";
+		}
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, name);
+		stmt.setString(2, nickname);
+		stmt.setString(3, surname);
+		stmt.setString(4, language);
+		stmt.setString(5, contact);
+		if(additional==null||additional.equals(""))
+			stmt.setNull(6,java.sql.Types.VARCHAR);
+		else
+			stmt.setString(6, additional);
+		if(!teamid.equals("-1"))
+			stmt.setInt(7, Integer.parseInt(teamid));
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
 }

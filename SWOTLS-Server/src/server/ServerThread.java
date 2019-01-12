@@ -147,6 +147,36 @@ public class ServerThread extends Thread{
 					oos.close();
 					os.close();
 				}
+				if(message.contains("add-player")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					String name = request[1];
+					String surname = request[2];
+					String nickname = request[3];
+					String contact = request[4];
+					String language = request[5];
+					String additional = request[6];
+					String teamid = request[7];
+				
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().addPlayer(name,nickname,surname,contact,language,additional,teamid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when adding a user.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
 			}
 		} catch (IOException e) {
 			System.out.println("Connection closed.");
