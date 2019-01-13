@@ -72,9 +72,10 @@ public class Main extends Application {
     	try {
     		ServerData.initializeServerConnection();
     		//ServerData.register("testuser", "test", Permission.FULL); //przykładowa rejestracja użytkownika
-        	ServerData.logIn("testuser", "test"); //przykładowy login administratora
+        	//ServerData.logIn("testuser", "test"); //przykładowy login administratora
         	//.newPlayer("aaa","eee","eeeeea","aaaaa","pl","",-1); //przykładowa rejestracja gracza bez drużyny
         	//ServerData.newTournament("turniej", "Pucharowy", "SOLO", "fajny jakiś"); //przykładowe tworzenie turnieju
+    		
             launch(args);
     	}
     	catch(NullPointerException e) {

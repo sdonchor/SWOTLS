@@ -314,7 +314,7 @@ public class ServerData {
 		try {
 			success=sc.entryRemoval(id,type);
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
+			ClientLog.logLine("BŁĄD", "Nie udało się usunąć wpisu ("+id+"; "+type+").");
 			success=false;
 			
 		}
@@ -391,7 +391,7 @@ public class ServerData {
 		else
 		{
 			System.out.println("no perms");
-			//uncomment Dialogs.insufficientPermissions();
+			Dialogs.insufficientPermissions();
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
@@ -409,13 +409,20 @@ public class ServerData {
         else if(system.equals("Wieloklasowa liga"))
             iSystem = 5;
 
-       
+       if(type.equals("Indywidualny"))
+       {
+    	   type="SOLO";
+       }
+       else if(type.equals("Drużynowy"))
+       {
+    	   type="TEAM";
+       }
 		if(ServerData.getCurrentUserPerms()==Permission.ORGANIZER || ServerData.getCurrentUserPerms()==Permission.FULL)
 		{
             try {
                 if(!sc.createNewTournament(name,iSystem,type,additional))
                 {
-                   //uncomment this Dialogs.error("Nie udało się utworzyć turnieju");
+                   Dialogs.error("Nie udało się utworzyć turnieju");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -424,7 +431,7 @@ public class ServerData {
             }
         }
 		else
-			//uncomment Dialogs.insufficientPermissions();
+			Dialogs.insufficientPermissions();
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
@@ -445,7 +452,7 @@ public class ServerData {
 			else
 			{
 				System.out.println("add player fail");
-				//Dialogs.error("Nie udało się dodać gracza.");
+				Dialogs.error("Nie udało się dodać gracza.");
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
