@@ -1,11 +1,9 @@
 package server;
 
 import javax.sql.rowset.CachedRowSet;
-
 import java.io.*;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 //
 public class ServerThread extends Thread{
 	private Socket socket;

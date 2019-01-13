@@ -1,6 +1,5 @@
 package application;
 
-import com.sun.javaws.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

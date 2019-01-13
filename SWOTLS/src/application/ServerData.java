@@ -1,8 +1,6 @@
 package application;
 
 import javax.sql.rowset.CachedRowSet;
-
-import java.awt.Dialog;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -678,12 +676,16 @@ public class ServerData {
 
 	public static void demotePlayer(int tournamentId, int playerId) {
         Dialogs.error("Niezaimplementowana funkcja");
-		//TODO Zdegradowanie gracza do mniej ważnej ligi (czyli o 1 numer w górę, bo liga 1 jest najważniejsza)
+		//TODO Zdegradowanie gracza do mniej ważnej ligi (czyli o 1 numer w górę, bo liga 1 jest najważniejsza) - możliwe tylko gdy etap turnieju == 0
 	}
 
 	public static void promotePlayer(int tournamentId, int playerId) {
         Dialogs.error("Niezaimplementowana funkcja");
-		//TODO Awansowanie gracza do ważniejszej ligi (czyli o 1 numer w dół, z tym że niżej niż 1 się nie da, bo liga 1 jest najważniejsza)
+		//TODO Awansowanie gracza do ważniejszej ligi (czyli o 1 numer w dół, z tym że niżej niż 1 się nie da, bo liga 1 jest najważniejsza) - możliwe tylko gdy etap turnieju == 0
 	}
 
+	public static void setNumerOfRounds(int tournamentId, int numerOfRounds) {
+        Dialogs.error("Niezaimplementowana funkcja " + numerOfRounds);
+		//TODO Ustawia ilość rund do rozegrania (używane tylko w systemie szwajcarskim i mcmahona)
+	}
 }

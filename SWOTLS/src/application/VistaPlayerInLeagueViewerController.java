@@ -21,7 +21,9 @@ public class VistaPlayerInLeagueViewerController extends VistaEntryViewerControl
         addEntry("Ranking Elo", String.valueOf(player.getElo()) );
         addEntry("Język", player.getLanguage() );
         addEntry("Informacje kontaktowe", player.getContactInfo() );
-        addEntry("Klasa rozgrywkowa (\"Liga\")", Integer.toString(ServerData.getCompetitorsLeagueClass(league.getId(), player.getId())) );
+        int leagueClass = ServerData.getCompetitorsLeagueClass(league.getId(), player.getId());
+        player.setLeagueClass(leagueClass);
+        addEntry("Klasa rozgrywkowa (\"Liga\")", Integer.toString(leagueClass) );
         addEntry("Informacje dodatkowe", player.getAdditionalInfo() );
         Team t = player.getTeam();
         if(t!=null)
@@ -42,6 +44,12 @@ public class VistaPlayerInLeagueViewerController extends VistaEntryViewerControl
 
         if(league.getStage()!=0){
             Dialogs.error("Awansować uczestników można tylko podczas fazy zapisów - na etapie pomiędzy sezonami.");
+            return;
+        }
+
+        if(player.getLeagueClass()<=1){
+            Dialogs.error("Uczestnik już znajduje się w najwyższej klasie ligowej.");
+            return;
         }
 
         ServerData.promotePlayer(league.getId(), player.getId());
@@ -58,6 +66,7 @@ public class VistaPlayerInLeagueViewerController extends VistaEntryViewerControl
 
         if(league.getStage()!=0){
             Dialogs.error("Degradować uczestników można tylko podczas fazy zapisów - na etapie pomiędzy sezonami.");
+            return;
         }
 
         ServerData.demotePlayer(league.getId(), player.getId());
