@@ -16,7 +16,6 @@ import java.io.IOException;
  */
 public class VistaCompetitionCreatorController implements VistaContainable {
     private VistaContainer parent;
-    private int editId = -1;
 
     public VistaCompetitionCreatorController(VistaContainer parent){
         this.init(parent);
@@ -66,10 +65,8 @@ public class VistaCompetitionCreatorController implements VistaContainable {
                 return;
             }
 
-            if(editId==-1)
-                ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
-            else
-                ServerData.editTournament(editId, nameField.getText(), additionalField.getText());
+
+            ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
 
             parent.close();
         }

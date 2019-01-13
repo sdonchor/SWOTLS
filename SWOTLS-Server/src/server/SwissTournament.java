@@ -74,7 +74,7 @@ public class SwissTournament extends Tournament {
         //TODO zapisać raport w bazie danych (przykładowy format tytułu: "Raport - Etap 1")
 
         //TODO Jeżeli aktualny etap był ostatnim (organizator określa liczbę rund) to wysłać komunikat o zwycięzcy i oznaczyć etap turnieju jako -1 (zakończony)
-        
+
         //TODO Jeżeli liczba graczy jest nieparzysta (i na to pozwalamy) to uczestnikowi z najmniejszym dorobkiem punktowym, który jeszcze nie pauzował daj punkt bez gry (i nie bierz go pod uwagę przy losowaniu par)
 
         //Dobranie par w taki sposób aby różnica ich punktów była jak najmniejsza (w miarę możliwości rywale powinni mieć jednakowa liczbę punktów)

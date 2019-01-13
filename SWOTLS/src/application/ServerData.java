@@ -464,11 +464,6 @@ public class ServerData {
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
-    public static void editTournament(int tournamentId, String name, String additional){
-        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja turnieju
-        ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
-    }
-
     /**
      * Dodaje nowego zawodnika
      * @param teamid Id drużyny, -1 jeżeli gracz ma nie mieć drużyny.
@@ -499,7 +494,7 @@ public class ServerData {
 
         //Poniższe wywoływane gdy serwer zakończy edycję
         Player player = getContestantById(playerId);
-        new VistaPlayerViewerController(MainController.newTab(player.getName()), player);
+        new VistaPlayerViewerController(MainController.newTab("Zawodnik - " + player.getName()), player);
     }
 
     public static void newTeam(String name, String from, int leaderId){
@@ -512,7 +507,7 @@ public class ServerData {
 
         //Poniższe wywoływane gdy serwer zakończy edycję
         Team team = getTeamById(teamId);
-        new VistaTeamViewerController(MainController.newTab(team.getName()), team);
+        new VistaTeamViewerController(MainController.newTab("Drużyna - " + team.getName()), team);
     }
 
     public static void newArena(String name, String location){
@@ -525,7 +520,7 @@ public class ServerData {
 
         //Poniższe wywoływane gdy serwer zakończy edycję
         Arena arena = getArenaById(arenaId);
-        new VistaArenaViewerController(MainController.newTab(arena.getName()), arena);
+        new VistaArenaViewerController(MainController.newTab("Arena - " + arena.getName()), arena);
     }
 
     /**

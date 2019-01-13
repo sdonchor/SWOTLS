@@ -40,7 +40,7 @@ public class BergsCircle {
             if(p1.getId()==-1 || p2.getId()==-1)
                 continue;
 
-            pairs.add( new MatchPair(p1, p2) );
+            pairs.add( new MatchPair(p1.getId(), p2.getId()) );
         }
         return pairs;
     }
