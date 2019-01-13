@@ -129,6 +129,9 @@ public class ServerData {
 				int tid = crs.getInt("tournament_id");
 				String name = crs.getString("name");
 				String type = crs.getString("type");
+				int season = crs.getInt("season");
+				int system = crs.getInt("system");
+				int operator = crs.getInt("operator");
 				Competition.Type t;
 				if(type.equals("solo"))
 				{
@@ -138,7 +141,6 @@ public class ServerData {
 				{
 					t= Competition.Type.TEAM;
 				}
-				int operator = crs.getInt("operator");
 				User u = null;
 				if(!crs.wasNull())
 				{
@@ -146,7 +148,8 @@ public class ServerData {
 				}
 				String additional_info = crs.getString("additional_info");
 				//TODO dać żeby pobierało jeszcze założyciela, etap, system i sezon
-				Competition c = new Competition(tid,name,t,additional_info,null, 0, 5, 1);
+				Competition c = new Competition(tid,name,t,additional_info,u, 0, 5, 1);
+				//Competition c = new Competition(tid,name,type,additional,creator,stage,system,season)
 				tournaments.add(c);
 			}
 		} catch (SQLException e) {
@@ -490,11 +493,20 @@ public class ServerData {
      * @param teamid Id drużyny, -1 jeżeli gracz ma nie mieć drużyny (drużyna ustawiona na "** Brak **").
      */
     public static void editPlayer(int playerId, String name, String surname, String nickname, String contact, String language, String additional, int teamid){
-        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja zawodnika
-
-        //Poniższe wywoływane gdy serwer zakończy edycję
-        Player player = getContestantById(playerId);
-        new VistaPlayerViewerController(MainController.newTab("Zawodnik - " + player.getName()), player);
+    	try {
+			if(!sc.editContestant(playerId, name,surname,nickname,contact,language,additional,teamid))
+			{
+				Dialogs.error("Nie udało się edytować zawodnika.");
+				return;
+			}
+			Player player = getContestantById(playerId);
+	        new VistaPlayerViewerController(MainController.newTab("Zawodnik - " + player.getName()), player);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
     }
 
     public static void newTeam(String name, String from, int leaderId){
