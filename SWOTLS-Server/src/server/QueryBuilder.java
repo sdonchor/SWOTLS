@@ -97,7 +97,7 @@ public class QueryBuilder {
 	public CachedRowSet getTable(String tableName) throws SQLException {
 		RowSetFactory factory = RowSetProvider.newFactory();
 		CachedRowSet crs = factory.createCachedRowSet();
-		String query = "SELECT * FROM $tablename";
+		String query = "SELECT * FROM $tablename ORDER BY 1";
 		query =query.replace("$tablename",tableName);
 		PreparedStatement stmt = connection.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();

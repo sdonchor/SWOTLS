@@ -132,6 +132,7 @@ public class ServerData {
 				int season = crs.getInt("season");
 				int system = crs.getInt("system");
 				int operator = crs.getInt("operator");
+				int stage = crs.getInt("stage");
 				Competition.Type t;
 				if(type.equals("solo"))
 				{
@@ -148,7 +149,7 @@ public class ServerData {
 				}
 				String additional_info = crs.getString("additional_info");
 				//TODO dać żeby pobierało jeszcze założyciela, etap, system i sezon
-				Competition c = new Competition(tid,name,t,additional_info,u, 0, 5, 1);
+				Competition c = new Competition(tid,name,t,additional_info,u, stage,system,season);
 				//Competition c = new Competition(tid,name,type,additional,creator,stage,system,season)
 				tournaments.add(c);
 			}
