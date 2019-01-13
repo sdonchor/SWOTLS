@@ -42,8 +42,8 @@ public class Main extends Application {
 		try {
 			server.runServer();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			System.out.println("Couldn't run server.");
+			ServerLog.logLine("ERROR", "Nie udało się uruchomić serwera.");
 		}
 		
 		//SERVER TEST END

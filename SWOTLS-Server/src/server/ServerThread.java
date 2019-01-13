@@ -90,6 +90,8 @@ public class ServerThread extends Thread{
 							continue;
 						}
 					}
+					else
+						continue;
 					String[] request = message.split(";");
 					String name = request[1];
 					String system = request[2];
@@ -120,7 +122,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("create-user")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")){
+							ServerLog.logLine("ERROR", "Nie udało się utworzyć użytkownika. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć użytkownika. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					String name = request[1];
 					String pw = request[2];
@@ -188,7 +201,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("add-player")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się utworzyć zawodnika. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć zawodnika. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					String name = request[1];
 					String surname = request[2];
@@ -219,7 +243,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("edit-player")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się edytować zawodnika. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się edytować zawodnika. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					int id = Integer.valueOf(request[1]);
 					String name = request[2];
@@ -258,7 +293,18 @@ public class ServerThread extends Thread{
 					ServerLog.logLine("INFO", "Wylogowano użytkownika o IP "+getCleanIP()+".");
 				}
 				if(message.contains("demote-player")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się degradować zawodnika. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się degradować zawodnika. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					int tid = Integer.valueOf(request[1]);
 					int pid = Integer.valueOf(request[2]);
@@ -286,7 +332,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("promote-player")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się awansować zawodnika. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się awansować zawodnika. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					int tid = Integer.valueOf(request[1]);
 					int pid = Integer.valueOf(request[2]);
@@ -312,7 +369,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("add-team")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się utworzyć drużyny. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć drużyny. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					String name = request[1];
 					String from = request[2];
@@ -340,7 +408,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("edit-team")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się edytować drużyny. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się edytować drużyny. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					int tid = Integer.valueOf(request[1]);
 					String name = request[2];
@@ -369,7 +448,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("new-arena")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się utworzyć areny. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć areny. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					String name = request[1];
 					String location = request[2];
@@ -396,7 +486,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("edit-arena")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się edytować areny. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się edytować areny. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					int aid = Integer.valueOf(request[1]);
 					String name = request[2];
@@ -424,7 +525,18 @@ public class ServerThread extends Thread{
 					os.close();
 				}
 				if(message.contains("set-score")){
-					//TODO check if logged in
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się ustawić wyniku. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się ustawić wyniku. Brak uprawnień.");
+						continue;
+					}
 					String[] request = message.split(";");
 					int mid = Integer.valueOf(request[1]);
 					int a = Integer.valueOf(request[2]);

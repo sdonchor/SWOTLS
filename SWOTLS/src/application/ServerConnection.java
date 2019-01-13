@@ -41,21 +41,7 @@ public class ServerConnection {
 			System.out.println("Successfully downloaded table "+tableName);
 			ClientLog.logLine("INFO", "Pobrano tabelę "+tableName+".");
 		}
-		/*if(crs!=null)
-		{
-			try {
-				while(crs.next())
-				{
-					int id = crs.getInt("contestant_id");
-					String nickname = crs.getString("nickname");
-					System.out.println(id+" "+nickname);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/
-		
+
 		socket.close();
 		return crs;
 	}
@@ -63,8 +49,7 @@ public class ServerConnection {
 		try {
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Couldn't close socket");
 		}
 	}
 	public void socketOpen() {

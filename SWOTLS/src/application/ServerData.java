@@ -148,9 +148,7 @@ public class ServerData {
 					u = ServerData.getUserById(operator);
 				}
 				String additional_info = crs.getString("additional_info");
-				//TODO dać żeby pobierało jeszcze założyciela, etap, system i sezon
 				Competition c = new Competition(tid,name,t,additional_info,u, stage,system,season);
-				//Competition c = new Competition(tid,name,type,additional,creator,stage,system,season)
 				tournaments.add(c);
 			}
 		} catch (SQLException e) {
@@ -707,15 +705,14 @@ public class ServerData {
     	try {
 			if(sc.setScore(matchId,scoreA,scoreB))
 			{
-	
+				ClientLog.logLine("INFO", "Ustawiono wynik meczu "+matchId+".");
 			}
 			else
 			{
-				
+				ClientLog.logLine("ERROR", "Nie udało się ustawić wyniku.");
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się ustawić wyniku. Błąd połączenia.");
 		}
 	    ServertriggeredEvents.dataUpdated();
     }

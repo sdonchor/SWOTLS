@@ -283,15 +283,7 @@ public class QueryBuilder {
 		else
 			return false;
 	}
-	public CachedRowSet getUnplannedMatches() throws SQLException {
-		String query = "SELECT * FROM matches WHERE time IS NULL";
-		PreparedStatement stmt=connection.prepareStatement(query);
-		ResultSet rs = stmt.executeQuery();
-		RowSetFactory factory = RowSetProvider.newFactory();
-		CachedRowSet crs = factory.createCachedRowSet();
-		crs.populate(rs);
-		return crs;
-	}
+	
 	public boolean demotePlayer(int tid, int cid) throws SQLException {
 		String query = "SELECT * FROM contestant-tournament WHERE contestant_id=? AND tournament_id=?";
 		PreparedStatement stmt=connection.prepareStatement(query);
@@ -341,9 +333,70 @@ public class QueryBuilder {
 			return false;
 		
 	}
+	//no client side implementation yet
 	public CachedRowSet getPlannedMatches() throws SQLException {
 		String query = "SELECT * FROM matches WHERE time IS NOT NULL AND sideA_score IS NULL";
 		PreparedStatement stmt=connection.prepareStatement(query);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public CachedRowSet getUnplannedMatches() throws SQLException {
+		String query = "SELECT * FROM matches WHERE time IS NULL";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public CachedRowSet getFinishedMatches() throws SQLException {
+		String query = "SELECT * FROM matches WHERE time IS NOT NULL AND sideA_score IS NOT NULL";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public CachedRowSet getReportsList(int tid) throws SQLException {
+		String query = "SELECT * FROM reports WHERE tournament_id=?";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public CachedRowSet getReport(int rid) throws SQLException {
+		String query = "SELECT * FROM reports WHERE report_id=?";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, rid);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public boolean addToTournament(int pid, int tid) throws SQLException{
+		String query = "INSERT INTO contestant-tournament(contestant_id,tournament_id) VALUES (?,?)";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, pid);
+		stmt.setInt(2, tid);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public CachedRowSet getPlayerTournamentStats(int tid, int pid) throws SQLException {
+		String query = "SELECT * FROM contestant-tournament WHERE contestant_id=? AND tournament_id=?";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, pid);
+		stmt.setInt(2, tid);
 		ResultSet rs = stmt.executeQuery();
 		RowSetFactory factory = RowSetProvider.newFactory();
 		CachedRowSet crs = factory.createCachedRowSet();
