@@ -15,10 +15,10 @@ public class ServerConnection {
 	private String address = null;
 	private int port;
 	private boolean newRequest = false;
-	public ServerConnection(String address, int port) throws UnknownHostException, IOException {
+	public ServerConnection(String address, int port) throws Exception {
 		this.address=address;
 		this.port=port;
-		//this.socket=new Socket(address,port);
+		this.socket=new Socket(address,port);
 	}
 	public void sendServerRequest(String request) throws IOException {
 		socketOpen();
@@ -68,7 +68,7 @@ public class ServerConnection {
 	public void socketOpen() {
 		try {
 			socket=new Socket(address,port);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Couldn't connect to server.");
 		}
 	}
@@ -103,7 +103,7 @@ public class ServerConnection {
 			}
 			return false;
 		}
-		
+
 	}
 
 	public boolean verifyLogin(String id, String pw) throws IOException, ClassNotFoundException {

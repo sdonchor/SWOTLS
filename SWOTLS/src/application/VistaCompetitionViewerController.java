@@ -21,6 +21,22 @@ public class VistaCompetitionViewerController extends VistaEntryViewerController
         else
             addEntry("Założyciel", "" );
 
+        String system = "Nieokreślony";
+
+        int iSystem = competition.getSystem();
+        if(iSystem==1)
+            system = "Pucharowy";
+        else if(iSystem==2)
+            system = "Szwajcarski";
+        else if(iSystem==3)
+            system = "Kołowy";
+        else if(iSystem==4)
+            system = "McMahona";
+        else if(iSystem==5)
+            system = "Wieloklasowa liga";
+
+        addEntry("System", system);
+
         actionButton.setVisible(false);
     }
 
@@ -31,6 +47,11 @@ public class VistaCompetitionViewerController extends VistaEntryViewerController
 
     @FXML
     private void buttonDelete(ActionEvent event) {
+        if(!VistaLogInController.hasOrganizerPermissions()){
+            Dialogs.insufficientPermissions();
+            return;
+        }
+
         ServerData.deleteTournament(competitionId);
     }
 }

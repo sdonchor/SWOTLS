@@ -27,28 +27,54 @@ public class ServerData {
 	private static ServerConnection sc;
 	private static User currentUser=null;
 
-	public static Permission getCurrentUserPerms() {
+    public static ServerConnection getServerConnection() {
+        return sc;
+    }
+
+    public static Permission getCurrentUserPerms() {
 		if(currentUser!=null) {
 			return Permission.valueOf(currentUser.getPermissions());
 		}
 		else
 			return Permission.GUEST;
 	}
-	public static void initializeServerConnection() {
+
+	public static boolean downloadEverything(){
+	    //TODO To tylko tymczasowo do testów, docelowo ma pobierać pojedynczo tylko to co jest żądane albo to co się zmieniło w bazie (w zależności od podejścia)
+        System.out.println("Tymczasowo dla testów pobieram wszystko od nowa przy każdym odświeżeniu");
+        try {
+            contestants.clear();
+            tournaments.clear();
+            teams.clear();
+            matches.clear();
+            arenas.clear();
+            sys_users.clear();
+            ServerData.convertContestants(sc.getTable("contestants"));
+            ServerData.convertTournaments(sc.getTable("tournaments"));
+            ServerData.convertTeams(sc.getTable("teams"));
+            ServerData.convertMatches(sc.getTable("matches"));
+            ServerData.convertArenas(sc.getTable("arenas"));
+            ServerData.convertSysUsrs(sc.getTable("system_users"));
+            return true;
+        } catch (Exception e) { //IOException | ClassNotFoundException e
+            System.out.println("Couldn't download database.");
+            return false;
+        }
+    }
+
+	public static boolean initializeServerConnection(String address, int port) {
 		try {
-			sc = new ServerConnection("localhost",4545);
-			ServerData.convertContestants(sc.getTable("contestants"));
-			ServerData.convertTournaments(sc.getTable("tournaments"));
-			ServerData.convertTeams(sc.getTable("teams"));
-			ServerData.convertMatches(sc.getTable("matches"));
-			ServerData.convertArenas(sc.getTable("arenas"));
-			ServerData.convertSysUsrs(sc.getTable("system_users"));
-		//	sc.socketClose();
-			
-		} catch (IOException | ClassNotFoundException e) {
+			sc = new ServerConnection(address,port);
+            downloadEverything();
+            sc.socketClose();
+            return true;
+		} catch (Exception e) {
 			System.out.println("Couldn't connect to server.");
+			return false;
 		}
+
 	}
+
 	public static void convertContestants(CachedRowSet crs) {
 		try {
 			while(crs.next()) {
@@ -119,7 +145,8 @@ public class ServerData {
 					u = ServerData.getUserById(operator);
 				}
 				String additional_info = crs.getString("additional_info");
-				Competition c = new Competition(tid,name,t,additional_info,null);
+				//TODO dać żeby pobierało jeszcze założyciela, etap, system i sezon
+				Competition c = new Competition(tid,name,t,additional_info,null, 0, 5, 1);
 				tournaments.add(c);
 			}
 		} catch (SQLException e) {
@@ -368,7 +395,9 @@ public class ServerData {
 	 */
 	public static void logOut() {
 		try {
-			sc.logOut();
+		    if(sc!=null)
+			    sc.logOut();
+		    sc = null;
 		} catch (IOException e) {
 			System.out.println("Couldn't send logout request.");
 		}
@@ -506,6 +535,7 @@ public class ServerData {
      * @param arenaId Id areny, która przypisać do meczu. (-1 gdy arena nie została określona)
      */
     public static void planMatch(int matchId, LocalDateTime localDate, int arenaId){
+        Dialogs.error("Niezaimplementowana funkcja");
         Date date = Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant()); //konwersja z LocalDateTime do Date
         //TODO ustawienie daty meczu i areny (oznaczenie jako zaplanowany - czyli ma podaną datę, ale jeszcze nie wprowadzony wynik)
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy operację
@@ -525,6 +555,17 @@ public class ServerData {
 		}
 		return map;
 	}
+
+    /**
+     * Pobiera numer klasy rozgrywkowej (podanej ligi) w której znajduje się podany uczestnik (drużyna lub zawodnik)
+     * @param tournamnetId Id ligi
+     * @param competitorId Id uczestnika turnieju (zawodnika lub drużyny - w zależności od typu podanego turnieju)
+     * @return Numer klasy rozgrywkowej
+     */
+	public static int getCompetitorsLeagueClass(int tournamnetId, int competitorId){
+        int leagueClass = -9999; //TODO
+        return leagueClass;
+    }
 
 	public static Map<String, Integer> getListOfUnplannedMatches(int competitionId){
 		//TODO powinno pobierać (tylko) niezaplanowane mecze w podanym turnieju (czyli takie które nie mają podanej daty ani wyniku)
@@ -562,12 +603,14 @@ public class ServerData {
     }
 
     public static Report getReportById(int reportId){
+        Dialogs.error("Niezaimplementowana funkcja");
         //TODO powinno zwracać raport o podanym id w formie Stringa
         String s = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla mattis blandit velit, sed elementum.";
         return new Report("Raport - Etap 1 - Sezon 2", s);
     }
 
 	public static void addCompetitorToCompetition(int competitorId, int competitionId){
+        Dialogs.error("Niezaimplementowana funkcja");
 		//TODO powinno zapisywać zawodnika lub drużynę (w zależnościu od typu podanego turnieju) do wydarzenia
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
@@ -577,6 +620,7 @@ public class ServerData {
 	 * @param competitionId Id turnieju, w którym ma nastąpić przejście do następnego etapu.
 	 */
 	public static void nextStage(int competitionId){
+        Dialogs.error("Niezaimplementowana funkcja");
 		//TODO serwer powinien sprawdzić czy można przejść (czy wyniki wszystkich meczy zostały wprowadzone) - jeżeli tak, to ma wygenerować mecze dla następnego etapu lub ogłosić zwycięzcę (lub dokonać awansów i spadków w przypadku ligi) jeżeli to był ostatni etap
         //TODO ^^ czyli wywołać metodę nextStage() (lub endEntriesStage() jeżeli zakończony etap to 0 czyli zapisy) dla odpowiedniego systemu turniejowego
 		ServertriggeredEvents.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy."); //TODO taki lub podobny komunikat ma wywoływać serwer jeżeli nie można przejść
@@ -584,6 +628,7 @@ public class ServerData {
 	}
 
     public static void setScore(int matchId, int scoreA, int scoreB) {
+        Dialogs.error("Niezaimplementowana funkcja");
         //TODO wprowadzenie wyniku meczu (po stronie serwera wyłołać metodę dla odpowiedniego systemu turniejowego)
 	    ServertriggeredEvents.dataUpdated();
     }
@@ -593,4 +638,15 @@ public class ServerData {
 	public static void setCurrentUser(User currentUser) {
 		ServerData.currentUser = currentUser;
 	}
+
+	public static void demotePlayer(int tournamentId, int playerId) {
+        Dialogs.error("Niezaimplementowana funkcja");
+		//TODO Zdegradowanie gracza do mniej ważnej ligi (czyli o 1 numer w górę, bo liga 1 jest najważniejsza)
+	}
+
+	public static void promotePlayer(int tournamentId, int playerId) {
+        Dialogs.error("Niezaimplementowana funkcja");
+		//TODO Awansowanie gracza do ważniejszej ligi (czyli o 1 numer w dół, z tym że niżej niż 1 się nie da, bo liga 1 jest najważniejsza)
+	}
+
 }

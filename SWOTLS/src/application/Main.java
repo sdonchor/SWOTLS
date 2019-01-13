@@ -12,6 +12,11 @@ import java.io.IOException;
  * Main application class.
  */
 public class Main extends Application {
+    private static MainController mainController;
+
+    public static MainController getMainController() {
+        return mainController;
+    }
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -43,8 +48,8 @@ public class Main extends Application {
             )
         );
 
-        MainController mainController = loader.getController();
-        new VistaFederationController(mainController);
+        mainController = loader.getController();
+        new VistaConnectController(mainController);
 
         return mainPane;
     }
@@ -70,12 +75,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
     	try {
-    		ServerData.initializeServerConnection();
-    		//ServerData.register("testuser", "test", Permission.FULL); //przykładowa rejestracja użytkownika
-        	//ServerData.logIn("testuser", "test"); //przykładowy login administratora
-        	//.newPlayer("aaa","eee","eeeeea","aaaaa","pl","",-1); //przykładowa rejestracja gracza bez drużyny
-        	//ServerData.newTournament("turniej", "Pucharowy", "SOLO", "fajny jakiś"); //przykładowe tworzenie turnieju
-    		
             launch(args);
     	}
     	catch(NullPointerException e) {

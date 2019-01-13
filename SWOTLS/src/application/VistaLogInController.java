@@ -63,6 +63,11 @@ public class VistaLogInController implements VistaContainable {
 
     @FXML
     void submit(ActionEvent event) {
+        if(idField.getText().isEmpty() || pwField.getText().isEmpty()){
+            Dialogs.error("Uzupełnij wszystkie pola.");
+            return;
+        }
+
         ServerData.logIn(idField.getText(), pwField.getText());
         parent.close();
     }

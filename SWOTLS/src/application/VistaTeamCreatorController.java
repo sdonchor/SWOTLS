@@ -19,6 +19,7 @@ public class VistaTeamCreatorController implements VistaContainable {
     private VistaContainer parent;
     private Map<String, Integer> players;
     private int editId = -1;
+    private int leaderId = -1;
 
     public VistaTeamCreatorController(VistaContainer parent){
         this.init(parent);
@@ -27,13 +28,16 @@ public class VistaTeamCreatorController implements VistaContainable {
     public VistaTeamCreatorController(VistaContainer parent, Team t){
         this.init(parent);
         this.editId = t.getId();
+        Player leader = t.getLeader();
+        if(leader!=null)
+            this.leaderId = leader.getId();
         actionButton.setText("Zapisz");
         nameField.setText(t.getName());
         fromField.setText(t.getWhereFrom());
 
         Player p = t.getLeader();
         if(p!=null)
-            leaderBox.setValue(p.getName());
+            leaderBox.setValue(p.displayedName());
     }
 
     @FXML private TextField nameField;
@@ -78,9 +82,9 @@ public class VistaTeamCreatorController implements VistaContainable {
         }
 
         if(editId==-1)
-            ServerData.newTeam(nameField.getText(), fromField.getText(), players.get(leaderBox.getValue()));
+            ServerData.newTeam(nameField.getText(), fromField.getText(), players.getOrDefault(leaderBox.getValue(), leaderId));
         else
-            ServerData.editTeam(editId, nameField.getText(), fromField.getText(), players.get(leaderBox.getValue()));
+            ServerData.editTeam(editId, nameField.getText(), fromField.getText(), players.getOrDefault(leaderBox.getValue(), leaderId));
 
         parent.close();
     }

@@ -94,10 +94,22 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
     private void updateBottomLabel()
     {
-        if(competition.getStage()>0)
-            bottomLabel.setText("Perspektywa wydarzenia: " + competition.getName() + " - Etap " + competition.getStage());
-        else
-            bottomLabel.setText("Perspektywa wydarzenia: " + competition.getName() + " - Zapisy");
+        String s;
+
+        if(competition.getStage()>0) {
+            if(competition.getSeason()==5)
+                s = "Perspektywa wydarzenia: " + competition.getName() + " - Sezon " + competition.getSeason() +  " - Kolejka " + competition.getStage();
+            else
+                s = "Perspektywa wydarzenia: " + competition.getName() + " - Etap " + competition.getStage();
+        }
+        else {
+            s = "Perspektywa wydarzenia: " + competition.getName() + " - Zapisy";
+            if(competition.getSeason()==5)
+                s += " przed sezonem " + competition.getSeason();
+        }
+
+
+        bottomLabel.setText(s);
     }
 
     @Override
@@ -192,10 +204,15 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                     return;
                 }
 
-                Player c = ServerData.getContestantById(id);
-                if(c==null)
+                Player player = ServerData.getContestantById(id);
+                if(player==null)
                     return;
-                new VistaPlayerViewerController(newTab("Profil - " + c.displayedName()), c);
+
+                if(competition.getSystem()==5)
+                    new VistaPlayerInLeagueViewerController(MainController.newTab("Zawodnik - " + player.displayedName()), player, competition);
+                else
+                    new VistaPlayerViewerController(newTab("Profil - " + player.displayedName()), player);
+
             }
         });
 
@@ -325,6 +342,13 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(s==null)
                     return;
                 int id = reports.get(s);
+
+                if(id == -1) {
+                    //Przejdź
+                    nextSage();
+                    return;
+                }
+
                 Report report = ServerData.getReportById(id);
                 if(report==null)
                     return;

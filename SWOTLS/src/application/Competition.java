@@ -8,13 +8,18 @@ public class Competition {
     private String additionalInfo;
     private User creator;
     private int stage = 0;
+    private int system;
+    private int season;
 
-    public Competition(int id, String name, Type type, String additionalInfo, User creator) {
+    public Competition(int id, String name, Type type, String additionalInfo, User creator, int stage, int system, int season) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.additionalInfo = additionalInfo;
         this.creator = creator;
+        this.stage = stage;
+        this.system = system;
+        this.season = season;
     }
 
     public int getId() {
@@ -43,5 +48,13 @@ public class Competition {
 
     public void setStage(int stage) {
         this.stage = stage;
+    }
+
+    public int getSystem() {
+        return system;
+    }
+
+    public int getSeason() {
+        return season;
     }
 }

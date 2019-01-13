@@ -1,5 +1,6 @@
 package application;
 
+import com.sun.security.ntlm.Server;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +28,13 @@ public class MainController extends VistaContainer  {
 
     @FXML
     private void closeAppAction(ActionEvent event) {
-        Platform.exit();
+        if(tabContainer==null)
+            Platform.exit();
+        else{
+            ServerData.logOut();
+            new VistaConnectController(this);
+            setTabContainer(null);
+        }
     }
 
     public static void setTabContainer(TabContainer toSet) {
@@ -36,16 +43,21 @@ public class MainController extends VistaContainer  {
     }
 
     public static TabController newTab(String title){
+        if(tabContainer==null){
+            Dialogs.error("Nie udało się otworzyć karty. Prawdopodobnie brak połączenia z serwerem.");
+            new VistaConnectController(Main.getMainController());
+            return new TabController(title);
+        }
         return tabContainer.newTab(title);
     }
 
     public static void openLogInTab(){
-        new VistaLogInController(tabContainer.newTab("Zaloguj się"));
+        new VistaLogInController(newTab("Zaloguj się"));
     }
 
     @FXML
     private void openLogInTab(ActionEvent event){
-        new VistaLogInController(tabContainer.newTab("Zaloguj się"));
+        new VistaLogInController(newTab("Zaloguj się"));
     }
 
     @FXML
@@ -55,14 +67,21 @@ public class MainController extends VistaContainer  {
         for(String match : matches.keySet()){
             s += match + "\n";
         }
-        s +="\n Aby zaplanować mecz, przejdź do perspektywy wybranego wydarzenia i wybierz niezaplanowany mecz z listy (rozwijanego panelu) po lewej stronie.";
-        new VistaReportViewerController(tabContainer.newTab("Terminarz"), s);
+        s +="\nAby zaplanować mecz, przejdź do perspektywy wybranego wydarzenia i wybierz niezaplanowany mecz z listy (rozwijanego panelu) po lewej stronie.";
+        new VistaReportViewerController(newTab("Terminarz"), s);
     }
 
     @FXML
-    private void goToFederationView(ActionEvent event){
+    public void goToFederationView(){
+        if(ServerData.getServerConnection()==null) {
+            Dialogs.error("Brak połączenia z serwerem.");
+            return;
+        }
+
         new VistaFederationController(this);
     }
 
-    public void close() { Platform.exit(); }
+    public void close() {
+        Platform.exit();
+    }
 }
