@@ -38,7 +38,10 @@ public class ServerConnection {
 		InputStream is = socket.getInputStream();
 		ObjectInputStream ois = new ObjectInputStream(is);
 		CachedRowSet crs = (CachedRowSet)ois.readObject();
-		if(crs!=null)System.out.println("Successfully downloaded table "+tableName);
+		if(crs!=null) {
+			System.out.println("Successfully downloaded table "+tableName);
+			ClientLog.logLine("INFO", "Pobrano tabelę "+tableName+".");
+		}
 		/*if(crs!=null)
 		{
 			try {

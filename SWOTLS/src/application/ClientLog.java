@@ -20,7 +20,7 @@ public class ClientLog {
 	public static void logLine(String type, String msg) 
 	{ 
 		String filename=filenameTemplate+getDate()+".log";
-		String line = "[$time][$type]: $msg\n";
+		String line = "[$time][$type]: $msg";
 		line = line.replace("$time", getTime());
 		line = line.replace("$type", type);
 		line = line.replace("$msg", msg);
@@ -29,6 +29,7 @@ public class ClientLog {
 			f.mkdir();
 			BufferedWriter out = new BufferedWriter(new FileWriter("./"+filename,true)); 
 			out.write(line); 
+			out.newLine();
 			out.close(); 
 		} 
 			catch (IOException e) { 

@@ -47,6 +47,7 @@ public class QueryBuilder {
 			stmt = connection.prepareStatement(query);
 			stmt.execute();
 		}
+		
 	}
 	/**
 	 * Inserts given contestant into the database.
@@ -86,15 +87,22 @@ public class QueryBuilder {
 			int uid = result.getInt("sys_usr_id");
 			String perms = result.getString("permissions");
 			if(SystemUser.hashString(pw).equals(savedHash))
+			{
 				return new SystemUser(uid,login,perms);
+			}
 			else
+			{
 				return null;
+			}
 		}
 		else
+		{
 			return null;
+		}
 	
 	}
 	public CachedRowSet getTable(String tableName) throws SQLException {
+		
 		RowSetFactory factory = RowSetProvider.newFactory();
 		CachedRowSet crs = factory.createCachedRowSet();
 		String query = "SELECT * FROM $tablename ORDER BY 1";
@@ -102,6 +110,7 @@ public class QueryBuilder {
 		PreparedStatement stmt = connection.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();
 		crs.populate(rs);
+		
 		return crs;
 	}//
 	public boolean removeFromTable(String tablename, int id) throws SQLException {

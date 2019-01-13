@@ -65,11 +65,14 @@ public class ServerData {
 	public static boolean initializeServerConnection(String address, int port) {
 		try {
 			sc = new ServerConnection(address,port);
+			 ClientLog.logLine("INFO", "Połączono z serwerem "+address+":"+port+".");
             downloadEverything();
             sc.socketClose();
+           
             return true;
 		} catch (Exception e) {
 			System.out.println("Couldn't connect to server.");
+			ClientLog.logLine("ERROR", "Nie udało się połączyć z serwerem "+address+":"+port+".");
 			return false;
 		}
 
@@ -344,8 +347,9 @@ public class ServerData {
 		boolean success=false;
 		try {
 			success=sc.entryRemoval(id,type);
+			ClientLog.logLine("INFO", "Usunięto rekord o ID "+id+" z tabeli "+type+".");
 		} catch (ClassNotFoundException | IOException e) {
-			ClientLog.logLine("BŁĄD", "Nie udało się usunąć wpisu ("+id+"; "+type+").");
+			ClientLog.logLine("ERROR", "Nie udało się usunąć rekordu o ID "+id+" z tabeli "+type+".");
 			success=false;
 			
 		}
@@ -382,10 +386,12 @@ public class ServerData {
 			if(sc.verifyLogin(id,pw))
 			{
 				System.out.println("log in success");
+				ClientLog.logLine("INFO", "Pomyślnie zalogowano użytkownika "+id+".");
 			    ServertriggeredEvents.permissionsChanged(ServerData.getCurrentUserPerms()); //wywoływane gdy serwer potwierdzi zmianę uprawnień
 			}
 			else
 			{
+				ClientLog.logLine("ERROR", "Nie udało się zalogować użytkownika "+id+".");
 				System.out.println("log in fail");
 			}
 			
@@ -400,10 +406,14 @@ public class ServerData {
 	public static void logOut() {
 		try {
 		    if(sc!=null)
+		    {
 			    sc.logOut();
+			    ClientLog.logLine("INFO", "Pomyślnie wylogowano bieżącego użytkownika.");
+		    }
 		    sc = null;
 		} catch (IOException e) {
 			System.out.println("Couldn't send logout request.");
+			 ClientLog.logLine("ERROR", "Nie udało się wysłać żądania wylogowania.");
 		}
 	}
 	public static void register(String id, String pw, Permission perm){
@@ -414,16 +424,21 @@ public class ServerData {
 				{
 					System.out.println("register fail");
 					Dialogs.error("Nie udało się utworzyć użytkownika ", id);
+					ClientLog.logLine("INFO", "Utworzono użytkownika "+id+".");
 				}
 				else
+				{
 					System.out.println("register success");
+					 ClientLog.logLine("INFO", "Utworzono użytkownika "+id+".");
+				}
 			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
+				ClientLog.logLine("ERROR", "Nie udało się utworzyć użytkownika "+id+". Błąd połączenia.");
 			}
 		}
 		else
 		{
 			System.out.println("no perms");
+			ClientLog.logLine("ERROR", "Nie udało się utworzyć użytkownika "+id+". Brak uprawnień.");
 			Dialogs.insufficientPermissions();
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
@@ -456,15 +471,23 @@ public class ServerData {
                 if(!sc.createNewTournament(name,iSystem,type,additional))
                 {
                    Dialogs.error("Nie udało się utworzyć turnieju");
+                   ClientLog.logLine("ERROR", "Nie udało się utworzyć turnieju "+name+".");
+                }
+                else
+                {
+                	ClientLog.logLine("INFO", "Utworzono turniej "+name+".");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+            	ClientLog.logLine("ERROR", "Nie udało się utworzyć turnieju "+name+". Błąd połączenia.");
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            	ClientLog.logLine("ERROR", "Nie udało się utworzyć turnieju "+name+". Błąd połaczenia.");
             }
         }
 		else
+		{
 			Dialogs.insufficientPermissions();
+			ClientLog.logLine("ERROR", "Nie udało się utworzyć turnieju "+name+". Brak uprawnień.");
+		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
@@ -476,15 +499,16 @@ public class ServerData {
 		try {
 			if(sc.addNewPlayer(name,surname,nickname,contact,language,additional,teamid)) {
 				System.out.println("add player success");
+				ClientLog.logLine("INFO", "Dodano gracza "+nickname+".");
 			}
 			else
 			{
 				System.out.println("add player fail");
 				Dialogs.error("Nie udało się dodać gracza.");
+				ClientLog.logLine("ERROR", "Nie udało się dodać gracza "+nickname+".");
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się dodać gracza "+nickname+". Błąd połączenia.");
 		}
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
@@ -498,7 +522,12 @@ public class ServerData {
 			if(!sc.editContestant(playerId, name,surname,nickname,contact,language,additional,teamid))
 			{
 				Dialogs.error("Nie udało się edytować zawodnika.");
+				ClientLog.logLine("ERROR", "Nie udało się edytować gracza "+nickname+".");
 				return;
+			}
+			else
+			{
+				ClientLog.logLine("INFO", "Utworzono gracza "+nickname+".");
 			}
 			Player player = getContestantById(playerId);
 	        new VistaPlayerViewerController(MainController.newTab("Zawodnik - " + player.getName()), player);
