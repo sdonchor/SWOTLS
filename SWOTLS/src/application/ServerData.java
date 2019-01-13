@@ -539,12 +539,12 @@ public class ServerData {
         
     }
 
-    public static void newTeam(String name, String from, int leaderId){
+    public static void newTeam(String name, String from, int leaderId){ //serverside ready
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowej drużyny
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
 
-    public static void editTeam(int teamId, String name, String from, int leaderId){
+    public static void editTeam(int teamId, String name, String from, int leaderId){ //serverside ready
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja drużyny
 
         //Poniższe wywoływane gdy serwer zakończy edycję
@@ -552,12 +552,12 @@ public class ServerData {
         new VistaTeamViewerController(MainController.newTab("Drużyna - " + team.getName()), team);
     }
 
-    public static void newArena(String name, String location){
+    public static void newArena(String name, String location){ //serverside ready
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowej arena
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
 
-    public static void editArena(int arenaId, String name, String location){
+    public static void editArena(int arenaId, String name, String location){ //serverside ready
         Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja areny
 
         //Poniższe wywoływane gdy serwer zakończy edycję

@@ -223,4 +223,97 @@ public class QueryBuilder {
 		else
 			return false;
 	}
+	public boolean addTeam(String name, String from, int leaderID) throws SQLException {
+		String query = "INSERT INTO teams(name,where_from,leader_id) VALUES (?,?,?)";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, name);
+		stmt.setString(2, from);
+		stmt.setInt(3, leaderID);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public boolean editTeam(int id, String name, String from, int leaderID) throws SQLException {
+		String query = "UPDATE teams SET name = ?, from = ?, leaderID = ? WHERE team_id=?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, name);
+		stmt.setString(2, from);
+		stmt.setInt(3, leaderID);
+		stmt.setInt(4, id);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public boolean newArena(String name, String location) throws SQLException {
+		String query = "INSERT INTO teams(name,location) VALUES (?,?)";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, name);
+		stmt.setString(2, location);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public boolean editArena(int id,String name, String location) throws SQLException {
+		String query = "UPDATE arenas SET name=?,location=? WHERE arena_id=?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, name);
+		stmt.setString(2, location);
+		stmt.setInt(3, id);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public boolean setScore(int id, int sideA, int sideB) throws SQLException{
+		String query = "UPDATE matches SET sideA_score = ? , sideB_score = ? WHERE match_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, sideA);
+		stmt.setInt(2, sideB);
+		stmt.setInt(3, id);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public CachedRowSet getUnplannedMatches() throws SQLException {
+		String query = "SELECT * FROM matches WHERE time IS NULL";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public boolean demotePlayer(int tid, int cid) throws SQLException {
+		String query = "SELECT * FROM contestant-tournament WHERE contestant_id=? AND tournament_id=?";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, cid);
+		stmt.setInt(2, tid);
+		ResultSet rs = stmt.executeQuery();
+		int currentLeague;
+		if(rs.next()) {
+			currentLeague = rs.getInt("league");
+			query = "UPDATE contestant-tournament SET league=? WHERE contestant_id=? AND tournament_id=?";
+			PreparedStatement update=connection.prepareStatement(query);
+			update.setInt(1, currentLeague+1);
+			update.setInt(2, cid);
+			update.setInt(3, tid);
+			int rows=update.executeUpdate();
+			if(rows==1)
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+		
+	}
 }
