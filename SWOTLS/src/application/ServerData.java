@@ -727,29 +727,35 @@ public class ServerData {
 	}
 
 	public static void demotePlayer(int tournamentId, int playerId) {
-<<<<<<< HEAD
 		try {
 			if(sc.demotePlayer(tournamentId, playerId))
 			{
-				
+				ClientLog.logLine("INFO", "Zdegradowano gracza "+playerId+".");
 			}
 			else
 			{
-				
+				ClientLog.logLine("ERROR", "Nie udało się zdegradować gracza "+playerId+".");
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się zdegradować gracza "+playerId+". Błąd połączenia.");
 		}
-=======
-        Dialogs.error("Niezaimplementowana funkcja");
-		//TODO Zdegradowanie gracza do mniej ważnej ligi (czyli o 1 numer w górę, bo liga 1 jest najważniejsza) - możliwe tylko gdy etap turnieju == 0
->>>>>>> branch 'master' of https://github.com/sdonchor/SWOTLS.git
 	}
 
 	public static void promotePlayer(int tournamentId, int playerId) {
-        Dialogs.error("Niezaimplementowana funkcja");
-		//TODO Awansowanie gracza do ważniejszej ligi (czyli o 1 numer w dół, z tym że niżej niż 1 się nie da, bo liga 1 jest najważniejsza) - możliwe tylko gdy etap turnieju == 0
+		try {
+			if(sc.promotePlayer(tournamentId, playerId))
+			{
+				ClientLog.logLine("INFO", "Awansowano gracza "+playerId+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się awansować gracza "+playerId+".");
+
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się awansować gracza "+playerId+". Błąd połączenia.");
+
+		}
 	}
 
 	public static void setNumerOfRounds(int tournamentId, int numerOfRounds) {

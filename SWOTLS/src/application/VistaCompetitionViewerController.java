@@ -1,9 +1,5 @@
 package application;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'master' of https://github.com/sdonchor/SWOTLS.git
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
