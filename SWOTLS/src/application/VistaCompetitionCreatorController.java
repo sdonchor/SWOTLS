@@ -65,7 +65,6 @@ public class VistaCompetitionCreatorController implements VistaContainable {
                 return;
             }
 
-
             ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
 
             parent.close();

@@ -87,10 +87,24 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             return;
         }
 
-        if(unplanned.size()>1&&planned.size()>1)
+        if(false&&unplanned.size()>1&&planned.size()>1)
             Dialogs.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy.", "Nie można przejść do następnego etapu");
-        else
+        else {
+            if(competition.getStage()==0 && (competition.getSystem()==2 || competition.getSystem()==4)) {
+                try {
+                    int rounds = Integer.valueOf(Dialogs.inputDialog("Wprowadź ilość rund do rozegrania:"));
+                    if(rounds<1){
+                        Dialogs.error("Liczba rund musi wynosić conajmniej 1! Spróbuj jeszcze raz.");
+                        return;
+                    }
+                    ServerData.setNumerOfRounds(competition.getId(), rounds);
+                }catch (NumberFormatException e){
+                    Dialogs.error("Wprowadzono niedozwoloną wartość! Spróbuj jeszcze raz wprowadzająć poprawną liczbę.");
+                    return;
+                }
+            }
             ServerData.nextStage(competition.getId());
+        }
     }
 
     private void updateBottomLabel()

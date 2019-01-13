@@ -77,7 +77,12 @@ public class VistaScoreSetterController implements VistaContainable {
             return;
         }
 
-        ServerData.setScore(matchId, Integer.parseInt(scoreA.getText()), Integer.parseInt(scoreB.getText()));
+        try {
+            ServerData.setScore(matchId, Integer.parseInt(scoreA.getText()), Integer.parseInt(scoreB.getText()));
+        }catch (NumberFormatException e){
+            Dialogs.error("Wprowadzono niedozwolone wartości!");
+            return;
+        }
 
         parent.close();
     }
