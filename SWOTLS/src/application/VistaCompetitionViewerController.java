@@ -1,5 +1,6 @@
 package application;
 
+import com.sun.javaws.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -52,6 +53,7 @@ public class VistaCompetitionViewerController extends VistaEntryViewerController
             return;
         }
 
+        application.Main.getMainController().goToFederationView();
         ServerData.deleteTournament(competitionId);
     }
 }

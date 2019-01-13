@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
@@ -102,6 +103,8 @@ public class VistaFederationController implements VistaContainable, Refreshable,
         }
         if(actionString!=null)
             from.put(actionString, -1);
+
+        Collections.sort(ols);
         to.setItems(ols);
     }
 
