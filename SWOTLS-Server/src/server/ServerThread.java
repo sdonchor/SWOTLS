@@ -259,6 +259,200 @@ public class ServerThread extends Thread{
 					System.out.println("User logged out");
 					ServerLog.logLine("INFO", "Wylogowano użytkownika o IP "+getCleanIP()+".");
 				}
+				if(message.contains("demote-player")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					int pid = Integer.valueOf(request[2]);
+				
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().demotePlayer(tid,pid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Pomyślnie zdegradowano gracza "+pid+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when demoting a user.");
+						ServerLog.logLine("ERROR", "Nie udało się zdegradować gracza. Błąd bazy danych.");
+
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("promote-player")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					int pid = Integer.valueOf(request[2]);
+				
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().promotePlayer(tid,pid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Pomyślnie awansowano gracza "+pid+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when promoting a user.");
+						ServerLog.logLine("ERROR", "Nie udało się awansować gracza. Błąd bazy danych.");
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("add-team")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					String name = request[1];
+					String from = request[2];
+					int lid = Integer.valueOf(request[3]);
+
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().addTeam(name,from,lid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Utworzono drużynę "+name+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when adding a team.");
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć drużyny. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("edit-team")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					String name = request[2];
+					String from = request[3];
+					int lid = Integer.valueOf(request[4]);
+
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().editTeam(tid,name,from,lid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Edytowano drużynę "+name+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when editing a team.");
+						ServerLog.logLine("ERROR", "Nie udało się edytować drużyny. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("new-arena")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					String name = request[1];
+					String location = request[2];
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().newArena(name,location);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Utworzono arenę "+name+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when adding an arena.");
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć areny. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("edit-arena")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					int aid = Integer.valueOf(request[1]);
+					String name = request[2];
+					String location = request[3];
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().editArena(aid,name,location);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Edytowano arenę "+name+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when editing an arena.");
+						ServerLog.logLine("ERROR", "Nie udało się edytować areny. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("set-score")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					int mid = Integer.valueOf(request[1]);
+					int a = Integer.valueOf(request[2]);
+					int b = Integer.valueOf(request[3]);
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().setScore(mid, a, b);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Ustalono wynik meczu "+mid+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when setting score..");
+						ServerLog.logLine("ERROR", "Nie udało się ustawić wyniku. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
 			}
 		} catch (IOException e) {
 			//System.out.println("Connection closed.");

@@ -58,6 +58,7 @@ public class ServerData {
             return true;
         } catch (Exception e) { //IOException | ClassNotFoundException e
             System.out.println("Couldn't download database.");
+            ClientLog.logLine("ERROR", "Nie udało się pobrać danych z bazy danych.");
             return false;
         }
     }
@@ -99,8 +100,7 @@ public class ServerData {
 				contestants.add(p);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się przetworzyć tabeli contestants.");
 		}
 	}
 	
@@ -121,8 +121,7 @@ public class ServerData {
 				teams.add(t);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się przetworzyć tabeli teams.");
 		}
 	}
 	
@@ -157,8 +156,7 @@ public class ServerData {
 				tournaments.add(c);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się przetworzyć tabeli tournaments.");
 		}
 	}
 	
@@ -172,8 +170,7 @@ public class ServerData {
 				arenas.add(a);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się przetworzyć tabeli arenas.");
 		}
 	}
 	public static void convertMatches(CachedRowSet crs) {
@@ -197,8 +194,8 @@ public class ServerData {
 				matches.add(m);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się przetworzyć tabeli matches.");
+
 		}
 	}
 	public static void convertSysUsrs(CachedRowSet crs) {
@@ -212,8 +209,7 @@ public class ServerData {
 				sys_users.add(u);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się przetworzyć tabeli system_users.");
 		}
 	}
 	
@@ -396,8 +392,7 @@ public class ServerData {
 			}
 			
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się zalogować. Błąd połączenia.");
 		}
 	}
 	/**
@@ -532,35 +527,81 @@ public class ServerData {
 			Player player = getContestantById(playerId);
 	        new VistaPlayerViewerController(MainController.newTab("Zawodnik - " + player.getName()), player);
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się edytować gracza "+nickname+". Błąd połączenia.");
 		}
         
         
     }
 
     public static void newTeam(String name, String from, int leaderId){ //serverside ready
-        Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowej drużyny
+    	try {
+			if(sc.newTeam(name,from,leaderId))
+			{
+				ClientLog.logLine("INFO", "Dodano drużynę "+name+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się dodać drużyny "+name+".");
+
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się dodać drużyny "+name+". Błąd połączenia.");
+		}
+    
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
 
     public static void editTeam(int teamId, String name, String from, int leaderId){ //serverside ready
-        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja drużyny
+    	try {
+			if(sc.editTeam(teamId,name,from,leaderId))
+			{
+				ClientLog.logLine("INFO", "Edytowano drużynę "+name+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się edytować drużyny "+name+".");
 
-        //Poniższe wywoływane gdy serwer zakończy edycję
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się edytować drużyny "+name+". Błąd połączenia.");
+		}
+    	 ServertriggeredEvents.dataUpdated();
         Team team = getTeamById(teamId);
         new VistaTeamViewerController(MainController.newTab("Drużyna - " + team.getName()), team);
     }
 
     public static void newArena(String name, String location){ //serverside ready
-        Dialogs.error("Niezaimplementowana funkcja"); //TODO Dodanie nowej arena
+    	try {
+			if(sc.newArena(name,location))
+			{
+				ClientLog.logLine("INFO", "Dodano arenę "+name+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się dodać areny "+name+".");
+
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się dodać areny "+name+". Błąd połączenia.");
+		}
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy dodawanie
     }
 
     public static void editArena(int arenaId, String name, String location){ //serverside ready
-        Dialogs.error("Niezaimplementowana funkcja"); //TODO Edycja areny
+    	try {
+			if(sc.editArena(arenaId,name,location))
+			{
+				ClientLog.logLine("INFO", "Edytowano arenę "+name+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się edytować areny "+name+".");
 
-        //Poniższe wywoływane gdy serwer zakończy edycję
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się edytować areny "+name+". Błąd połączenia.");
+		}
+    	 ServertriggeredEvents.dataUpdated();
         Arena arena = getArenaById(arenaId);
         new VistaArenaViewerController(MainController.newTab("Arena - " + arena.getName()), arena);
     }
@@ -665,8 +706,19 @@ public class ServerData {
 	}
 
     public static void setScore(int matchId, int scoreA, int scoreB) {
-        Dialogs.error("Niezaimplementowana funkcja");
-        //TODO wprowadzenie wyniku meczu (po stronie serwera wyłołać metodę dla odpowiedniego systemu turniejowego)
+    	try {
+			if(sc.setScore(matchId,scoreA,scoreB))
+			{
+	
+			}
+			else
+			{
+				
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    ServertriggeredEvents.dataUpdated();
     }
 	public static User getCurrentUser() {
@@ -677,8 +729,19 @@ public class ServerData {
 	}
 
 	public static void demotePlayer(int tournamentId, int playerId) {
-        Dialogs.error("Niezaimplementowana funkcja");
-		//TODO Zdegradowanie gracza do mniej ważnej ligi (czyli o 1 numer w górę, bo liga 1 jest najważniejsza)
+		try {
+			if(sc.demotePlayer(tournamentId, playerId))
+			{
+				
+			}
+			else
+			{
+				
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static void promotePlayer(int tournamentId, int playerId) {

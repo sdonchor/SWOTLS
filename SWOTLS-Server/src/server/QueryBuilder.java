@@ -236,7 +236,7 @@ public class QueryBuilder {
 			return false;
 	}
 	public boolean editTeam(int id, String name, String from, int leaderID) throws SQLException {
-		String query = "UPDATE teams SET name = ?, from = ?, leaderID = ? WHERE team_id=?";
+		String query = "UPDATE teams SET name = ?, where_from = ?, leader_id = ? WHERE team_id=?";
 		PreparedStatement stmt = connection.prepareStatement(query);
 		stmt.setString(1, name);
 		stmt.setString(2, from);
@@ -249,7 +249,7 @@ public class QueryBuilder {
 			return false;
 	}
 	public boolean newArena(String name, String location) throws SQLException {
-		String query = "INSERT INTO teams(name,location) VALUES (?,?)";
+		String query = "INSERT INTO arenas(name,location) VALUES (?,?)";
 		PreparedStatement stmt = connection.prepareStatement(query);
 		stmt.setString(1, name);
 		stmt.setString(2, location);
@@ -315,5 +315,39 @@ public class QueryBuilder {
 		else
 			return false;
 		
+	}
+	public boolean promotePlayer(int tid, int cid) throws SQLException {
+		String query = "SELECT * FROM contestant-tournament WHERE contestant_id=? AND tournament_id=?";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, cid);
+		stmt.setInt(2, tid);
+		ResultSet rs = stmt.executeQuery();
+		int currentLeague;
+		if(rs.next()) {
+			currentLeague = rs.getInt("league");
+			if(currentLeague-1<1) return false; // 1 to najwyższa liga
+			query = "UPDATE contestant-tournament SET league=? WHERE contestant_id=? AND tournament_id=?";
+			PreparedStatement update=connection.prepareStatement(query);
+			update.setInt(1, currentLeague-1);
+			update.setInt(2, cid);
+			update.setInt(3, tid);
+			int rows=update.executeUpdate();
+			if(rows==1)
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+		
+	}
+	public CachedRowSet getPlannedMatches() throws SQLException {
+		String query = "SELECT * FROM matches WHERE time IS NOT NULL AND sideA_score IS NULL";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
 	}
 }

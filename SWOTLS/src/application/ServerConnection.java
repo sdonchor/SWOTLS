@@ -214,4 +214,130 @@ public class ServerConnection {
 			return false;
 		}
 	}
+	public boolean demotePlayer(int tid, int pid) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "demote-player;"+tid+";"+pid;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean promotePlayer(int tid, int pid) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "promote-player;"+tid+";"+pid;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean newTeam(String name, String from, int leaderId) throws IOException, ClassNotFoundException  {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "add-team;"+name+";"+from+";"+leaderId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean editTeam(int teamId, String name, String from, int leaderId)  throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "edit-team;"+teamId+";"+name+";"+from+";"+leaderId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean newArena(String name, String location) throws IOException, ClassNotFoundException  {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "new-arena;"+name+";"+location;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean editArena(int arenaId, String name, String location) throws IOException, ClassNotFoundException  {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "edit-arena;"+arenaId+";"+name+";"+location;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean setScore(int matchId, int scoreA, int scoreB) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "set-score;"+matchId+";"+scoreA+";"+scoreB;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
