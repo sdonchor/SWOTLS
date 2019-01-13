@@ -1,6 +1,7 @@
 package server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LeagueTournament extends Tournament {
     /* Wieloklasowa liga - używa systemu kołowego osobno w każdej klasie (szczeblu ligowym); po zakończeniu sezonu
@@ -13,7 +14,7 @@ public class LeagueTournament extends Tournament {
      * @return Lista list zawodników z poszczególnych szczebli ligowych.
      */
     public static ArrayList< ArrayList<TournamentParticipant> > getParticipantsInClasses(int tournamentId){
-        ArrayList<TournamentParticipant> competitors = new ArrayList<>(); //TODO Pobrać listę zawodników
+        ArrayList<TournamentParticipant> competitors = new ArrayList<>(); //TODO Pobrać listę uczestników (zawodników lub drużyn)
 
         //Posegregowanie uczestników do osobnych kolekcji według klas, w których się znajdują.
         ArrayList< ArrayList<TournamentParticipant> > classes = new ArrayList<>();
@@ -37,8 +38,10 @@ public class LeagueTournament extends Tournament {
 
         //Wywołanie algorytmu kołowego dla każdej grupy zawodników
         for(ArrayList<TournamentParticipant> competitorsOfXClass : classes){
-            RoundRobinTournament.endEntriesStage(competitorsOfXClass);
+            RoundRobinTournament.endEntriesStage(tournamentId, competitorsOfXClass);
         }
+
+        //TODO Zwiększyć wartość "etap turnieju" z 0 na 1 (0 oznacza zapisy, które właśnie się zakończyły i rozpoczyna się pierwszy etap)
     }
 
     /**
@@ -55,11 +58,27 @@ public class LeagueTournament extends Tournament {
     public static void nextStage(int tournamentId){
         //Uwaga: do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
 
-        //TODO Jeżeli liga jest już zarchiwizowana (etap -1) to przerwać i wysłać komunikat
-        //TODO Wygenerować prosty raport z listą uczestników i ich punktacją po zakończonym etapie (gracze posegregowani na grupy i posortowani w każdej grupie od największej ilości punktów)
+         ArrayList< ArrayList<TournamentParticipant> > classes = getParticipantsInClasses(tournamentId);
+        boolean isSoloType = true; //TODO sprawdzenie typu turnieju (solo czy drużynowy)
+
+        //Generacja raportu z listą graczy i ich punktacją po zakończonym etapie (uczestnicy posegregowani na grupy i posortowani w każdej grupie od największej ilości punktów)
+        String raport = "Punktacja w poszczególnych klasach rozgrywkowych po X rundzie turnieju:\n\n";
+        for(ArrayList<TournamentParticipant> competitorsOfXClass : classes) {
+            raport += "Klasa " + competitorsOfXClass.get(0).getLeagueClass() + ":\n";
+            Collections.sort(competitorsOfXClass, Collections.reverseOrder());
+
+            for (TournamentParticipant p : competitorsOfXClass) {
+                if (isSoloType)
+                    raport += getDisplayedNameOfPlayer(p.getId()) + " - " + p.getPoints();
+                else
+                    raport += getNameOfTeam(p.getId()) + " - " + p.getPoints();
+                raport += "\n";
+            }
+            raport += "\n";
+        }
+        //TODO zapisać raport w bazie danych (przykładowy format tytułu: "Raport - Etap 1 - Sezon 2")
 
         boolean areAllClassesFinished = true; //Ma określać czy we wszystkich klasach ligi sezon już się zakończył
-        ArrayList< ArrayList<TournamentParticipant> > classes = getParticipantsInClasses(tournamentId);
         for(ArrayList<TournamentParticipant> competitorsOfXClass : classes){
             //TODO odkomentować i wstawić numer_etapu_do_ktorego_przechodzimy
             /*if(RoundRobinTournament.generateMatches(tournamentId, competitorsOfXClass, numer_etapu_do_ktorego_przechodzimy)) //Wygenerowanie meczy dla każdej klasy za pomocą algorytmu kołowego

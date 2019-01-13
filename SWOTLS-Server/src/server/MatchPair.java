@@ -1,19 +1,19 @@
 package server;
 
 public class MatchPair {
-    private TournamentParticipant sideA;
-    private TournamentParticipant sideB;
+    private int competitorIdSideA;
+    private int competitorIdSideB;
 
-    public MatchPair(TournamentParticipant sideA, TournamentParticipant sideB) {
-        this.sideA = sideA;
-        this.sideB = sideB;
+    public MatchPair(int sideA, int sideB) {
+        this.competitorIdSideA = sideA;
+        this.competitorIdSideB = sideB;
     }
 
-    public TournamentParticipant getSideA() {
-        return sideA;
+    public int getCompetitorIdSideA() {
+        return competitorIdSideA;
     }
 
-    public TournamentParticipant getSideB() {
-        return sideB;
+    public int getCompetitorIdSideB() {
+        return competitorIdSideB;
     }
 }

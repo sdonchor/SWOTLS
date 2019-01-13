@@ -1,6 +1,16 @@
 package server;
 
 public class Tournament {
+    public static String getDisplayedNameOfPlayer(int playerId){
+        //TODO pobieranie wyświetlanej nazwy zawodnika o podanym id (w formie: Imię "pseudonim" Nazwisko)
+        return "Adam \"amalysz\" Małysz";
+    }
+
+    public static String getNameOfTeam(int teamId){
+        //TODO pobieranie nazwy drużyny o podanym id
+        return "2Pesteczka";
+    }
+
     /**
      * Zapisuje uczestnika do turnieju.
      * @param competitor Uczestnik, którego dodać do turnieju (zawodnik lub drużyna).

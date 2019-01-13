@@ -1,6 +1,6 @@
 package server;
 
-public class TournamentParticipant {
+public class TournamentParticipant implements Identifiable, Comparable<TournamentParticipant> {
     private int id; //Identyfikuje id zawodnika lub drużyny w bazie danych
     private int startingPosition;
     private int leagueClass;
@@ -49,5 +49,10 @@ public class TournamentParticipant {
 
     public void setLeagueClass(int leagueClass) {
         this.leagueClass = leagueClass;
+    }
+
+    @Override
+    public int compareTo(TournamentParticipant p) {
+        return getPoints()-p.getPoints();
     }
 }

@@ -1,6 +1,7 @@
 package server;
 
 public class Player extends Competitor {
+    private int id;
 	private String name;
 	private String surname;
 	private String nickname;
@@ -9,10 +10,16 @@ public class Player extends Competitor {
 	private String contact_info;
 	private String additional_info;
 	private int team_id;
-	
-	public Player(String name, String surname, String nickname, int elo, String language, String contact_info, String additional_info, int team_id)
+
+    public Player(int id, int elo) {
+        this.id = id;
+        this.elo = elo;
+    }
+
+    public Player(int id, String name, String surname, String nickname, int elo, String language, String contact_info, String additional_info, int team_id)
 	{
-		this.setName(name);
+		this.id = id;
+	    this.setName(name);
 		this.setSurname(surname);
 		this.setNickname(nickname);
 		this.setElo(elo);
@@ -22,7 +29,12 @@ public class Player extends Competitor {
 		this.setTeam_id(team_id);
 	}
 
-	public String getName() {
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
 		return name;
 	}
 
@@ -84,5 +96,10 @@ public class Player extends Competitor {
 
 	public void setTeam_id(int team_id) {
 		this.team_id = team_id;
+	}
+
+	@Override
+	public String displayedName() {
+		return name + " '" + nickname + "' " + surname;
 	}
 }

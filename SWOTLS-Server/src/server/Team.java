@@ -17,6 +17,7 @@ public class Team extends Competitor {
         this.leader = leader;
     }
 
+    @Override
     public int getId() {
         return id;
     }
@@ -37,6 +38,7 @@ public class Team extends Competitor {
         return players;
     }
 
+    @Override
     public String displayedName() {
         return name;
     }
