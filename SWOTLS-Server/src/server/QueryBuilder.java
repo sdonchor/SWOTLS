@@ -343,9 +343,10 @@ public class QueryBuilder {
 		crs.populate(rs);
 		return crs;
 	}
-	public CachedRowSet getUnplannedMatches() throws SQLException {
-		String query = "SELECT * FROM matches WHERE time IS NULL";
+	public CachedRowSet getUnplannedMatches(int tid) throws SQLException {
+		String query = "SELECT * FROM matches WHERE time IS NULL AND tournament=?";
 		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, tid);
 		ResultSet rs = stmt.executeQuery();
 		RowSetFactory factory = RowSetProvider.newFactory();
 		CachedRowSet crs = factory.createCachedRowSet();
@@ -397,6 +398,28 @@ public class QueryBuilder {
 		PreparedStatement stmt=connection.prepareStatement(query);
 		stmt.setInt(1, pid);
 		stmt.setInt(2, tid);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public boolean setNumberOfRounds(int tid, int rounds) throws SQLException{
+		String query = "UPDATE tournaments SET rounds=? WHERE tournament_id=?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, rounds);
+		stmt.setInt(2, tid);
+
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public CachedRowSet getPlannedMatchesId(int tid) throws SQLException {
+		String query = "SELECT * FROM matches WHERE time IS NOT NULL AND sideA_score IS NULL AND tournament=?";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, tid);
 		ResultSet rs = stmt.executeQuery();
 		RowSetFactory factory = RowSetProvider.newFactory();
 		CachedRowSet crs = factory.createCachedRowSet();

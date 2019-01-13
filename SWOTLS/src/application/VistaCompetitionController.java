@@ -97,7 +97,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                         Dialogs.error("Liczba rund musi wynosić conajmniej 1! Spróbuj jeszcze raz.");
                         return;
                     }
-                    ServerData.setNumerOfRounds(competition.getId(), rounds);
+                    ServerData.setNumberOfRounds(competition.getId(), rounds);
                 }catch (NumberFormatException e){
                     Dialogs.error("Wprowadzono niedozwoloną wartość! Spróbuj jeszcze raz wprowadzająć poprawną liczbę.");
                     return;

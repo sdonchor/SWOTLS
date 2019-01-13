@@ -324,4 +324,70 @@ public class ServerConnection {
 			return false;
 		}
 	}
+	public boolean setRounds(int tournamentId, int numberOfRounds)  throws IOException, ClassNotFoundException{
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "set-rounds;"+tournamentId+";"+numberOfRounds;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public CachedRowSet getPlannedMatches() throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-planned-matches";
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		CachedRowSet crs = (CachedRowSet)ois.readObject();
+		if(crs!=null) {
+			ClientLog.logLine("INFO", "Pobrano wszystkie zaplanowane mecze.");
+		}
+
+		socket.close();
+		return crs;
+	}
+	public CachedRowSet getPlannedMatchesById(int competitionId) throws ClassNotFoundException, IOException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-planned-matches-id;"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		CachedRowSet crs = (CachedRowSet)ois.readObject();
+		if(crs!=null) {
+			ClientLog.logLine("INFO", "Pobrano zaplanowane mecze dla id "+competitionId+".");
+		}
+
+		socket.close();
+		return crs;
+	}
+	public CachedRowSet getUnplannedMatchesById(int competitionId) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-unplanned-matches-id;"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		CachedRowSet crs = (CachedRowSet)ois.readObject();
+		if(crs!=null) {
+			ClientLog.logLine("INFO", "Pobrano niezaplanowane mecze dla id "+competitionId+".");
+		}
+
+		socket.close();
+		return crs;
+	}
 }

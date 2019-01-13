@@ -642,21 +642,36 @@ public class ServerData {
     }
 
 	public static Map<String, Integer> getListOfUnplannedMatches(int competitionId){
-		//TODO powinno pobierać (tylko) niezaplanowane mecze w podanym turnieju (czyli takie które nie mają podanej daty ani wyniku)
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("2Pesteczka vs Unity Female", 3);
+		try {
+			CachedRowSet crs = sc.getPlannedMatchesById(competitionId);
+			while(crs.next()) {
+				
+				int aId = crs.getInt("sideA");
+				int bId = crs.getInt("sideB");
+				int id = crs.getInt("match_id");
+				String title = "$a vs $b";
+				//wez nick gracza albo nazwe druzyny
+				//title=title.replace("$a", a);
+			//	title=title.replace("$b", b);
+				map.put(title, id);
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return map;
 	}
 
     public static Map<String, Integer> getListOfAllPlannedMatches(){
-        //TODO powinno pobierać (tylko) zaplanowane mecze ze wszystkich turniejów (czyli takie które mają datę, a nie mają wyniku)
+    	//sc.getPlannedMatches();
         Map<String, Integer> map = new HashMap<String, Integer>();
         map = getListOfAllMatches(); //Dla testów tymczasowo pobieram wszystkie mecze - domyślnie powinno pobierać tylko zaplanowane niezakończone.
         return map;
     }
 
 	public static Map<String, Integer> getListOfPlannedMatches(int competitionId){
-		//TODO powinno pobierać (tylko) zaplanowane mecze w podanym turnieju (czyli takie które mają datę, a nie mają wyniku)
+		//sc.getUnplannedMatchesById(competitionId);
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("Smoki vs Wilki 02.02.2019 19:00", 3);
 		return map;
@@ -755,8 +770,20 @@ public class ServerData {
 		}
 	}
 
-	public static void setNumerOfRounds(int tournamentId, int numerOfRounds) {
-        Dialogs.error("Niezaimplementowana funkcja " + numerOfRounds);
-		//TODO Ustawia ilość rund do rozegrania (używane tylko w systemie szwajcarskim i mcmahona)
+	public static void setNumberOfRounds(int tournamentId, int numberOfRounds) {
+		try {
+			if(sc.setRounds(tournamentId, numberOfRounds))
+			{
+				ClientLog.logLine("INFO", "Ustawiono liczbę rund turnieju "+tournamentId+" na "+numberOfRounds+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się ustawić liczby rund.");
+
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się ustawić liczby rund. Błąd połączenia.");
+
+		}
 	}
 }

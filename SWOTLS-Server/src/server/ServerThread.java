@@ -563,6 +563,57 @@ public class ServerThread extends Thread{
 					oos.close();
 					os.close();
 				}
+				if(message.contains("get-planned-matches")){
+
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					try {
+						
+						CachedRowSet crs = dbH.getQueryBuilder().getPlannedMatches();
+						oos.writeObject(crs);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano wszystkie zaplanowane mecze.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać wszystkich zaplanowanych meczy.");
+					}
+					
+				}
+				if(message.contains("get-planned-matches-id")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					try {
+						
+						CachedRowSet crs = dbH.getQueryBuilder().getPlannedMatchesId(tid);
+						oos.writeObject(crs);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano zaplanowane mecze.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać zaplanowanych meczy.");
+					}
+					
+				}
+				if(message.contains("get-unplanned-matches-id")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					try {
+						
+						CachedRowSet crs = dbH.getQueryBuilder().getUnplannedMatches(tid);
+						oos.writeObject(crs);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano niezaplanowane mecze.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać niezaplanowanych meczy.");
+					}
+					
+				}
+				
 			}
 		} catch (IOException e) {
 			//System.out.println("Connection closed.");
