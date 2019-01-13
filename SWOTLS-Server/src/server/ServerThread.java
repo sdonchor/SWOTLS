@@ -48,9 +48,10 @@ public class ServerThread extends Thread{
 						oos.writeObject(crs);
 						oos.close();
 						os.close();
+						ServerLog.logLine("INFO", "Pobrano tabelę "+tableName+".");
 					} catch (SQLException e) {
-						//System.out.println("SQL error while gettin table");
-						e.printStackTrace();
+						System.out.println("SQL error while getting table "+tableName);
+						ServerLog.logLine("ERROR", "Nie udało się pobrać tabeli "+tableName+".");
 					}
 					
 				}
@@ -69,12 +70,14 @@ public class ServerThread extends Thread{
 						success = dbH.getQueryBuilder().removeFromTable(tablename,id);
 						sr.setBoolTypeResponse(success);
 						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Usunięto rekord ID "+id+" z tabeli "+tablename+".");
 					} catch (SQLException e) {
 						if(e.getMessage().contains("foreign key constraint fails"))
 						{
 							sr.setBoolTypeResponse(false);
 							sr.setStringTypeResponse("fk-check");
 							oos.writeObject(sr);
+							ServerLog.logLine("ERROR", "Nie udało się usunąć rekordu o ID "+id+" z tablicy "+tablename+".");
 						}
 					}
 					oos.close();
@@ -85,6 +88,7 @@ public class ServerThread extends Thread{
 					{
 						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
 							System.out.println("Can't create tournament - no user or no permissions");
+							ServerLog.logLine("ERROR", "Nie udało się utworzyć turnieju. Brak uprawnień.");
 							continue;
 						}
 					}
@@ -106,11 +110,13 @@ public class ServerThread extends Thread{
 						success = dbH.getQueryBuilder().createTournament(name,system,type,additional,operator);
 						sr.setBoolTypeResponse(success);
 						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Utworzono turniej "+name+".");
 					} catch (SQLException e) {
 						sr.setBoolTypeResponse(false);
 						oos.writeObject(sr);
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć turnieju. Błąd bazy danych.");
 						System.out.println("SQLException when adding a tournament.");
-						e.printStackTrace();
+						//e.printStackTrace();
 					}
 					oos.close();
 					os.close();
@@ -134,11 +140,13 @@ public class ServerThread extends Thread{
 						success = dbH.getQueryBuilder().createUser(name,pw,perms);
 						sr.setBoolTypeResponse(success);
 						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Utworzono użytkownika "+name+".");
 					} catch (SQLException e) {
 						sr.setBoolTypeResponse(false);
 						oos.writeObject(sr);
 						System.out.println("SQLException when adding a user.");
-						e.printStackTrace();
+						ServerLog.logLine("ERROR", "Nie udało się utworzyć użytkownika. Błąd bazy danych.");
+						//e.printStackTrace();
 					}
 					oos.close();
 					os.close();
@@ -157,7 +165,10 @@ public class ServerThread extends Thread{
 					try {
 						fetchedUser = dbH.getQueryBuilder().verifySystemLogin(login,pw);
 						if(fetchedUser==null)
+						{
 							sr.setBoolTypeResponse(false);
+							ServerLog.logLine("ERROR", "Błąd logowania. Błędne hasło lub login.");
+						}
 						else
 						{
 							sr.setBoolTypeResponse(true);
@@ -165,7 +176,7 @@ public class ServerThread extends Thread{
 							LoggedInList.addUser(getCleanIP(), fetchedUser);
 							uid = fetchedUser.getId();
 							sr.setStringTypeResponse(fetchedUser.getPermissions());
-							
+							ServerLog.logLine("INFO", "Zalogowano użytkownika "+login+" o uprawnieniach "+fetchedUser.getPermissions()+".");
 						}
 						sr.setIntTypeResponse(uid);
 						oos.writeObject(sr);
@@ -173,6 +184,7 @@ public class ServerThread extends Thread{
 						sr.setBoolTypeResponse(false);
 						sr.setIntTypeResponse(-1);
 						oos.writeObject(sr);
+						ServerLog.logLine("ERROR", "Błąd logowania.");
 					}
 					oos.close();
 					os.close();
@@ -198,10 +210,46 @@ public class ServerThread extends Thread{
 						success = dbH.getQueryBuilder().addPlayer(name,nickname,surname,contact,language,additional,teamid);
 						sr.setBoolTypeResponse(success);
 						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Dodano gracza "+nickname+ ".");
 					} catch (SQLException e) {
 						sr.setBoolTypeResponse(false);
 						oos.writeObject(sr);
 						System.out.println("SQLException when adding a user.");
+						ServerLog.logLine("ERROR", "Nie udało się dodać gracza. Błąd bazy danych.");
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("edit-player")){
+					//TODO check if logged in
+					String[] request = message.split(";");
+					int id = Integer.valueOf(request[1]);
+					String name = request[2];
+					String surname = request[3];
+					String nickname = request[4];
+					String contact = request[5];
+					String language = request[6];
+					String additional = request[7];
+					String teamid = request[8];
+				
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().editPlayer(id,name,nickname,surname,contact,language,additional,teamid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Pomyślnie edytowano gracza "+id+". "+nickname+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when editing a user.");
+						ServerLog.logLine("ERROR", "Nie udało się edytować gracza. Błąd bazy danych.");
+
+						//e.printStackTrace();
 					}
 					oos.close();
 					os.close();
@@ -209,10 +257,11 @@ public class ServerThread extends Thread{
 				if(message.contains("log-out")) {
 					LoggedInList.removeUserByIP(getCleanIP());
 					System.out.println("User logged out");
+					ServerLog.logLine("INFO", "Wylogowano użytkownika o IP "+getCleanIP()+".");
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("Connection closed.");
+			//System.out.println("Connection closed.");
 		}
 	}
 }

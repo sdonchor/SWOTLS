@@ -85,11 +85,14 @@ public class DatabaseHandler {
 	 * Prepares the database for system's use. Removes all data if exists.
 	 */
 	public void formatDatabase() {
+		ServerLog.logLine("INFO", "Formatowanie bazy danych.");
 		try {
 			getQueryBuilder().dropAllTables();
 			getQueryBuilder().createTables();
+			ServerLog.logLine("INFO","Utworzono pustą bazę danych na podstawie szablonu.");
 		} catch (SQLException e) {
 			System.out.println("Couldn't format the database.");
+			ServerLog.logLine("ERROR", "Formatowanie nie udało się. Błąd bazy danych.");
 			//e.printStackTrace();
 		}
 	}

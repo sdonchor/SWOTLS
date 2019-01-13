@@ -47,6 +47,7 @@ public class QueryBuilder {
 			stmt = connection.prepareStatement(query);
 			stmt.execute();
 		}
+		
 	}
 	/**
 	 * Inserts given contestant into the database.
@@ -86,22 +87,30 @@ public class QueryBuilder {
 			int uid = result.getInt("sys_usr_id");
 			String perms = result.getString("permissions");
 			if(SystemUser.hashString(pw).equals(savedHash))
+			{
 				return new SystemUser(uid,login,perms);
+			}
 			else
+			{
 				return null;
+			}
 		}
 		else
+		{
 			return null;
+		}
 	
 	}
 	public CachedRowSet getTable(String tableName) throws SQLException {
+		
 		RowSetFactory factory = RowSetProvider.newFactory();
 		CachedRowSet crs = factory.createCachedRowSet();
-		String query = "SELECT * FROM $tablename";
+		String query = "SELECT * FROM $tablename ORDER BY 1";
 		query =query.replace("$tablename",tableName);
 		PreparedStatement stmt = connection.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();
 		crs.populate(rs);
+		
 		return crs;
 	}//
 	public boolean removeFromTable(String tablename, int id) throws SQLException {
@@ -188,6 +197,26 @@ public class QueryBuilder {
 			stmt.setString(6, additional);
 		if(!teamid.equals("-1"))
 			stmt.setInt(7, Integer.parseInt(teamid));
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public boolean editPlayer(int id, String name, String nickname, String surname, String contact, String language,
+			String additional, String teamid) throws SQLException {
+		String query = "UPDATE contestants SET name=?,surname=?, nickname=?, language=?, contact_info=?,additional_info=?, team_id=? WHERE contestant_id = "+id;
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, name);
+		stmt.setString(2, nickname);
+		stmt.setString(3, surname);
+		stmt.setString(4, contact);
+		stmt.setString(5, language);
+		stmt.setString(6, additional);
+		if(teamid.equals("-1"))
+			stmt.setNull(7, java.sql.Types.INTEGER);
+		else
+			stmt.setInt(7, Integer.valueOf(teamid));
 		int rows = stmt.executeUpdate();
 		if(rows==1)
 			return true;

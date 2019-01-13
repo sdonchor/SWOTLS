@@ -38,7 +38,10 @@ public class ServerConnection {
 		InputStream is = socket.getInputStream();
 		ObjectInputStream ois = new ObjectInputStream(is);
 		CachedRowSet crs = (CachedRowSet)ois.readObject();
-		if(crs!=null)System.out.println("Successfully downloaded table "+tableName);
+		if(crs!=null) {
+			System.out.println("Successfully downloaded table "+tableName);
+			ClientLog.logLine("INFO", "Pobrano tabelę "+tableName+".");
+		}
 		/*if(crs!=null)
 		{
 			try {
@@ -191,5 +194,24 @@ public class ServerConnection {
 		String request = "log-out";
 		printWriter.println(request);
 		
+	}
+	public boolean editContestant(int playerId, String name, String surname, String nickname, String contact,
+			String language, String additional, int teamid) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "edit-player;"+playerId+";"+name+";"+surname+";"+nickname+";"+contact+";"+language+";"+additional+";"+teamid;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
