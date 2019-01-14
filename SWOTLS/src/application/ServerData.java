@@ -674,9 +674,16 @@ public class ServerData {
     	return type;
     	
     }
-	public static int getCompetitorsLeagueClass(int tournamnetId, int competitorId){
-        int leagueClass = -9999; //TODO
-        return leagueClass;
+	public static int getCompetitorsLeagueClass(int tournamentId, int competitorId){
+		int league = -1;
+    	try {
+    		league=sc.getLeague(tournamentId, competitorId);
+			return league;
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się pobrać klasy ligowej. Błąd połączenia.");
+			
+		}
+    	return league;
     }
 
 	public static Map<String, Integer> getListOfUnplannedMatches(int competitionId){
@@ -975,11 +982,35 @@ public class ServerData {
 	}
 
 	public static void promoteTeam(int tournamentId, int teamId){
-		//TODO
+		try {
+			if(sc.promoteTeam(tournamentId, teamId))
+			{
+				ClientLog.logLine("INFO", "Awansowano gracza "+teamId+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się awansować drużyny "+teamId+".");
+
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się awansować drużyny "+teamId+". Błąd połączenia.");
+
+		}
 	}
 
 	public static void demoteTeam(int tournamentId, int teamId){
-		//TODO
+		try {
+			if(sc.demoteTeam(tournamentId, teamId))
+			{
+				ClientLog.logLine("INFO", "Zdegradowano drużynę "+teamId+".");
+			}
+			else
+			{
+				ClientLog.logLine("ERROR", "Nie udało się zdegradować drużyny "+teamId+".");
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			ClientLog.logLine("ERROR", "Nie udało się zdegradować drużyny "+teamId+". Błąd połączenia.");
+		}
 	}
 
 	public static void setNumberOfRounds(int tournamentId, int numberOfRounds) {

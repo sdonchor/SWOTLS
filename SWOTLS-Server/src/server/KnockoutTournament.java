@@ -1,11 +1,18 @@
 package server;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class KnockoutTournament extends Tournament {
+import javax.sql.rowset.CachedRowSet;
 
+public class KnockoutTournament extends Tournament {
+	private static DatabaseHandler dbH = null;
+	
+	public static void setDbh(DatabaseHandler dbh) {
+		dbH=dbh;
+	}
     public static List<MatchPair> drawMatchPairs(List<? extends Identifiable> participants){
         //Losowanie par meczowych (każdy uczestnik ma tylko jeden mecz w danym etapie)
         List<MatchPair> matchPairs = new ArrayList<>();
@@ -38,8 +45,8 @@ public class KnockoutTournament extends Tournament {
             }
         }
         if(!isValidPlayerCount) {
-            //TODO Jeżeli nie to albo przerwać i wysłać błąd (ServertriggeredEvents->error(String msg)) albo uzupełnić wirtualnymi zawodnikami "wolny los".
-            return false; //TODO jeżeli decydujemy się na błąd to przerywamy zwracając false
+            
+            return false; 
         }
 
         List<MatchPair> matchPairs = drawMatchPairs(participants); //wylosowanie par meczowych
@@ -82,16 +89,66 @@ public class KnockoutTournament extends Tournament {
         //TODO Zapisać wynik meczu do bazy jeżeli gdzieś wcześniej tego nie zrobiłeś
 
         return true;
-    }
-
+    }	
     public static ArrayList<Competitor> getLosers(int tournamentId){
-        //TODO pobrać listę uczestników (zawodników lub drużyn) którzy już odpadli w podanym turnieju - tacy zawodnicy mają score ustawione na -1
-        ArrayList<Competitor> losers = new ArrayList<>();
+
+    	ArrayList<Competitor> losers = new ArrayList<>();
+    	try {
+    		String type = dbH.getQueryBuilder().getTournamentType(tournamentId);
+    		if(type.equals("solo"))
+    		{
+    			CachedRowSet crs = dbH.getQueryBuilder().getLosers(tournamentId);
+    			while(crs.next()) {
+    				int playerId = crs.getInt("contestant_id");
+    				losers.add(dbH.getQueryBuilder().getPlayer(playerId));
+    			}
+    		}
+    		else if(type.equals("team"))
+    		{
+    			CachedRowSet crs = dbH.getQueryBuilder().getLosers(tournamentId);
+    			while(crs.next()) {
+    				int teamId = crs.getInt("team_id");
+    				losers.add(dbH.getQueryBuilder().getTeam(teamId));
+    			}
+    		}
+			
+				
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         return losers;
     }
 
     public static ArrayList<Competitor> getWinners(int tournamentId){
-        ArrayList<Competitor> winners = new ArrayList<>(); //TODO pobrać listę uczestników (zawodników lub drużyn) którzy jeszcze nie odpadli w podanym turnieju
+    	ArrayList<Competitor> winners = new ArrayList<>();
+    	try {
+    		String type = dbH.getQueryBuilder().getTournamentType(tournamentId);
+    		if(type.equals("solo"))
+    		{
+    			CachedRowSet crs = dbH.getQueryBuilder().getWinners(tournamentId);
+    			while(crs.next()) {
+    				int playerId = crs.getInt("contestant_id");
+    				winners.add(dbH.getQueryBuilder().getPlayer(playerId));
+    			}
+    		}
+    		else if(type.equals("team"))
+    		{
+    			CachedRowSet crs = dbH.getQueryBuilder().getWinners(tournamentId);
+    			while(crs.next()) {
+    				int teamId = crs.getInt("team_id");
+    				winners.add(dbH.getQueryBuilder().getTeam(teamId));
+    			}
+    		}
+			
+				
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return winners;
     }
 

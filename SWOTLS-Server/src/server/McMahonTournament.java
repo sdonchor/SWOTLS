@@ -11,6 +11,11 @@ public class McMahonTournament extends Tournament {
        Np. w przypadku rankingu szachowego można przyjąć 1 punkt McMahona za każde 100 punktów ELO.
     */
 
+	private static DatabaseHandler dbH = null;
+	
+	public static void setDbh(DatabaseHandler dbh) {
+		dbH=dbh;
+	}
     public static int getPlayersElo(int playerId){
         int elo = 1200; //TODO pobranie elo gracza o podanym id
         return elo;

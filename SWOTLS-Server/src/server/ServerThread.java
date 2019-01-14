@@ -935,6 +935,106 @@ public class ServerThread extends Thread{
 					oos.close();
 					os.close();
 				}
+				if(message.contains("promote-team")){
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się awansować drużyny. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się awansować drużyny. Brak uprawnień.");
+						continue;
+					}
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					int pid = Integer.valueOf(request[2]);
+				
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().promoteTeam(tid,pid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Pomyślnie awansowano drużynę "+pid+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when promoting a team.");
+						ServerLog.logLine("ERROR", "Nie udało się awansować drużyny. Błąd bazy danych.");
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("demote-team")){
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się zdegradować drużyny. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się zdegradować drużyny. Brak uprawnień.");
+						continue;
+					}
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					int pid = Integer.valueOf(request[2]);
+				
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().demoteTeam(tid,pid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Pomyślnie zdegradowano drużynę "+pid+".");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when demoting a team.");
+						ServerLog.logLine("ERROR", "Nie udało się zdegradować drużyny. Błąd bazy danych.");
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("get-league")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					int pid = Integer.valueOf(request[2]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("int");
+					try {
+						
+						int league = dbH.getQueryBuilder().getLeague(tid,pid);
+						sr.setIntTypeResponse(league);
+						sr.setBoolTypeResponse(true);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano ligę.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać ligi.");
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+					}
+					
+				}
 				
 			}
 		} catch (IOException e) {

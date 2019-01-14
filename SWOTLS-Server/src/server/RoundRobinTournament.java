@@ -10,6 +10,11 @@ public class RoundRobinTournament extends Tournament {
        Ten sposób rozgrywek nazywany jest również systemem każdy z każdym, w anglojęzycznej literaturze round-robin.
     */
 
+	private static DatabaseHandler dbH = null;
+	
+	public static void setDbh(DatabaseHandler dbh) {
+		dbH=dbh;
+	}
         public static void endEntriesStage(int tournamentId, ArrayList<TournamentParticipant> competitors) {
         //Numerowanie zawodników pozycjami startowymi 1, 2, ... n (gdzie n to liczba zawodników w turnieju)
         int i = 1;

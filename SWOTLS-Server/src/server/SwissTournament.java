@@ -11,6 +11,11 @@ public class SwissTournament extends Tournament {
        możliwości spośród tych uczestników, którzy dotychczas zdobyli jednakową liczbę punktów.
     */
 
+	private static DatabaseHandler dbH = null;
+	
+	public static void setDbh(DatabaseHandler dbh) {
+		dbH=dbh;
+	}
     public static List<MatchPair> drawMatchPairs(List<? extends Identifiable> participants){
         //Losowanie par meczowych (każdy uczestnik ma tylko jeden mecz w danym etapie)
         List<MatchPair> matchPairs = new ArrayList<>();

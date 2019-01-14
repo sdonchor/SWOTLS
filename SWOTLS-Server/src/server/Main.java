@@ -35,6 +35,12 @@ public class Main extends Application {
 		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
 		db.connect();
 		Tournament.setDbh(db);
+		KnockoutTournament.setDbh(db);
+		LeagueTournament.setDbh(db);
+		McMahonTournament.setDbh(db);
+		RoundRobinTournament.setDbh(db);
+		SwissTournament.setDbh(db);
+		Team.setDbh(db);
 		
 		//DB TEST END
 		

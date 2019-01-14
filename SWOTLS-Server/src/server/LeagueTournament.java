@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class LeagueTournament extends Tournament {
+	
     /* Wieloklasowa liga - używa systemu kołowego osobno w każdej klasie (szczeblu ligowym); po zakończeniu sezonu
        organizator może zadecydować kogo awansować do wyższej klasy, a kogo zdegradować.
     */
@@ -13,6 +14,12 @@ public class LeagueTournament extends Tournament {
      * @param tournamentId Id turnieju w bazie danych, z którego pobrać uczestników.
      * @return Lista list zawodników z poszczególnych szczebli ligowych.
      */
+	
+	private static DatabaseHandler dbH = null;
+	
+	public static void setDbh(DatabaseHandler dbh) {
+		dbH=dbh;
+	}
     public static ArrayList< ArrayList<TournamentParticipant> > getParticipantsInClasses(int tournamentId){
         ArrayList<TournamentParticipant> competitors = getTournamentParticipants(tournamentId);
 
