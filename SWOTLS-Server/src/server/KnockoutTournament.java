@@ -8,6 +8,10 @@ import java.util.List;
 import javax.sql.rowset.CachedRowSet;
 
 public class KnockoutTournament extends Tournament {
+    /* Zasadniczo system pucharowy stosuje się w rozgrywkach, których liczba uczestników jest potęgą liczby 2, tj.: 4, 8, 16, 32, 64 i 128.
+       Po każdej rundzie odpada połowa uczestników.
+     */
+
 	private static DatabaseHandler dbH = null;
 	
 	public static void setDbh(DatabaseHandler dbh) {
@@ -31,11 +35,6 @@ public class KnockoutTournament extends Tournament {
     public static boolean endEntriesStage(int tournamentId){
         ArrayList<TournamentParticipant> participants = getTournamentParticipants(tournamentId);
 
-        // Zasadniczo system pucharowy stosuje się w rozgrywkach, których liczba uczestników jest potęgą
-        // liczby 2, tj.: 4, 8, 16, 32, 64 i 128. W innych przypadkach najczęściej „wirtualnie” uzupełnia
-        // się listę uczestników do potęgi liczby 2, skutkiem czego część uczestników w pierwszej rundzie
-        // ma wirtualnego przeciwnika, czyli tzw. wolny los i bez gry przechodzi do następnej fazy rozgrywek.
-
         //Sprawdzenie czy liczba zapisanych do turnieju uczestników (zawodników lub drużyn) jest potęgą liczby 2
         boolean isValidPlayerCount = false;
         for(int i = 2; i<=participants.size(); i*=2){
@@ -45,7 +44,7 @@ public class KnockoutTournament extends Tournament {
             }
         }
         if(!isValidPlayerCount) {
-            
+            //ilośc uczestników nie jest potęgą 2
             return false; 
         }
 
@@ -158,8 +157,6 @@ public class KnockoutTournament extends Tournament {
      * @return true jeżeli udało się wygenerować nowe mecze, false jeżeli turniej zakończony i wysyłamy komunikat o zwycięzcy
      */
     public static boolean nextStage(int tournamentId){
-        //Uwaga: Jeżeli etap turnieju = 0 to zamiast tej metody wywołać endEntriesStage
-        //Uwaga: Do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
     	try {
 			if(!dbH.getQueryBuilder().allFinished(tournamentId))
 			{
@@ -169,6 +166,7 @@ public class KnockoutTournament extends Tournament {
 	
 			e.printStackTrace();
 		}
+
         int stage = getTournamentStage(tournamentId);
         if(stage==-1) {
             return false;

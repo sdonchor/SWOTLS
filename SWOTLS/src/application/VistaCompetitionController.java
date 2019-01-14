@@ -87,6 +87,32 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             return;
         }
 
+        if(competition.getStage()==0) {
+            int participants = competitors.size() - 1;
+            int system = competition.getSystem();
+            if (system == 1) {
+                //"Pucharowy"
+                //Sprawdzenie czy liczba zapisanych do turnieju uczestników jest potęgą liczby 2
+                boolean isValidPlayerCount = false;
+                for(int i = 2; i<=participants; i*=2){
+                    if(i == participants){
+                        isValidPlayerCount = true;
+                        break;
+                    }
+                }
+                if(!isValidPlayerCount) {
+                    Dialogs.error("Ilośc uczestników nie jest potęgą liczby 2!", "Niewłaściwa ilość uczestników");
+                    return;
+                }
+            } else if (system == 2 || system == 4) {
+                //"Szwajcarski" i "McMahona"
+                if(participants%2==1) {
+                    Dialogs.error("Ilość zawodników musi być parzysta!", "Niewłaściwa ilość uczestników");
+                    return;
+                }
+            }
+        }
+
         if(unplanned.size()>1&&planned.size()>1)
             Dialogs.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy.", "Nie można przejść do następnego etapu");
         else {

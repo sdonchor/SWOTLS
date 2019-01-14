@@ -65,8 +65,12 @@ public class LeagueTournament extends Tournament {
      * @return true jeżeli udało się wygenerować nowe mecze, false jeżeli turniej zakończony i wysyłamy komunikat o zwycięzcy
      */
     public static boolean nextStage(int tournamentId){
-        //Uwaga: Jeżeli etap turnieju = 0 to zamiast tej metody wywołać endEntriesStage
-        //Uwaga: do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
+        int stage = getTournamentStage(tournamentId);
+        if(stage==-1) {
+            return false;
+        }else if(stage==0){
+            endEntriesStage(tournamentId);
+        }
 
         ArrayList< ArrayList<TournamentParticipant> > classes = getParticipantsInClasses(tournamentId);
         boolean isSoloType = isSoloType(tournamentId); //sprawdzenie typu turnieju (solo czy drużynowy)
@@ -87,7 +91,6 @@ public class LeagueTournament extends Tournament {
             report += "\n";
         }
 
-        int stage = getTournamentStage(tournamentId);
         int season = getTournamentSeason(tournamentId);
         createReport(tournamentId, "Raport - Etap " + stage + " - Sezon " + season, report); //zapisanie raportu w bazie danych
 

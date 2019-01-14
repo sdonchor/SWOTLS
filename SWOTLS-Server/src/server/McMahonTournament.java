@@ -117,6 +117,12 @@ public class McMahonTournament extends Tournament {
      * @return true jeżeli udało się wygenerować nowe mecze, false jeżeli turniej zakończony i wysyłamy komunikat o zwycięzcy
      */
     public static boolean nextStage(int tournamentId){
+        int stage = getTournamentStage(tournamentId);
+        if(stage==-1) {
+            return false;
+        }else if(stage==0){
+            return endEntriesStage(tournamentId);
+        }
         return SwissTournament.nextStage(tournamentId); //To samo co w szwajcarskim
     }
 
