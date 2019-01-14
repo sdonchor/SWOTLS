@@ -166,8 +166,10 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
         //Sprawdza, który panel jest otwarty i przeładowywuje w nim dane.
         if(competitorsPane.isExpanded()){
-            competitors = ServerData.getListOfCompetitionContestants(competition.getId());
-            reloadPane(competitors, lvCompetitors, "** Dodaj **");
+            if(competition.getStage()==0)
+                reloadPane(competitors, lvCompetitors, "** Dodaj **");
+            else
+                reloadPane(competitors, lvCompetitors, null);
         }else if(unplannedPane.isExpanded()){
             unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
 
@@ -196,7 +198,10 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(competitorsPane.isExpanded()){
                     competitors = ServerData.getListOfCompetitionContestants(competition.getId());
-                    reloadPane(competitors, lvCompetitors, "** Dodaj **");
+                    if(competition.getStage()==0)
+                        reloadPane(competitors, lvCompetitors, "** Dodaj **");
+                    else
+                        reloadPane(competitors, lvCompetitors, null);
                 }else {
                     lvCompetitors.getSelectionModel().clearSelection();
                 }
@@ -220,14 +225,31 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                     return;
                 }
 
-                Player player = ServerData.getContestantById(id);
-                if(player==null)
-                    return;
+                if(competition.getType()== Competition.Type.SOLO){
+                    //SOLO
+                    Player player = ServerData.getContestantById(id);
+                    if(player==null)
+                        return;
 
-                if(competition.getSystem()==5)
-                    new VistaPlayerInLeagueViewerController(MainController.newTab("Zawodnik - " + player.displayedName()), player, competition);
-                else
-                    new VistaPlayerViewerController(newTab("Profil - " + player.displayedName()), player);
+                    if(competition.getSystem()==5) {
+                        new VistaPlayerInLeagueViewerController(MainController.newTab("Zawodnik - " + player.displayedName()), player, competition);
+                    }else {
+                        new VistaPlayerViewerController(newTab("Zawodnik - " + player.displayedName()), player);
+                    }
+                }else {
+                    //TEAM
+                    Team t = ServerData.getTeamById(id);
+                    if(t==null)
+                        return;
+
+                    if(competition.getSystem()==5) {
+                        new VistaTeamInLeagueViewerController(MainController.newTab("Drużyna - " + t.displayedName()), t, competition);
+                    }else {
+                        new VistaTeamViewerController(newTab("Drużyna - " + t.displayedName()), t);
+                    }
+                }
+
+
 
             }
         });

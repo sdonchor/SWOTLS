@@ -477,3 +477,23 @@
 [19:25:48][INFO]: Pobrano nazwę gracza 372.
 [19:26:03][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
 [19:26:52][ERROR]: Nie udało się uruchomić serwera.
+[20:15:33][INFO]: Pobrano tabelę contestants.
+[20:15:33][INFO]: Pobrano tabelę tournaments.
+[20:15:33][INFO]: Pobrano tabelę teams.
+[20:15:33][INFO]: Pobrano tabelę matches.
+[20:15:33][INFO]: Pobrano tabelę arenas.
+[20:15:33][INFO]: Pobrano tabelę system_users.
+[20:15:37][INFO]: Pobrano niezaplanowane mecze.
+[20:15:37][INFO]: Pobrano typ turnieju 306.
+[20:15:37][INFO]: Pobrano wszystkie zaplanowane mecze.
+[20:15:37][INFO]: Pobrano typ turnieju 306.
+[20:15:38][INFO]: Pobrano niezaplanowane mecze.
+[20:15:38][INFO]: Pobrano typ turnieju 306.
+[20:15:38][INFO]: Pobrano nazwę gracza 107.
+[20:15:38][INFO]: Pobrano nazwę gracza 228.
+[20:15:38][INFO]: Pobrano raporty.
+[20:15:39][INFO]: Pobrano niezaplanowane mecze.
+[20:15:39][INFO]: Pobrano typ turnieju 306.
+[20:15:39][INFO]: Pobrano nazwę gracza 107.
+[20:15:39][INFO]: Pobrano nazwę gracza 228.
+[20:15:46][INFO]: Wylogowano użytkownika o IP /127.0.0.1.

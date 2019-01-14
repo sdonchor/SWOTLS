@@ -368,3 +368,16 @@
 [19:25:46][INFO]: Pobrano niezaplanowane mecze dla id 306.
 [19:25:47][INFO]: Pobrano zawodników dla id 306.
 [19:26:03][INFO]: Pomyślnie wylogowano bieżącego użytkownika.
+[20:15:32][INFO]: Połączono z serwerem localhost:4545.
+[20:15:33][INFO]: Pobrano tabelę contestants.
+[20:15:33][INFO]: Pobrano tabelę tournaments.
+[20:15:33][INFO]: Pobrano tabelę teams.
+[20:15:33][INFO]: Pobrano tabelę matches.
+[20:15:33][INFO]: Pobrano tabelę arenas.
+[20:15:33][INFO]: Pobrano tabelę system_users.
+[20:15:37][INFO]: Pobrano niezaplanowane mecze dla id 306.
+[20:15:37][INFO]: Pobrano zaplanowane mecze dla id 306.
+[20:15:38][INFO]: Pobrano zakończone mecze dla id 306.
+[20:15:38][INFO]: Pobrano raporty dla id 306.
+[20:15:39][INFO]: Pobrano zakończone mecze dla id 306.
+[20:15:46][INFO]: Pomyślnie wylogowano bieżącego użytkownika.

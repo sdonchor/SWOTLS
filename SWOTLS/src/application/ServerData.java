@@ -974,6 +974,14 @@ public class ServerData {
 		}
 	}
 
+	public static void promoteTeam(int tournamentId, int teamId){
+		//TODO
+	}
+
+	public static void demoteTeam(int tournamentId, int teamId){
+		//TODO
+	}
+
 	public static void setNumberOfRounds(int tournamentId, int numberOfRounds) {
 		try {
 			if(sc.setRounds(tournamentId, numberOfRounds))

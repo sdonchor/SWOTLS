@@ -43,7 +43,11 @@ public class VistaCompetitorChooserController implements VistaContainable {
 
     private void init(){
         ObservableList<String> options = FXCollections.observableArrayList();
-        contestants = ServerData.getListOfAllContestants();
+        if(competition.getType()==Competition.Type.SOLO)
+            contestants = ServerData.getListOfAllContestants();
+        else
+            contestants = ServerData.getListOfAllTeams();
+
         for(String s : contestants.keySet()){
             if(!addedContestants.containsKey(s))
                 options.add(s);
