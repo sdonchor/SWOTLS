@@ -24,7 +24,7 @@ public class Team extends Competitor {
         try {
 			this.players = dbH.getQueryBuilder().getTeamPlayers(id);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
     }

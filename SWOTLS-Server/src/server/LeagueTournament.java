@@ -102,7 +102,7 @@ public class LeagueTournament extends Tournament {
             setTournamentStage(tournamentId, 0);
             setTournamentSeason(tournamentId, season+1);
 
-            //TODO Wysłać komunikat o zwycięzcy w klasie pierwszej (najważniejszej) i poinformować że zwycięzców pozostałych można odczytać z właśnie wygenerowanego raportu
+            
             return false;
         }
 

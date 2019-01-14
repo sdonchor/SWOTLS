@@ -1,5 +1,6 @@
 package server;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class McMahonTournament extends Tournament {
@@ -17,12 +18,38 @@ public class McMahonTournament extends Tournament {
 		dbH=dbh;
 	}
     public static int getPlayersElo(int playerId){
-        int elo = 1200; //TODO pobranie elo gracza o podanym id
+        Player x;
+        int elo=1200;
+		try {
+			x = dbH.getQueryBuilder().getPlayer(playerId);
+			elo = x.getElo();
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}
+        
         return elo;
     }
 
     public static int getTeamElo(int teamId){
-        int elo = 1200; //TODO pobierz średnią wartość elo wszystkich członków podanej drużyny
+    	int elo=1200;
+    	try {
+			Team x = dbH.getQueryBuilder().getTeam(teamId);
+			int count = 0;
+			int sum = 0;
+			List<Player> members = x.getPlayers();
+			for(int i = 0 ; i<members.size() ; i++)
+			{
+				Player current = members.get(i);
+				sum+=current.getElo();
+				count++;
+			}
+			elo=sum/count;
+			
+		} catch (SQLException e) {
+				e.printStackTrace();
+		}
+    	
         return elo;
     }
 
@@ -35,8 +62,8 @@ public class McMahonTournament extends Tournament {
         ArrayList<TournamentParticipant> participants = getTournamentParticipants(tournamentId);
 
         if(participants.size()%2==1) {
-            //TODO Jeżeli liczba zawodników jest nieparzysta, to nie pozwól na wystartowanie turnieju i wyślij komunikat
-            return false;
+            
+            return true; //TODO false?
         }
 
         Map<TournamentParticipant, Integer> eloOfParticipants = new HashMap<>();

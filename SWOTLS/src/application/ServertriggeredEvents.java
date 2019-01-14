@@ -21,7 +21,7 @@ public class ServertriggeredEvents {
     }
 
     public static void dataUpdated(){
-        ServerData.downloadEverything(); //TODO To tylko tymczasowo do testów
+        ServerData.downloadEverything(); 
 
         for (Refreshable l : dataUpdateListeners)
             l.refresh();

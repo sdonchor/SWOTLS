@@ -60,7 +60,7 @@ public class RoundRobinTournament extends Tournament {
 
         match.setScoreA(scoreA);
         match.setScoreB(scoreB);
-        //TODO Zapisać wynik meczu do bazy jeżeli gdzieś wcześniej tego nie zrobiłeś
+        
     }
 
     /**
@@ -74,8 +74,7 @@ public class RoundRobinTournament extends Tournament {
 
         int stage = getTournamentStage(tournamentId);
         if(stage==-1) {
-            //Jeżeli turniej jest już zakończony (etap -1) to przerwać i
-            //TODO wysłać komunikat o zwycięzcy
+
             return false;
         }else if(stage==0){
             endEntriesStage(tournamentId);
@@ -98,7 +97,6 @@ public class RoundRobinTournament extends Tournament {
 
         if(stage==participants.size()-1){ //Jeżeli aktualny etap był ostatnim (liczba_etapów == ilość_uczestników-1)
             setTournamentStage(tournamentId, -1); //oznaczyć etap turnieju jako -1 (zakończony)
-            //TODO wysłać komunikat o zwycięzcy
             return false;
         }
 

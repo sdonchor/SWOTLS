@@ -40,7 +40,7 @@ public class ServerData {
 	}
 
 	public static boolean downloadEverything(){
-	    //TODO To tylko tymczasowo do testów, docelowo ma pobierać pojedynczo tylko to co jest żądane albo to co się zmieniło w bazie (w zależności od podejścia)
+	    
         System.out.println("Tymczasowo dla testów pobieram wszystko od nowa przy każdym odświeżeniu");
        
         try {
@@ -916,9 +916,10 @@ public class ServerData {
 	 */
 	public static void nextStage(int competitionId){
 
-        //TODO wywołać metodę po stronie serwera nextStage() (lub endEntriesStage() jeżeli zakończony etap to 0 czyli zapisy) dla odpowiedniego systemu turniejowego
 		try {
-			sc.nextStage(competitionId);
+			if(!sc.nextStage(competitionId)) {
+				Dialogs.error("Turniej zakończony.");
+			}
 		} catch (ClassNotFoundException | IOException e) {
 			ClientLog.logLine("ERROR", "Nie udało się przejść do kolejnego etapu. Błąd połączenia.");
 
@@ -927,7 +928,7 @@ public class ServerData {
 	}
 
     public static void setScore(int matchId, int scoreA, int scoreB) {
-	    //TODO w tym przypadku trzeba wywoływać po stronie serwera metodę saveResult z podpowiedniego systemu turniejowego (wg którego jest rozgrywany turniej tego meczu) np. KnockoutTournament.saveResult(matchId, scoreA, scoreB)
+	    
     	try {
 			if(sc.setScore(matchId,scoreA,scoreB))
 			{

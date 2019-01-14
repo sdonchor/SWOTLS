@@ -274,6 +274,29 @@ public class QueryBuilder {
 			return false;
 	}
 	public boolean setScore(int id, int sideA, int sideB) throws SQLException{
+		int system = getSystem(getTournamentIdOfMatch(id));
+		if(system==1)
+		{
+			KnockoutTournament.saveResult(id, sideA, sideB);
+		}
+		else if(system==2)
+		{
+			SwissTournament.saveResult(id, sideA, sideB);
+		}
+		else if(system==3)
+		{
+			 RoundRobinTournament.saveResult(id, sideA, sideB);
+		}
+		else if(system==4)
+		{
+			 McMahonTournament.saveResult(id, sideA, sideB);
+		}
+		else if(system==5)
+		{
+			 LeagueTournament.saveResult(id, sideA, sideB);
+		}
+		else
+			System.out.println("Nie rozpoznano systemu");
 		String query = "UPDATE matches SET sideA_score = ? , sideB_score = ? WHERE match_id = ?";
 		PreparedStatement stmt = connection.prepareStatement(query);
 		stmt.setInt(1, sideA);
@@ -553,19 +576,7 @@ public class QueryBuilder {
 		else
 			return -1;
 	}
-	/**
-	 * 
-	    if(system.equals("Pucharowy"))
-	        iSystem = 1;
-	    else if(system.equals("Szwajcarski"))
-	        iSystem = 2;
-	    else if(system.equals("Kołowy"))
-	        iSystem = 3;
-        else if(system.equals("McMahona"))
-            iSystem = 4;
-        else if(system.equals("Wieloklasowa liga"))
-            iSystem = 5;
-	 */
+
 	
 	public boolean setElo(int pid, int elo) throws SQLException {
 		String query = "UPDATE contestants SET score = ? WHERE contestant_id = ?";
@@ -827,8 +838,111 @@ public class QueryBuilder {
 		}
 		return list;
 	}
+	public boolean allFinished(int tid) throws SQLException {
+		boolean plannedExist=true;
+		boolean unplannedExist = true;
+		CachedRowSet planned = getPlannedMatchesId(tid);
+		if(!planned.next())
+			plannedExist=false;
+		CachedRowSet unplanned = getUnplannedMatches(tid);
+		if(!unplanned.next())
+			unplannedExist=false;
+		if(plannedExist || unplannedExist) {
+			return false;
+		}
+		else
+			return true;
+	}
 	public boolean nextStage(int tid) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		int system = getSystem(tid);
+		if(system==1)
+		{
+			return KnockoutTournament.nextStage(tid);
+		}
+		else if(system==2)
+		{
+			return SwissTournament.nextStage(tid);
+		}
+		else if(system==3)
+		{
+			return RoundRobinTournament.nextStage(tid);
+		}
+		else if(system==4)
+		{
+			return McMahonTournament.nextStage(tid);
+		}
+		else if(system==5)
+		{
+			return LeagueTournament.nextStage(tid);
+		}
+		else
+			return false;
+	}
+	public int getSystem(int tid) throws SQLException{
+		String query = "SELECT * FROM tournaments WHERE tournament_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			int system = rs.getInt("system");
+			return system;
+		}
+		else
+			return -1;
+	}
+	public int getTournamentIdOfMatch(int mid) throws SQLException{
+		String query = "SELECT * FROM matches WHERE match_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, mid);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			int tournament = rs.getInt("tournament");
+			return tournament;
+		}
+		else
+			return -1;
+	}
+	public Player getLeaderOfTeam(int tid) throws SQLException{
+		String query = "SELECT * FROM contestants WHERE team_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			return getPlayer(rs.getInt("contestant_id"));
+		}
+		else return null;
+	}
+	public Match getMatchById(int mid) throws SQLException{
+		String query = "SELECT * FROM matches WHERE match_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		String type = getTournamentTypeByMatchId(mid);
+		stmt.setInt(1, mid);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			if(type.equals("solo")) {
+				int tournament = rs.getInt("tournament");
+				int sideA = rs.getInt("sideA");
+				int sideB = rs.getInt("sideB");
+				int sideA_score = rs.getInt("sideA_score");
+				int sideB_score=rs.getInt("sideB_score");
+				Player a = getPlayer(sideA);
+				Player b = getPlayer(sideB);
+				return new Match(mid, a, b, tournament);
+			}
+			else if(type.equals("team")) {
+				int tournament = rs.getInt("tournament");
+				int sideA = rs.getInt("teamA");
+				int sideB = rs.getInt("teamB");;
+				int sideA_score = rs.getInt("sideA_score");
+				int sideB_score=rs.getInt("sideB_score");
+				Team teamA = getTeam(sideA);
+				Team teamB = getTeam(sideB);
+				
+				return new Match(mid, teamA, teamB, tournament);
+			}
+		}
+		else
+			return null;
+		return null;
 	}
 }

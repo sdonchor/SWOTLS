@@ -65,7 +65,6 @@ public class KnockoutTournament extends Tournament {
      */
     public static boolean saveResult(int matchId, int scoreA, int scoreB){
         if(scoreA == scoreB){
-            //TODO Remisy są niedopuszczalne w tym systemie, jeżeli remis to wyślij błąd (ServertriggeredEvents->error(String msg))
             return false;
         }
 
@@ -83,10 +82,11 @@ public class KnockoutTournament extends Tournament {
         setPoints(match.getCompetitionId(), loser.getId(), -1); //Oznaczenie przegranego jako odpadniętego z turnieju
 
         updateRating(match.getCompetitionId(), winner, loser, 1); //Aktualizacja rankingu uczestników meczu
-
+        
+       
         match.setScoreA(scoreA);
         match.setScoreB(scoreB);
-        //TODO Zapisać wynik meczu do bazy jeżeli gdzieś wcześniej tego nie zrobiłeś
+
 
         return true;
     }	
@@ -115,7 +115,7 @@ public class KnockoutTournament extends Tournament {
 				
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         
@@ -146,7 +146,7 @@ public class KnockoutTournament extends Tournament {
 				
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         return winners;
@@ -160,11 +160,17 @@ public class KnockoutTournament extends Tournament {
     public static boolean nextStage(int tournamentId){
         //Uwaga: Jeżeli etap turnieju = 0 to zamiast tej metody wywołać endEntriesStage
         //Uwaga: Do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
-
+    	try {
+			if(!dbH.getQueryBuilder().allFinished(tournamentId))
+			{
+				return true;
+			}
+		} catch (SQLException e) {
+	
+			e.printStackTrace();
+		}
         int stage = getTournamentStage(tournamentId);
         if(stage==-1) {
-            //Jeżeli turniej jest już zakończony (etap -1) to przerwać i
-            //TODO wysłać komunikat o zwycięzcy
             return false;
         }else if(stage==0){
             return endEntriesStage(tournamentId);
@@ -185,7 +191,7 @@ public class KnockoutTournament extends Tournament {
 
         if(winners.size()==1) { //Jeżeli został tylko jeden gracz to
             setTournamentStage(tournamentId, -1); //oznaczyć etap turnieju jako -1 czyli zakończony
-            String s = "Uczestnik " + winners.get(0) + " wygrał cały turniej!";  //TODO wysłać komunikat o zwycięzcy (niezależnie od tego czy wysyłamy komunikat czy nie to i tak ServertriggeredEvents->dataUpdated() ma sie wywołać po stronie klienta)
+            String s = "Uczestnik " + winners.get(0) + " wygrał cały turniej!";  
             return false;
         }
 

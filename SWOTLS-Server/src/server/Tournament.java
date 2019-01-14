@@ -55,7 +55,7 @@ public class Tournament {
         try {
 			dbH.getQueryBuilder().setElo(id, elo);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     }
@@ -132,7 +132,7 @@ public class Tournament {
         try {
 			dbH.getQueryBuilder().setStage(tournamentId, stage);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
     }
@@ -142,7 +142,7 @@ public class Tournament {
         try {
 			stage = dbH.getQueryBuilder().getStage(tournamentId);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         return stage;
@@ -152,7 +152,7 @@ public class Tournament {
     	try {
 			dbH.getQueryBuilder().setSeason(tournamentId, season);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     }
@@ -162,7 +162,7 @@ public class Tournament {
          try {
  			season = dbH.getQueryBuilder().getSeason(tournamentId);
  		} catch (SQLException e) {
- 			// TODO Auto-generated catch block
+ 			
  			e.printStackTrace();
  		}
          return season;
@@ -178,7 +178,7 @@ public class Tournament {
     	try {
 			dbH.getQueryBuilder().createReport(tid, title, content);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     }
@@ -186,7 +186,6 @@ public class Tournament {
     public static void updateRating(int tournamentId, Competitor competitorX, Competitor competitorY, float didXwin){
         boolean isSoloType = isSoloType(tournamentId); //sprawdzenie typu turnieju (solo czy drużynowy)
         if(isSoloType){
-            //TODO Competitor to klasa abstrakcyjna po której dziedziczą Player i Team - nie pamiętam czy można tak robić rzutowanie w dół - chyba można, prawda?
             //Solo
             Player pX = (Player) competitorX;
             Player pY = (Player) competitorY;
