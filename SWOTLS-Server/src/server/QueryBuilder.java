@@ -565,7 +565,7 @@ public class QueryBuilder {
         else if(system.equals("Wieloklasowa liga"))
             iSystem = 5;
 	 */
-	public boolean nextStage(int tid) {
+	public boolean nextStage(int tid) throws SQLException {
 		// TODO Auto-generated method stub
 		return false;
 	}

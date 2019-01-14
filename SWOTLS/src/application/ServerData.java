@@ -620,8 +620,7 @@ public class ServerData {
         try {
 			sc.planMatch(matchId,time,arenaId);
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się zaplanować meczu. Błąd połączenia.");
 		}
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy operację
     }
@@ -651,8 +650,7 @@ public class ServerData {
 				}
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać listy zawodników. Błąd połączenia.");
 		}
 		
 		return map;
@@ -670,8 +668,7 @@ public class ServerData {
     		type=sc.getTournamentType(tid);
 			return type;
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać typu turnieju. Błąd połączenia.");
 			
 		}
     	return type;
@@ -715,8 +712,7 @@ public class ServerData {
 				map.put(title, id);
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać listy niezaplanowanych. Błąd połączenia.");
 		}
 		return map;
 	}
@@ -755,8 +751,7 @@ public class ServerData {
 				map.put(title, id);
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać listy planowanych. Błąd połączenia.");
 		}
 		return map;
 	}
@@ -795,8 +790,8 @@ public class ServerData {
 				map.put(title, id);
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać listy planowanych. Błąd połączenia.");
+
 		}
 		return map;
 	}
@@ -815,8 +810,7 @@ public class ServerData {
 			    System.out.println("");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		
 	}
@@ -853,8 +847,8 @@ public class ServerData {
 				map.put(title, id);
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać listy zakończonych. Błąd połączenia.");
+
 		}
 		return map;
 	}
@@ -869,8 +863,8 @@ public class ServerData {
 				map.put(title,id);
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać listy raportów. Błąd połączenia.");
+
 		}
     	return map;
     }
@@ -886,8 +880,8 @@ public class ServerData {
 				 s = crs.getString("content");
 			}
 		} catch (SQLException | ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się pobrać raportu. Błąd połączenia.");
+
 		}
         return new Report(title, s);
     }
@@ -903,8 +897,8 @@ public class ServerData {
 				sc.addTeamToCompetition(competitorId,competitionId);
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się dodać zawodnika. Błąd połączenia.");
+
 		}
         ServertriggeredEvents.dataUpdated();
 	}
@@ -916,7 +910,12 @@ public class ServerData {
 	public static void nextStage(int competitionId){
 
         //TODO wywołać metodę po stronie serwera nextStage() (lub endEntriesStage() jeżeli zakończony etap to 0 czyli zapisy) dla odpowiedniego systemu turniejowego
-		sc.nextStage(competitionId);
+		try {
+			sc.nextStage(competitionId);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
