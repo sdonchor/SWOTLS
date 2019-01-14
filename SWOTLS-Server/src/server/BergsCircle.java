@@ -25,8 +25,9 @@ public class BergsCircle {
             slots.add(p.getStartingPosition(), p);
         }
 
-        if(slots.size()%2==1)
-            slots.add(new TournamentParticipant(-1, slots.size()+1));
+        if(slots.size()%2==1) {
+            slots.add(new TournamentParticipant(-1, slots.size() + 1, 0, competitors.get(0).getLeagueClass()));
+        }
     }
 
     public List<MatchPair> getPairs(){

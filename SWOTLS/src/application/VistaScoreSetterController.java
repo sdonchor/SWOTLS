@@ -18,11 +18,11 @@ import java.util.Map;
 public class VistaScoreSetterController implements VistaContainable {
     private VistaContainer parent;
     private Map<String, Integer> players;
-    private int matchId = -1;
+    private Match match;
 
     public VistaScoreSetterController(VistaContainer parent, Match match){
         this.init(parent);
-        this.matchId = match.getId();
+        this.match = match;
         labelA.setText("Punkty " + match.getSideA().displayedName());
         labelB.setText("Punkty " + match.getSideB().displayedName());
     }
@@ -78,7 +78,14 @@ public class VistaScoreSetterController implements VistaContainable {
         }
 
         try {
-            ServerData.setScore(matchId, Integer.parseInt(scoreA.getText()), Integer.parseInt(scoreB.getText()));
+            int iScoreA = Integer.parseInt(scoreA.getText());
+            int iScoreB = Integer.parseInt(scoreB.getText());
+            if(iScoreA==iScoreB && match.getCompetition().getSystem()==1){
+                Dialogs.error("W systemie turniejowym nie może być remisów!");
+                return;
+            }
+
+            ServerData.setScore(match.getId(), iScoreA, iScoreB);
         }catch (NumberFormatException e){
             Dialogs.error("Wprowadzono niedozwolone wartości!");
             return;

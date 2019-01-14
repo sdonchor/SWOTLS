@@ -10,12 +10,7 @@ public class RoundRobinTournament extends Tournament {
        Ten sposób rozgrywek nazywany jest również systemem każdy z każdym, w anglojęzycznej literaturze round-robin.
     */
 
-    public static ArrayList<TournamentParticipant> getCompetitors(int tournamentId){
-        ArrayList<TournamentParticipant> competitors = new ArrayList<>(); //TODO pobrać listę uczestników turnieju
-        return competitors;
-    }
-
-    public static void endEntriesStage(int tournamentId, ArrayList<TournamentParticipant> competitors) {
+        public static void endEntriesStage(int tournamentId, ArrayList<TournamentParticipant> competitors) {
         //Numerowanie zawodników pozycjami startowymi 1, 2, ... n (gdzie n to liczba zawodników w turnieju)
         int i = 1;
         for(TournamentParticipant participant : competitors){
@@ -23,57 +18,88 @@ public class RoundRobinTournament extends Tournament {
         }
 
         generateMatches(tournamentId, competitors, 1);
-
-        //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
     }
 
     /**
      * Zakańcza etap zapisów i przechodzi do pierwszego etapu (generuje mecze startowe).
      */
     public static void endEntriesStage(int tournamentId){
-        endEntriesStage(tournamentId, getCompetitors(tournamentId));
-        //TODO Zwiększyć wartość "etap turnieju" z 0 na 1 (0 oznacza zapisy, które właśnie się zakończyły i rozpoczyna się pierwszy etap)
+        endEntriesStage(tournamentId, getTournamentParticipants(tournamentId));
+        setTournamentStage(tournamentId, 1);
     }
 
     /**
      * Zapisuje wynik meczu i oznacza go jako zakończony. Na podstawie wprowadzonego wyniku uaktualnia ranking i punktację uczestników.
      * @param matchId Identyfikator meczu w bazie danych.
      */
-    public static void saveResult(int matchId){ //prawdopodobnie klasa Match jako parametr będzie albo id meczu żeby go z bazy pobrać
-        //TODO Wygranemu dodaj 1 punkt, jeżeli remis to obu ustecztnikom meczu dodaj 0.5 punkta.
-        //TODO Zaktualizostać ranking uczestników meczu
-        //EloRatingSystem.updateRating(); //TODO trzeba sprawdzić jaki typ turnieju (czy drużynowy czy solo) i wywołać metodę z odpowiednim typem parametrów
-        //TODO Zaktualizować wynik i status uczestnika w turnieju, a następnie wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
+    public static void saveResult(int matchId, int scoreA, int scoreB){ //prawdopodobnie klasa Match jako parametr będzie albo id meczu żeby go z bazy pobrać
+        server.Match match = getMatchById(matchId);
+        Competitor competitorA = match.getSideA();
+        Competitor competitorB = match.getSideB();
+
+        float didAwin = 1;
+        if(scoreA<scoreB){
+            didAwin = 0;
+            addPoint(match.getCompetitionId(), competitorB.getId()); //Dodanie wygranemu 1 punkta
+        }else if(scoreA==scoreB){
+            didAwin = 0.5f;
+            //Remis - gracze dostają po 0.5 punktu
+            addHalfPoint(match.getCompetitionId(), competitorA.getId());
+            addHalfPoint(match.getCompetitionId(), competitorB.getId());
+        }else{
+            didAwin = 1;
+            addPoint(match.getCompetitionId(), competitorA.getId()); //Dodanie wygranemu 1 punkta
+        }
+
+        updateRating(match.getCompetitionId(), competitorA, competitorB, didAwin); //Aktualizacja rankingu uczestników meczu
+
+        match.setScoreA(scoreA);
+        match.setScoreB(scoreB);
+        //TODO Zapisać wynik meczu do bazy jeżeli gdzieś wcześniej tego nie zrobiłeś
     }
 
     /**
      * Zakańcza aktualny etap (generuje raport) i przechodzi do następnego (generuje mecze dla pozostałych w następnym etapie uczestników).
+     * @param tournamentId Id turnieju, który ma przejść do następnego etapu
+     * @return true jeżeli udało się wygenerować nowe mecze, false jeżeli turniej zakończony i wysyłamy komunikat o zwycięzcy
      */
-    public static void nextStage(int tournamentId){
+    public static boolean nextStage(int tournamentId){
+        //Uwaga: Jeżeli etap turnieju = 0 to zamiast tej metody wywołać endEntriesStage
         //Uwaga: do następnego etapu można przejść tylko wtedy gdy wszystkie mecze w turnieju zostały zakończone (wprowadzono wyniki)
 
-        //TODO Jeżeli turniej jest już zakończony (etap -1) to przerwać i wysłać komunikat o zwycięzcy (jeżeli więcej niż 1 osoba ma największą ilość punktów to albo ogłosić kilku wzycięzców i niech się martwią sami, albo wygenerować mecze dogrywkowe)
+        int stage = getTournamentStage(tournamentId);
+        if(stage==-1) {
+            //Jeżeli turniej jest już zakończony (etap -1) to przerwać i
+            //TODO wysłać komunikat o zwycięzcy
+            return false;
+        }else if(stage==0){
+            endEntriesStage(tournamentId);
+        }
 
 
-        ArrayList<TournamentParticipant> participants = new ArrayList<>(); //TODO pobrać listę uczestników (zawodników albo drużyn) podanego turnieju
+        ArrayList<TournamentParticipant> participants = getTournamentParticipants(tournamentId);
         //Generacja raportu z listą graczy i ich punktacją po zakończonym etapie (uczestnicy posortowani od największej ilości punktów)
         Collections.sort(participants, Collections.reverseOrder());
-        String raport = "Punktacja po X rundzie turnieju:\n";
+        String report = "Punktacja po X rundzie turnieju:\n";
 
-        boolean isSoloType = true; //TODO sprawdzenie typu turnieju (solo czy drużynowy)
+        boolean isSoloType = isSoloType(tournamentId); //sprawdzenie typu turnieju (solo czy drużynowy)
         for(TournamentParticipant p : participants){
             if(isSoloType)
-                raport += getDisplayedNameOfPlayer(p.getId()) + " - " + p.getPoints();
+                report += getDisplayedNameOfPlayer(p.getId()) + " - " + p.getPoints();
             else
-                raport += getNameOfTeam(p.getId()) + " - " + p.getPoints();
+                report += getNameOfTeam(p.getId()) + " - " + p.getPoints();
         }
-        //TODO zapisać raport w bazie danych
+        createReport("Raport - Etap " + stage, report);
 
-        //TODO Zwiększyć numer etapu. Jeżeli aktualny etap był ostatnim (liczba_etapów == ilość_uczestników-1) to wysłać komunikat o zwycięzcy i oznaczyć etap turnieju jako -1 (zakończony)
+        if(stage==participants.size()-1){ //Jeżeli aktualny etap był ostatnim (liczba_etapów == ilość_uczestników-1)
+            setTournamentStage(tournamentId, -1); //oznaczyć etap turnieju jako -1 (zakończony)
+            //TODO wysłać komunikat o zwycięzcy
+            return false;
+        }
 
-        //generateMatches(tournamentId, getCompetitors(tournamentId), numer_etapu_do_ktorego_przechodzimy);
-
-        //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
+        generateMatches(tournamentId, participants, stage+1);
+        setTournamentStage(tournamentId, stage+1);
+        return true;
     }
 
     /**
@@ -89,8 +115,7 @@ public class RoundRobinTournament extends Tournament {
 
         //Wygenerowanie par meczowych za pomocą koła Berga
         List<MatchPair> pairs = BergsCircle.getPairs(competitors, stageOfMatchesToGenerate); //etapy rozgrywek są numerowane od 1 (etap 0 to zapisy, -1 to turniej zakończony)
-        //TODO Utworzyć mecze z uzyskanych par. UWAGA! Jeżeli liczba uczestników jest nieparzysta, to jeden z nich będzie miał parę z zawodnikiem z id -1 - taki zawodnik oznacza wolny los, i jego przeciwnik nie ma meczu w tej rundzie.
-        //TODO Utworzone mecze mają być oznaczone jako niezaplanowane (brak daty, brak wyników).
+        createMatches(tournamentId, pairs);
         return true;
     }
 

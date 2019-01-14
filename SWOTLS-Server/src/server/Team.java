@@ -10,11 +10,12 @@ public class Team extends Competitor {
     private Player leader;
     private List<Player> players = new ArrayList<>();
 
-    public Team(int id, String name, String whereFrom, Player leader) {
+    public Team(int id, String name, String whereFrom, Player leader, List<Player> members) {
         this.id = id;
         this.name = name;
         this.whereFrom = whereFrom;
         this.leader = leader;
+        this.players = members;
     }
 
     @Override
@@ -36,6 +37,10 @@ public class Team extends Competitor {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
     @Override

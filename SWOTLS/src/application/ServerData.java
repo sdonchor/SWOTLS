@@ -710,13 +710,16 @@ public class ServerData {
 	 */
 	public static void nextStage(int competitionId){
         Dialogs.error("Niezaimplementowana funkcja");
-		//TODO serwer powinien sprawdzić czy można przejść (czy wyniki wszystkich meczy zostały wprowadzone) - jeżeli tak, to ma wygenerować mecze dla następnego etapu lub ogłosić zwycięzcę (lub dokonać awansów i spadków w przypadku ligi) jeżeli to był ostatni etap
-        //TODO ^^ czyli wywołać metodę nextStage() (lub endEntriesStage() jeżeli zakończony etap to 0 czyli zapisy) dla odpowiedniego systemu turniejowego
-		ServertriggeredEvents.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy."); //TODO taki lub podobny komunikat ma wywoływać serwer jeżeli nie można przejść
+		//TODO serwer powinien sprawdzić czy wyniki wszystkich meczy zostały wprowadzone - sprawdzam to już po stronie klienta więc w ostatnieczności jak mamy wyjebke na bezpieczeństwo to po stronie serwera można sobie już to odpuścić
+        ServertriggeredEvents.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy."); //TODO taki lub podobny komunikat ma wywoływać serwer jeżeli nie można przejść
+
+        //TODO wywołać metodę po stronie serwera nextStage() (lub endEntriesStage() jeżeli zakończony etap to 0 czyli zapisy) dla odpowiedniego systemu turniejowego
+
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
     public static void setScore(int matchId, int scoreA, int scoreB) {
+	    //TODO w tym przypadku trzeba wywoływać po stronie serwera metodę saveResult z podpowiedniego systemu turniejowego (wg którego jest rozgrywany turniej tego meczu) np. KnockoutTournament.saveResult(matchId, scoreA, scoreB)
     	try {
 			if(sc.setScore(matchId,scoreA,scoreB))
 			{

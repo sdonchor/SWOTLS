@@ -12,7 +12,7 @@ public class EloRatingSystem {
      * @param result 0 jeśli gracz X przegrał, 0.5 jeśli zremisował, 1 jeśli wygrał
      * @return
      */
-    public static int calcChange(int playerRating, int opponentRating, int result){
+    public static int calcChange(int playerRating, int opponentRating, float result){
         int d = opponentRating - playerRating;
         if (d > 400) d = 400;
         else if (d < -400) d = -400;
@@ -27,7 +27,7 @@ public class EloRatingSystem {
      * @param playerY Gracz Y.
      * @param didXWin 1 jeżeli gracz X wygrał, 0.5 jeżeli remis, 0 jeżeli gracz Y wygrał.
      */
-    public static void updateRating(Player playerX, Player playerY, int didXWin){
+    public static void updateRating(Player playerX, Player playerY, float didXWin){
         int ratingX = playerX.getElo();
         int ratingY = playerY.getElo();
         playerX.setElo( playerX.getElo()+calcChange(ratingX, ratingY, didXWin) );
@@ -40,7 +40,7 @@ public class EloRatingSystem {
      * @param teamY Drużyna Y.
      * @param didXWin 1 jeżeli dużyna X wygrała, 0.5 jeżeli remis, 0 jeżeli drużyna Y wygrała.
      */
-    public static void updateRating(Team teamX, Team teamY, int didXWin){
+    public static void updateRating(Team teamX, Team teamY, float didXWin){
         //Obliczenie średniego rankingu graczy z drużyny X
         List<Player> playersX = teamX.getPlayers();
         int ratingX = 0;

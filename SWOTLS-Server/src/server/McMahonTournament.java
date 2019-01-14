@@ -23,17 +23,20 @@ public class McMahonTournament extends Tournament {
 
     /**
      * Zakańcza etap zapisów i przechodzi do pierwszego etapu (generuje mecze startowe).
+     * @param tournamentId Id turnieju, którego etap zapisów próbujemy zakończyć.
+     * @return true jeżeli udało się zakończyć zapisy i przejść do pierwszego etapu, false jeżeli liczba uczestników jest nieparzysta
      */
-    public static void endEntriesStage(int tournamentId){
+    public static boolean endEntriesStage(int tournamentId){
         ArrayList<TournamentParticipant> participants = new ArrayList<>(); //TODO pobrać listę uczestników (zawodników albo drużyn)
 
         if(participants.size()%2==1) {
-            //TODO Jeżeli liczba zawodników jest nieparzysta, to albo nie pozwól na wystartowanie turnieju, albo uczestnikowi z najmniejszym dorobkiem punktowym, który jeszcze nie pauzował daj punkt bez gry (i nie bierz go pod uwagę przy losowaniu par)
+            //TODO Jeżeli liczba zawodników jest nieparzysta, to nie pozwól na wystartowanie turnieju i wyślij komunikat
+            return false;
         }
 
         Map<TournamentParticipant, Integer> eloOfParticipants = new HashMap<>();
         int lowestElo = 9999999;
-        boolean isSoloType = true; //TODO sprawdzenie typu turnieju (solo czy drużynowy)
+        boolean isSoloType = isSoloType(tournamentId); //sprawdzenie typu turnieju (solo czy drużynowy)
 
         //Pobranie elo każdego z uczestników i wyznaczenie najmniejszego z nich
         for(TournamentParticipant p : participants){
@@ -61,24 +64,28 @@ public class McMahonTournament extends Tournament {
         //Dobranie par w taki sposób aby różnica ich punktów była jak najmniejsza (w miarę możliwości rywale powinni mieć jednakowa liczbę punktów)
         Collections.sort(participants, Collections.reverseOrder()); //można to zrobić poprzez posortowanie listy uczestników od największej do najmniejszej liczby punktów i po kolei dobierać pary
         List<MatchPair> matchPairs = SwissTournament.drawMatchPairs(participants);
-        //TODO Utworzyć mecze z uzyskanych par - mają być one oznaczone jako niezaplanowane (brak daty, brak wyników).
+        createMatches(tournamentId, matchPairs);
 
-        //TODO Zapisać wszystko w bazie i wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
+        setTournamentStage(tournamentId, 1);
+
+        return true;
     }
 
     /**
      * Zapisuje wynik meczu i oznacza go jako zakończony. Na podstawie wprowadzonego wyniku uaktualnia ranking i punktację uczestników.
      * @param matchId Identyfikator meczu w bazie danych.
      */
-    public static void saveResult(int matchId){ //prawdopodobnie klasa Match jako parametr będzie, albo id meczu żeby go z bazy pobrać
-        SwissTournament.saveResult(matchId); //To samo co w szwajcarskim
+    public static void saveResult(int matchId, int sideA, int sideB){ //prawdopodobnie klasa Match jako parametr będzie, albo id meczu żeby go z bazy pobrać
+        SwissTournament.saveResult(matchId, sideA, sideB); //To samo co w szwajcarskim
     }
 
     /**
      * Zakańcza aktualny etap (generuje raport) i przechodzi do następnego (generuje mecze dla pozostałych w następnym etapie uczestników).
+     * @param tournamentId Id turnieju, który ma przejść do następnego etapu
+     * @return true jeżeli udało się wygenerować nowe mecze, false jeżeli turniej zakończony i wysyłamy komunikat o zwycięzcy
      */
-    public static void nextStage(int tournamentId){
-        SwissTournament.nextStage(tournamentId); //To samo co w szwajcarskim
+    public static boolean nextStage(int tournamentId){
+        return SwissTournament.nextStage(tournamentId); //To samo co w szwajcarskim
     }
 
 

@@ -8,18 +8,10 @@ public class TournamentParticipant implements Identifiable, Comparable<Tournamen
     //public enum Type { PERSON, TEAM }
     //private Type type;
 
-    public TournamentParticipant(int id) {
-        this.id = id;
-    }
-
-    public TournamentParticipant(int id, int leagueClass) {
-        this.id = id;
-        this.leagueClass = leagueClass;
-    }
-
-    public TournamentParticipant(int id, int startingPosition, int points) {
+    public TournamentParticipant(int id, int startingPosition, int points, int leagueClass) {
         this.id = id;
         this.startingPosition = startingPosition;
+        this.leagueClass = leagueClass;
         this.points = points;
     }
 

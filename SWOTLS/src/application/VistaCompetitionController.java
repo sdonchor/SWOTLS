@@ -87,7 +87,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             return;
         }
 
-        if(false&&unplanned.size()>1&&planned.size()>1)
+        if(unplanned.size()>1&&planned.size()>1)
             Dialogs.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy.", "Nie można przejść do następnego etapu");
         else {
             if(competition.getStage()==0 && (competition.getSystem()==2 || competition.getSystem()==4)) {
