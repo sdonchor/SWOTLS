@@ -32,7 +32,7 @@ public class McMahonTournament extends Tournament {
      * @return true jeżeli udało się zakończyć zapisy i przejść do pierwszego etapu, false jeżeli liczba uczestników jest nieparzysta
      */
     public static boolean endEntriesStage(int tournamentId){
-        ArrayList<TournamentParticipant> participants = new ArrayList<>(); //TODO pobrać listę uczestników (zawodników albo drużyn)
+        ArrayList<TournamentParticipant> participants = getTournamentParticipants(tournamentId);
 
         if(participants.size()%2==1) {
             //TODO Jeżeli liczba zawodników jest nieparzysta, to nie pozwól na wystartowanie turnieju i wyślij komunikat
