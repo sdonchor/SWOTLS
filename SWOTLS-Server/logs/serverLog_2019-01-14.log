@@ -1,0 +1,424 @@
+[14:44:50][INFO]: Pobrano tabelę contestants.
+[14:44:50][INFO]: Pobrano tabelę tournaments.
+[14:44:50][INFO]: Pobrano tabelę teams.
+[14:44:50][INFO]: Pobrano tabelę matches.
+[14:44:50][INFO]: Pobrano tabelę arenas.
+[14:44:50][INFO]: Pobrano tabelę system_users.
+[14:45:34][INFO]: Pobrano tabelę contestants.
+[14:45:34][INFO]: Pobrano tabelę tournaments.
+[14:45:34][INFO]: Pobrano tabelę teams.
+[14:45:35][INFO]: Pobrano tabelę matches.
+[14:45:35][INFO]: Pobrano tabelę arenas.
+[14:45:35][INFO]: Pobrano tabelę system_users.
+[14:45:35][INFO]: Pobrano typ turnieju 4.
+[14:45:38][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[14:45:48][INFO]: Pobrano tabelę contestants.
+[14:45:48][INFO]: Pobrano tabelę tournaments.
+[14:45:49][INFO]: Pobrano tabelę teams.
+[14:45:49][INFO]: Pobrano tabelę matches.
+[14:45:49][INFO]: Pobrano tabelę arenas.
+[14:45:49][INFO]: Pobrano tabelę system_users.
+[14:45:49][INFO]: Pobrano typ turnieju 3.
+[14:55:57][INFO]: Pobrano tabelę contestants.
+[14:55:58][INFO]: Pobrano tabelę tournaments.
+[14:55:58][INFO]: Pobrano tabelę teams.
+[14:55:58][INFO]: Pobrano tabelę matches.
+[14:55:58][INFO]: Pobrano tabelę arenas.
+[14:55:58][INFO]: Pobrano tabelę system_users.
+[14:56:00][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[14:56:52][INFO]: Pobrano tabelę contestants.
+[14:56:52][INFO]: Pobrano tabelę tournaments.
+[14:56:52][INFO]: Pobrano tabelę teams.
+[14:56:53][INFO]: Pobrano tabelę matches.
+[14:56:53][INFO]: Pobrano tabelę arenas.
+[14:56:53][INFO]: Pobrano tabelę system_users.
+[14:56:53][ERROR]: Nie udało się pobrać nazwy gracza.
+[14:56:53][INFO]: Pobrano nazwę drużyny 26.
+[14:57:23][INFO]: Pobrano tabelę contestants.
+[14:57:24][INFO]: Pobrano tabelę tournaments.
+[14:57:24][INFO]: Pobrano tabelę teams.
+[14:57:24][INFO]: Pobrano tabelę matches.
+[14:57:24][INFO]: Pobrano tabelę arenas.
+[14:57:24][INFO]: Pobrano tabelę system_users.
+[14:57:24][ERROR]: Nie udało się pobrać nazwy gracza.
+[14:57:24][INFO]: Pobrano nazwę drużyny 26.
+[14:57:36][INFO]: Pobrano tabelę contestants.
+[14:57:36][INFO]: Pobrano tabelę tournaments.
+[14:57:36][INFO]: Pobrano tabelę teams.
+[14:57:36][INFO]: Pobrano tabelę matches.
+[14:57:36][INFO]: Pobrano tabelę arenas.
+[14:57:36][INFO]: Pobrano tabelę system_users.
+[14:57:37][ERROR]: Nie udało się pobrać nazwy gracza.
+[14:57:37][INFO]: Pobrano nazwę drużyny 16.
+[14:58:06][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[14:58:08][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[14:58:58][INFO]: Pobrano tabelę contestants.
+[14:58:58][INFO]: Pobrano tabelę tournaments.
+[14:58:58][INFO]: Pobrano tabelę teams.
+[14:58:59][INFO]: Pobrano tabelę matches.
+[14:58:59][INFO]: Pobrano tabelę arenas.
+[14:58:59][INFO]: Pobrano tabelę system_users.
+[14:58:59][ERROR]: Nie udało się pobrać nazwy gracza.
+[14:58:59][INFO]: Pobrano nazwę drużyny 16.
+[14:59:46][INFO]: Pobrano tabelę contestants.
+[14:59:47][INFO]: Pobrano tabelę tournaments.
+[14:59:47][INFO]: Pobrano tabelę teams.
+[14:59:47][INFO]: Pobrano tabelę matches.
+[14:59:47][INFO]: Pobrano tabelę arenas.
+[14:59:47][INFO]: Pobrano tabelę system_users.
+[14:59:47][ERROR]: Nie udało się pobrać nazwy gracza.
+[14:59:47][INFO]: Pobrano nazwę drużyny 16.
+[14:59:49][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[15:00:56][INFO]: Pobrano tabelę contestants.
+[15:00:56][INFO]: Pobrano tabelę tournaments.
+[15:00:56][INFO]: Pobrano tabelę teams.
+[15:00:57][INFO]: Pobrano tabelę matches.
+[15:00:57][INFO]: Pobrano tabelę arenas.
+[15:00:57][INFO]: Pobrano tabelę system_users.
+[15:00:57][ERROR]: Nie udało się pobrać nazwy gracza.
+[15:00:57][INFO]: Pobrano nazwę drużyny 16.
+[15:01:25][INFO]: Pobrano tabelę contestants.
+[15:01:25][INFO]: Pobrano tabelę tournaments.
+[15:01:26][INFO]: Pobrano tabelę teams.
+[15:01:26][INFO]: Pobrano tabelę matches.
+[15:01:26][INFO]: Pobrano tabelę arenas.
+[15:01:26][INFO]: Pobrano tabelę system_users.
+[15:01:26][INFO]: Pobrano nazwę gracza 83.
+[15:01:26][INFO]: Pobrano nazwę drużyny 16.
+[15:04:03][INFO]: Pobrano tabelę contestants.
+[15:04:03][INFO]: Pobrano tabelę tournaments.
+[15:04:04][INFO]: Pobrano tabelę teams.
+[15:04:04][INFO]: Pobrano tabelę matches.
+[15:04:04][INFO]: Pobrano tabelę arenas.
+[15:04:04][INFO]: Pobrano tabelę system_users.
+[15:04:09][INFO]: Pobrano wszystkie zaplanowane mecze.
+[15:04:09][INFO]: Pobrano typ turnieju 253.
+[15:04:09][INFO]: Pobrano nazwę drużyny 0.
+[15:04:09][INFO]: Pobrano nazwę drużyny 0.
+[15:04:22][INFO]: Pobrano wszystkie zaplanowane mecze.
+[15:04:22][INFO]: Pobrano typ turnieju 253.
+[15:04:22][INFO]: Pobrano nazwę drużyny 0.
+[15:04:22][INFO]: Pobrano nazwę drużyny 0.
+[15:04:37][INFO]: Pobrano wszystkie zaplanowane mecze.
+[15:04:37][INFO]: Pobrano typ turnieju 253.
+[15:04:37][INFO]: Pobrano nazwę drużyny 0.
+[15:04:37][INFO]: Pobrano nazwę drużyny 0.
+[15:04:42][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[15:46:22][ERROR]: Nie udało się uruchomić serwera.
+[15:46:47][ERROR]: Nie udało się uruchomić serwera.
+[15:46:51][INFO]: Pobrano tabelę contestants.
+[15:46:51][INFO]: Pobrano tabelę tournaments.
+[15:46:51][INFO]: Pobrano tabelę teams.
+[15:46:51][INFO]: Pobrano tabelę matches.
+[15:46:52][INFO]: Pobrano tabelę arenas.
+[15:46:52][INFO]: Pobrano tabelę system_users.
+[15:47:00][INFO]: Pobrano wszystkie zaplanowane mecze.
+[15:47:00][INFO]: Pobrano typ turnieju 243.
+[15:47:00][INFO]: Pobrano nazwę gracza 181.
+[15:47:01][INFO]: Pobrano nazwę gracza 382.
+[15:52:22][INFO]: Pobrano tabelę contestants.
+[15:52:23][INFO]: Pobrano tabelę tournaments.
+[15:52:23][INFO]: Pobrano tabelę teams.
+[15:52:23][INFO]: Pobrano tabelę matches.
+[15:52:23][INFO]: Pobrano tabelę arenas.
+[15:52:23][INFO]: Pobrano tabelę system_users.
+[15:52:27][INFO]: Pobrano niezaplanowane mecze.
+[15:52:27][INFO]: Pobrano typ turnieju 129.
+[15:52:44][INFO]: Pobrano wszystkie zaplanowane mecze.
+[15:52:44][INFO]: Pobrano typ turnieju 129.
+[15:52:44][INFO]: Pobrano nazwę gracza 181.
+[15:52:44][INFO]: Pobrano nazwę gracza 382.
+[15:53:32][INFO]: Pobrano tabelę contestants.
+[15:53:33][INFO]: Pobrano tabelę tournaments.
+[15:53:33][INFO]: Pobrano tabelę teams.
+[15:53:33][INFO]: Pobrano tabelę matches.
+[15:53:33][INFO]: Pobrano tabelę arenas.
+[15:53:33][INFO]: Pobrano tabelę system_users.
+[15:53:38][INFO]: Pobrano niezaplanowane mecze.
+[15:53:38][INFO]: Pobrano typ turnieju 243.
+[15:53:38][INFO]: Pobrano nazwę gracza 461.
+[15:53:38][INFO]: Pobrano nazwę gracza 243.
+[15:53:38][INFO]: Pobrano nazwę gracza 122.
+[15:53:39][INFO]: Pobrano nazwę gracza 128.
+[15:53:39][INFO]: Pobrano nazwę gracza 191.
+[15:53:39][INFO]: Pobrano nazwę gracza 233.
+[15:53:39][INFO]: Pobrano nazwę gracza 295.
+[15:53:39][INFO]: Pobrano nazwę gracza 323.
+[15:53:39][INFO]: Pobrano nazwę gracza 204.
+[15:53:39][INFO]: Pobrano nazwę gracza 384.
+[15:53:54][INFO]: Pobrano tabelę contestants.
+[15:53:54][INFO]: Pobrano tabelę tournaments.
+[15:53:54][INFO]: Pobrano tabelę teams.
+[15:53:54][INFO]: Pobrano tabelę matches.
+[15:53:54][INFO]: Pobrano tabelę arenas.
+[15:53:54][INFO]: Pobrano tabelę system_users.
+[15:53:58][INFO]: Pobrano niezaplanowane mecze.
+[15:53:58][INFO]: Pobrano typ turnieju 243.
+[15:53:58][INFO]: Pobrano nazwę gracza 461.
+[15:53:58][INFO]: Pobrano nazwę gracza 243.
+[15:53:58][INFO]: Pobrano nazwę gracza 122.
+[15:53:58][INFO]: Pobrano nazwę gracza 128.
+[15:53:58][INFO]: Pobrano nazwę gracza 191.
+[15:53:58][INFO]: Pobrano nazwę gracza 233.
+[15:53:58][INFO]: Pobrano nazwę gracza 295.
+[15:53:58][INFO]: Pobrano nazwę gracza 323.
+[15:53:58][INFO]: Pobrano nazwę gracza 204.
+[15:53:58][INFO]: Pobrano nazwę gracza 384.
+[15:56:16][INFO]: Pobrano niezaplanowane mecze.
+[15:56:16][INFO]: Pobrano typ turnieju 243.
+[15:57:22][INFO]: Pobrano tabelę contestants.
+[15:57:22][INFO]: Pobrano tabelę tournaments.
+[15:57:22][INFO]: Pobrano tabelę teams.
+[15:57:22][INFO]: Pobrano tabelę matches.
+[15:57:23][INFO]: Pobrano tabelę arenas.
+[15:57:23][INFO]: Pobrano tabelę system_users.
+[15:57:34][INFO]: Pobrano niezaplanowane mecze.
+[15:57:34][INFO]: Pobrano typ turnieju 281.
+[15:57:34][INFO]: Pobrano nazwę drużyny 0.
+[15:57:34][INFO]: Pobrano nazwę drużyny 0.
+[15:58:24][INFO]: Pobrano tabelę contestants.
+[15:58:24][INFO]: Pobrano tabelę tournaments.
+[15:58:24][INFO]: Pobrano tabelę teams.
+[15:58:25][INFO]: Pobrano tabelę matches.
+[15:58:25][INFO]: Pobrano tabelę arenas.
+[15:58:25][INFO]: Pobrano tabelę system_users.
+[15:58:35][INFO]: Pobrano niezaplanowane mecze.
+[15:58:35][INFO]: Pobrano typ turnieju 281.
+[15:58:35][INFO]: Pobrano nazwę drużyny 0.
+[15:58:35][INFO]: Pobrano nazwę drużyny 0.
+[16:00:32][INFO]: Pobrano tabelę contestants.
+[16:00:32][INFO]: Pobrano tabelę tournaments.
+[16:00:32][INFO]: Pobrano tabelę teams.
+[16:00:33][INFO]: Pobrano tabelę matches.
+[16:00:33][INFO]: Pobrano tabelę arenas.
+[16:00:33][INFO]: Pobrano tabelę system_users.
+[16:00:39][INFO]: Pobrano niezaplanowane mecze.
+[16:00:39][INFO]: Pobrano typ turnieju 281.
+[16:00:39][INFO]: Pobrano nazwę drużyny 0.
+[16:00:39][INFO]: Pobrano nazwę drużyny 0.
+[16:10:10][INFO]: Pobrano tabelę contestants.
+[16:10:11][INFO]: Pobrano tabelę tournaments.
+[16:10:11][INFO]: Pobrano tabelę teams.
+[16:10:11][INFO]: Pobrano tabelę matches.
+[16:10:11][INFO]: Pobrano tabelę arenas.
+[16:10:11][INFO]: Pobrano tabelę system_users.
+[16:10:20][INFO]: Pobrano niezaplanowane mecze.
+[16:10:20][INFO]: Pobrano typ turnieju 281.
+[16:10:20][INFO]: Pobrano nazwę drużyny 0.
+[16:10:20][INFO]: Pobrano nazwę drużyny 0.
+[16:14:17][ERROR]: Nie udało się uruchomić serwera.
+[16:14:32][INFO]: Pobrano tabelę contestants.
+[16:14:32][INFO]: Pobrano tabelę tournaments.
+[16:14:32][INFO]: Pobrano tabelę teams.
+[16:14:32][INFO]: Pobrano tabelę matches.
+[16:14:33][INFO]: Pobrano tabelę arenas.
+[16:14:33][INFO]: Pobrano tabelę system_users.
+[16:14:45][INFO]: Pobrano niezaplanowane mecze.
+[16:14:45][INFO]: Pobrano typ turnieju 281.
+[16:14:45][INFO]: Pobrano nazwę drużyny 0.
+[16:14:45][INFO]: Pobrano nazwę drużyny 0.
+[16:15:15][INFO]: Pobrano tabelę contestants.
+[16:15:15][INFO]: Pobrano tabelę tournaments.
+[16:15:15][INFO]: Pobrano tabelę teams.
+[16:15:15][INFO]: Pobrano tabelę matches.
+[16:15:16][INFO]: Pobrano tabelę arenas.
+[16:15:16][INFO]: Pobrano tabelę system_users.
+[16:15:24][INFO]: Pobrano niezaplanowane mecze.
+[16:15:24][INFO]: Pobrano typ turnieju 281.
+[16:15:24][INFO]: Pobrano nazwę drużyny 0.
+[16:15:25][INFO]: Pobrano nazwę drużyny 0.
+[16:17:33][ERROR]: Nie udało się uruchomić serwera.
+[16:17:54][INFO]: Pobrano tabelę contestants.
+[16:17:55][INFO]: Pobrano tabelę tournaments.
+[16:17:55][INFO]: Pobrano tabelę teams.
+[16:17:55][INFO]: Pobrano tabelę matches.
+[16:17:55][INFO]: Pobrano tabelę arenas.
+[16:17:55][INFO]: Pobrano tabelę system_users.
+[16:18:05][INFO]: Pobrano niezaplanowane mecze.
+[16:18:05][INFO]: Pobrano typ turnieju 281.
+[16:18:05][INFO]: Pobrano nazwę drużyny 0.
+[16:18:05][INFO]: Pobrano nazwę drużyny 0.
+[16:24:01][INFO]: Pobrano tabelę contestants.
+[16:24:01][INFO]: Pobrano tabelę tournaments.
+[16:24:01][INFO]: Pobrano tabelę teams.
+[16:24:02][INFO]: Pobrano tabelę matches.
+[16:24:02][INFO]: Pobrano tabelę arenas.
+[16:24:02][INFO]: Pobrano tabelę system_users.
+[16:24:11][INFO]: Pobrano niezaplanowane mecze.
+[16:24:11][INFO]: Pobrano typ turnieju 281.
+[16:24:11][INFO]: Pobrano nazwę drużyny 0.
+[16:24:11][INFO]: Pobrano nazwę drużyny 0.
+[16:25:14][INFO]: Pobrano tabelę contestants.
+[16:25:14][INFO]: Pobrano tabelę tournaments.
+[16:25:14][INFO]: Pobrano tabelę teams.
+[16:25:14][INFO]: Pobrano tabelę matches.
+[16:25:15][INFO]: Pobrano tabelę arenas.
+[16:25:15][INFO]: Pobrano tabelę system_users.
+[16:25:21][INFO]: Pobrano niezaplanowane mecze.
+[16:25:21][INFO]: Pobrano typ turnieju 281.
+[16:25:21][INFO]: Pobrano nazwę drużyny 0.
+[16:25:21][INFO]: Pobrano nazwę drużyny 0.
+[16:25:53][INFO]: Pobrano tabelę contestants.
+[16:25:53][INFO]: Pobrano tabelę tournaments.
+[16:25:53][INFO]: Pobrano tabelę teams.
+[16:25:54][INFO]: Pobrano tabelę matches.
+[16:25:54][INFO]: Pobrano tabelę arenas.
+[16:25:54][INFO]: Pobrano tabelę system_users.
+[16:26:06][INFO]: Pobrano niezaplanowane mecze.
+[16:26:06][INFO]: Pobrano typ turnieju 281.
+[16:26:06][INFO]: Pobrano nazwę drużyny 0.
+[16:26:06][INFO]: Pobrano nazwę drużyny 0.
+[16:26:22][INFO]: Pobrano tabelę contestants.
+[16:26:22][INFO]: Pobrano tabelę tournaments.
+[16:26:22][INFO]: Pobrano tabelę teams.
+[16:26:22][INFO]: Pobrano tabelę matches.
+[16:26:23][INFO]: Pobrano tabelę arenas.
+[16:26:23][INFO]: Pobrano tabelę system_users.
+[16:26:32][INFO]: Pobrano niezaplanowane mecze.
+[16:26:32][INFO]: Pobrano typ turnieju 281.
+[16:26:32][INFO]: Pobrano nazwę drużyny 0.
+[16:26:32][INFO]: Pobrano nazwę drużyny 0.
+[16:27:53][INFO]: Pobrano tabelę contestants.
+[16:27:53][INFO]: Pobrano tabelę tournaments.
+[16:27:53][INFO]: Pobrano tabelę teams.
+[16:27:53][INFO]: Pobrano tabelę matches.
+[16:27:53][INFO]: Pobrano tabelę arenas.
+[16:27:53][INFO]: Pobrano tabelę system_users.
+[16:28:00][INFO]: Zalogowano użytkownika testuser o uprawnieniach FULL.
+[16:28:21][INFO]: Utworzono turniej Abcd.
+[16:28:21][INFO]: Pobrano tabelę contestants.
+[16:28:21][INFO]: Pobrano tabelę tournaments.
+[16:28:21][INFO]: Pobrano tabelę teams.
+[16:28:22][INFO]: Pobrano tabelę matches.
+[16:28:22][INFO]: Pobrano tabelę arenas.
+[16:28:22][INFO]: Pobrano tabelę system_users.
+[16:28:41][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[16:28:53][INFO]: Pobrano tabelę contestants.
+[16:28:53][INFO]: Pobrano tabelę tournaments.
+[16:28:53][INFO]: Pobrano tabelę teams.
+[16:28:53][INFO]: Pobrano tabelę matches.
+[16:28:53][INFO]: Pobrano tabelę arenas.
+[16:28:53][INFO]: Pobrano tabelę system_users.
+[16:28:59][INFO]: Zalogowano użytkownika testuser o uprawnieniach FULL.
+[16:29:09][INFO]: Pobrano niezaplanowane mecze.
+[16:29:09][INFO]: Pobrano typ turnieju 306.
+[16:29:12][INFO]: Pobrano wszystkie zaplanowane mecze.
+[16:29:12][INFO]: Pobrano typ turnieju 306.
+[16:29:34][INFO]: Pobrano niezaplanowane mecze.
+[16:29:34][INFO]: Pobrano typ turnieju 306.
+[16:29:36][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[16:55:48][INFO]: Pobrano tabelę contestants.
+[16:55:48][INFO]: Pobrano tabelę tournaments.
+[16:55:49][INFO]: Pobrano tabelę teams.
+[16:55:49][INFO]: Pobrano tabelę matches.
+[16:55:49][INFO]: Pobrano tabelę arenas.
+[16:55:49][INFO]: Pobrano tabelę system_users.
+[16:56:01][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[17:06:53][INFO]: Pobrano tabelę contestants.
+[17:06:53][INFO]: Pobrano tabelę tournaments.
+[17:06:53][INFO]: Pobrano tabelę teams.
+[17:06:53][INFO]: Pobrano tabelę matches.
+[17:06:53][INFO]: Pobrano tabelę arenas.
+[17:06:53][INFO]: Pobrano tabelę system_users.
+[17:07:02][INFO]: Pobrano niezaplanowane mecze.
+[17:07:02][INFO]: Pobrano typ turnieju 306.
+[17:07:02][INFO]: Pobrano nazwę gracza 107.
+[17:07:02][INFO]: Pobrano nazwę gracza 228.
+[17:07:15][INFO]: Zalogowano użytkownika testuser o uprawnieniach FULL.
+[17:07:18][INFO]: Zaplanowano mecz 1001
+[17:07:18][INFO]: Pobrano tabelę contestants.
+[17:07:19][INFO]: Pobrano tabelę tournaments.
+[17:07:19][INFO]: Pobrano tabelę teams.
+[17:07:19][INFO]: Pobrano tabelę matches.
+[17:07:19][INFO]: Pobrano tabelę arenas.
+[17:07:19][INFO]: Pobrano tabelę system_users.
+[17:07:19][INFO]: Pobrano niezaplanowane mecze.
+[17:07:19][INFO]: Pobrano typ turnieju 306.
+[17:19:20][INFO]: Pobrano tabelę contestants.
+[17:19:20][INFO]: Pobrano tabelę tournaments.
+[17:19:20][INFO]: Pobrano tabelę teams.
+[17:19:20][INFO]: Pobrano tabelę matches.
+[17:19:20][INFO]: Pobrano tabelę arenas.
+[17:19:20][INFO]: Pobrano tabelę system_users.
+[17:19:24][INFO]: Pobrano zawodników.
+[17:19:24][INFO]: Pobrano typ turnieju 306.
+[17:19:25][INFO]: Pobrano nazwę gracza 5.
+[17:19:36][INFO]: Zalogowano użytkownika testuser o uprawnieniach FULL.
+[17:19:43][INFO]: Pobrano typ turnieju 306.
+[17:19:43][INFO]: Dodano gracza 790 do turnieju 306
+[17:21:00][INFO]: Pobrano tabelę contestants.
+[17:21:00][INFO]: Pobrano tabelę tournaments.
+[17:21:00][INFO]: Pobrano tabelę teams.
+[17:21:00][INFO]: Pobrano tabelę matches.
+[17:21:00][INFO]: Pobrano tabelę arenas.
+[17:21:00][INFO]: Pobrano tabelę system_users.
+[17:21:05][INFO]: Zalogowano użytkownika testuser o uprawnieniach FULL.
+[17:21:08][INFO]: Pobrano zawodników.
+[17:21:08][INFO]: Pobrano typ turnieju 306.
+[17:21:08][INFO]: Pobrano nazwę gracza 5.
+[17:21:08][INFO]: Pobrano nazwę gracza 790.
+[17:21:13][INFO]: Pobrano typ turnieju 306.
+[17:21:13][INFO]: Dodano gracza 372 do turnieju 306
+[17:21:14][INFO]: Pobrano tabelę contestants.
+[17:21:14][INFO]: Pobrano tabelę tournaments.
+[17:21:14][INFO]: Pobrano tabelę teams.
+[17:21:14][INFO]: Pobrano tabelę matches.
+[17:21:14][INFO]: Pobrano tabelę arenas.
+[17:21:14][INFO]: Pobrano tabelę system_users.
+[17:21:14][INFO]: Pobrano zawodników.
+[17:21:14][INFO]: Pobrano typ turnieju 306.
+[17:21:14][INFO]: Pobrano nazwę gracza 5.
+[17:21:14][INFO]: Pobrano nazwę gracza 790.
+[17:21:14][INFO]: Pobrano nazwę gracza 372.
+[17:21:19][INFO]: Usunięto rekord ID 790 z tabeli contestants.
+[17:21:19][INFO]: Pobrano tabelę contestants.
+[17:21:19][INFO]: Pobrano tabelę tournaments.
+[17:21:19][INFO]: Pobrano tabelę teams.
+[17:21:19][INFO]: Pobrano tabelę matches.
+[17:21:19][INFO]: Pobrano tabelę arenas.
+[17:21:20][INFO]: Pobrano tabelę system_users.
+[17:21:20][INFO]: Pobrano zawodników.
+[17:21:20][INFO]: Pobrano typ turnieju 306.
+[17:21:20][INFO]: Pobrano nazwę gracza 5.
+[17:21:20][INFO]: Pobrano nazwę gracza 372.
+[17:21:28][INFO]: Pobrano niezaplanowane mecze.
+[17:21:28][INFO]: Pobrano typ turnieju 306.
+[17:21:30][INFO]: Pobrano wszystkie zaplanowane mecze.
+[17:21:30][INFO]: Pobrano typ turnieju 306.
+[17:21:30][INFO]: Pobrano nazwę gracza 107.
+[17:21:30][INFO]: Pobrano nazwę gracza 228.
+[17:21:35][INFO]: Ustalono wynik meczu 1001.
+[17:21:35][INFO]: Pobrano tabelę contestants.
+[17:21:35][INFO]: Pobrano tabelę tournaments.
+[17:21:35][INFO]: Pobrano tabelę teams.
+[17:21:35][INFO]: Pobrano tabelę matches.
+[17:21:35][INFO]: Pobrano tabelę arenas.
+[17:21:35][INFO]: Pobrano tabelę system_users.
+[17:21:36][INFO]: Pobrano wszystkie zaplanowane mecze.
+[17:21:36][INFO]: Pobrano typ turnieju 306.
+[17:21:37][INFO]: Pobrano niezaplanowane mecze.
+[17:21:38][INFO]: Pobrano typ turnieju 306.
+[17:21:38][INFO]: Pobrano nazwę gracza 107.
+[17:21:38][INFO]: Pobrano nazwę gracza 228.
+[17:21:45][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[17:27:18][INFO]: Pobrano tabelę contestants.
+[17:27:18][INFO]: Pobrano tabelę tournaments.
+[17:27:18][INFO]: Pobrano tabelę teams.
+[17:27:18][INFO]: Pobrano tabelę matches.
+[17:27:19][INFO]: Pobrano tabelę arenas.
+[17:27:19][INFO]: Pobrano tabelę system_users.
+[17:27:25][INFO]: Pobrano raporty.
+[17:27:50][INFO]: Pobrano niezaplanowane mecze.
+[17:27:50][INFO]: Pobrano typ turnieju 306.
+[17:27:50][INFO]: Pobrano nazwę gracza 107.
+[17:27:50][INFO]: Pobrano nazwę gracza 228.
+[17:27:51][INFO]: Pobrano raporty.
+[17:27:55][INFO]: Wylogowano użytkownika o IP /127.0.0.1.
+[17:30:32][INFO]: Pobrano tabelę contestants.
+[17:30:32][INFO]: Pobrano tabelę tournaments.
+[17:30:32][INFO]: Pobrano tabelę teams.
+[17:30:32][INFO]: Pobrano tabelę matches.
+[17:30:32][INFO]: Pobrano tabelę arenas.
+[17:30:32][INFO]: Pobrano tabelę system_users.
+[17:30:37][INFO]: Pobrano raporty.
+[17:30:38][INFO]: Pobrano raporty.

@@ -531,4 +531,42 @@ public class QueryBuilder {
 		else
 			return false;
 	}
+	public CachedRowSet getCompetitors(int tid) throws SQLException {
+		String query = "SELECT * FROM `contestant-tournament` WHERE tournament_id=?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
+	public int getTournamentSystem(int tid) throws SQLException {
+		String query = "SELECT * FROM tournaments WHERE tournament_id =?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			return rs.getInt("system");
+		}
+		else
+			return -1;
+	}
+	/**
+	 * 
+	    if(system.equals("Pucharowy"))
+	        iSystem = 1;
+	    else if(system.equals("Szwajcarski"))
+	        iSystem = 2;
+	    else if(system.equals("Kołowy"))
+	        iSystem = 3;
+        else if(system.equals("McMahona"))
+            iSystem = 4;
+        else if(system.equals("Wieloklasowa liga"))
+            iSystem = 5;
+	 */
+	public boolean nextStage(int tid) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

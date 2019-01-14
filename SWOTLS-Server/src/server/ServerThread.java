@@ -847,6 +847,94 @@ public class ServerThread extends Thread{
 					oos.close();
 					os.close();
 				}
+				if(message.contains("get-competitors")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					try {
+						
+						CachedRowSet crs = dbH.getQueryBuilder().getCompetitors(tid);
+						oos.writeObject(crs);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano zawodników.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać zawodników.");
+					}
+					
+				}
+				if(message.contains("get-reports")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					try {
+						
+						CachedRowSet crs = dbH.getQueryBuilder().getReportsList(tid);
+						oos.writeObject(crs);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano raporty.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać raportów.");
+					}
+					
+				}
+				if(message.contains("get-report-id")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					try {
+						
+						CachedRowSet crs = dbH.getQueryBuilder().getReport(tid);
+						oos.writeObject(crs);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano raporty.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać raportów.");
+					}
+					
+				}
+				if(message.contains("next-stage")){
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się zmienić etapu. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się zmienić etapu. Brak uprawnień.");
+						continue;
+					}
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().nextStage(tid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Zmieniono etap "+tid);
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						ServerLog.logLine("ERROR", "Nie udało się zaplanować meczu. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
 				
 			}
 		} catch (IOException e) {

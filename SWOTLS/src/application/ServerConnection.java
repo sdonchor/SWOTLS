@@ -554,5 +554,56 @@ public class ServerConnection {
 		socket.close();
 		return crs;
 	}
+	public CachedRowSet getReports(int competitionId) throws IOException, ClassNotFoundException{
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-reports;"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		CachedRowSet crs = (CachedRowSet)ois.readObject();
+		if(crs!=null) {
+			ClientLog.logLine("INFO", "Pobrano raporty dla id "+competitionId+".");
+		}
+
+		socket.close();
+		return crs;
+	}
+	public CachedRowSet getReportById(int reportId) throws IOException, ClassNotFoundException{
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-report-id;"+reportId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		CachedRowSet crs = (CachedRowSet)ois.readObject();
+		if(crs!=null) {
+			ClientLog.logLine("INFO", "Pobrano raport "+reportId+".");
+		}
+
+		socket.close();
+		return crs;
+	}
+	public boolean nextStage(int cid) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "next-stage;"+cid;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
 
 }

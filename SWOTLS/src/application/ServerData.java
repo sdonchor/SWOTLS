@@ -632,16 +632,29 @@ public class ServerData {
      * @return Mapa zawierająca jako klucz nazwę nazwodnika, a jako wartość jego id. (analogicznie inne tego typu metody)
      */
     public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){
-		CachedRowSet crs = sc.getTournamentCompetitors(competitionId);
-		
-				
-				
-				
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		for(int i = 2; i<contestants.size();i++)
-		{
-			map.put(contestants.get(i).displayedName(), contestants.get(i).getId());
+    	Map<String, Integer> map = new HashMap<String, Integer>();
+		try {
+			CachedRowSet crs = sc.getTournamentCompetitors(competitionId);
+			
+			if(sc.getTournamentType(competitionId).equals("solo")) {
+				while(crs.next()) {
+					int contestantId = crs.getInt("contestant_id");
+					String name = sc.getContestantName(contestantId);
+					map.put(name,contestantId);
+				}
+			}
+			else if(sc.getTournamentType(competitionId).equals("team")) {
+				while(crs.next()) {
+					int teamId = crs.getInt("team_id");
+					String name = sc.getTeamName(teamId);
+					map.put(name,teamId);
+				}
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 		return map;
 	}
 
@@ -847,17 +860,36 @@ public class ServerData {
 	}
 
     public static Map<String, Integer> getListOfReports(int competitionId){
-        //TODO powinno pobierać listę
-        Map<String, Integer> map = new HashMap<String, Integer>();
-        map.put("Raport - Etap 1 - Sezon 2", 3);
-        return map;
+    	   Map<String, Integer> map = new HashMap<String, Integer>();
+    	try {
+			CachedRowSet crs = sc.getReports(competitionId);
+			while(crs.next()) {
+				String title = crs.getString("title");
+				int id=crs.getInt("report_id");
+				map.put(title,id);
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return map;
     }
 
     public static Report getReportById(int reportId){
-        Dialogs.error("Niezaimplementowana funkcja");
-        //TODO powinno zwracać raport o podanym id w formie Stringa
-        String s = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla mattis blandit velit, sed elementum.";
-        return new Report("Raport - Etap 1 - Sezon 2", s);
+    	String title = "";
+	    String s ="";
+	    try {
+	    	CachedRowSet crs = sc.getReportById(reportId);
+		    
+			if(crs.next()) {
+				 title = crs.getString("title");
+				 s = crs.getString("content");
+			}
+		} catch (SQLException | ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return new Report(title, s);
     }
 
 	public static void addCompetitorToCompetition(int competitorId, int competitionId){
@@ -874,6 +906,7 @@ public class ServerData {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        ServertriggeredEvents.dataUpdated();
 	}
 
 	/**
@@ -881,12 +914,9 @@ public class ServerData {
 	 * @param competitionId Id turnieju, w którym ma nastąpić przejście do następnego etapu.
 	 */
 	public static void nextStage(int competitionId){
-        Dialogs.error("Niezaimplementowana funkcja");
-		//TODO serwer powinien sprawdzić czy wyniki wszystkich meczy zostały wprowadzone - sprawdzam to już po stronie klienta więc w ostatnieczności jak mamy wyjebke na bezpieczeństwo to po stronie serwera można sobie już to odpuścić
-        ServertriggeredEvents.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy."); //TODO taki lub podobny komunikat ma wywoływać serwer jeżeli nie można przejść
 
         //TODO wywołać metodę po stronie serwera nextStage() (lub endEntriesStage() jeżeli zakończony etap to 0 czyli zapisy) dla odpowiedniego systemu turniejowego
-
+		sc.nextStage(competitionId);
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}
 
