@@ -913,8 +913,8 @@ public class ServerData {
 		try {
 			sc.nextStage(competitionId);
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClientLog.logLine("ERROR", "Nie udało się przejść do kolejnego etapu. Błąd połączenia.");
+
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
 	}

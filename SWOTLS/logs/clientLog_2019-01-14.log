@@ -331,3 +331,40 @@
 [17:30:32][INFO]: Pobrano tabelę system_users.
 [17:30:37][INFO]: Pobrano raporty dla id 306.
 [17:30:38][INFO]: Pobrano raport 1.
+[17:45:25][INFO]: Połączono z serwerem localhost:4545.
+[17:45:25][INFO]: Pobrano tabelę contestants.
+[17:45:25][INFO]: Pobrano tabelę tournaments.
+[17:45:25][INFO]: Pobrano tabelę teams.
+[17:45:25][INFO]: Pobrano tabelę matches.
+[17:45:26][INFO]: Pobrano tabelę arenas.
+[17:45:26][INFO]: Pobrano tabelę system_users.
+[17:45:30][INFO]: Pobrano zaplanowane mecze dla id 306.
+[17:45:31][INFO]: Pobrano niezaplanowane mecze dla id 306.
+[17:45:33][INFO]: Pobrano zakończone mecze dla id 306.
+[17:45:33][INFO]: Pobrano raporty dla id 306.
+[17:45:34][INFO]: Pobrano raport 1.
+[17:45:45][INFO]: Pomyślnie zalogowano użytkownika testuser.
+[17:45:48][INFO]: Pobrano raport 1.
+[17:45:49][INFO]: Pobrano tabelę contestants.
+[17:45:49][INFO]: Pobrano tabelę tournaments.
+[17:45:49][INFO]: Pobrano tabelę teams.
+[17:45:49][INFO]: Pobrano tabelę matches.
+[17:45:49][INFO]: Pobrano tabelę arenas.
+[17:45:49][INFO]: Pobrano tabelę system_users.
+[17:45:53][INFO]: Pomyślnie wylogowano bieżącego użytkownika.
+[19:25:32][INFO]: Połączono z serwerem localhost:4545.
+[19:25:32][INFO]: Pobrano tabelę contestants.
+[19:25:33][INFO]: Pobrano tabelę tournaments.
+[19:25:33][INFO]: Pobrano tabelę teams.
+[19:25:33][INFO]: Pobrano tabelę matches.
+[19:25:34][INFO]: Pobrano tabelę arenas.
+[19:25:34][INFO]: Pobrano tabelę system_users.
+[19:25:38][INFO]: Pobrano zaplanowane mecze dla id 306.
+[19:25:39][INFO]: Pobrano niezaplanowane mecze dla id 306.
+[19:25:40][INFO]: Pobrano zawodników dla id 306.
+[19:25:42][INFO]: Pobrano raporty dla id 306.
+[19:25:43][INFO]: Pobrano zakończone mecze dla id 306.
+[19:25:45][INFO]: Pobrano zaplanowane mecze dla id 306.
+[19:25:46][INFO]: Pobrano niezaplanowane mecze dla id 306.
+[19:25:47][INFO]: Pobrano zawodników dla id 306.
+[19:26:03][INFO]: Pomyślnie wylogowano bieżącego użytkownika.

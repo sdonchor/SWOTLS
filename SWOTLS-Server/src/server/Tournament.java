@@ -2,18 +2,29 @@ package server;
 
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tournament {
+	public static DatabaseHandler dbH = null;
+	public static void setDbh(DatabaseHandler d) {
+		dbH=d;
+	}
     public static String getDisplayedNameOfPlayer(int playerId){
-        //TODO pobieranie wyświetlanej nazwy zawodnika o podanym id (w formie: Imię "pseudonim" Nazwisko)
-        return "Adam \"amalysz\" Małysz";
+        try {
+			return dbH.getQueryBuilder().getContestantName(playerId);
+		} catch (SQLException e) {
+			return null;
+		}
     }
 
     public static String getNameOfTeam(int teamId){
-        //TODO pobieranie nazwy drużyny o podanym id
-        return "2Pesteczka";
+        try {
+			return dbH.getQueryBuilder().getTeamName(teamId);
+		} catch (SQLException e) {
+			return null;
+		}
     }
 
     /**
@@ -21,8 +32,14 @@ public class Tournament {
      * @return true jeżeli typ turnieju to solo, false jeżeli typ turnieju to drużynowy
      */
     public static boolean isSoloType(int tournamentId){
-        //TODO true jeżeli typ turnieju to solo, false jeżeli typ turnieju to drużynowy
-        return true;
+        try {
+			if(dbH.getQueryBuilder().getTournamentType(tournamentId).equals("solo"))
+				return true;
+			else
+				return false;
+		} catch (SQLException e) {
+			return false;
+		}
     }
 
     public static server.Match getMatchById(int matchId){
@@ -35,7 +52,12 @@ public class Tournament {
     public static void saveElo(Player p){
         int id = p.getId();
         int elo = p.getElo();
-        //TODO zapisane elo gracza w bazie
+        try {
+			dbH.getQueryBuilder().setElo(id, elo);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -45,15 +67,59 @@ public class Tournament {
      * @param score Punkty, które ustawić uczestnikowi
      */
     public static void setPoints(int tournamentId, int participantId, int score){
-        //TODO ustawienie puntków uczestnikowi (zawodnikowi albo drużynie - w zależności od typu turnieju)
+    	try {
+	    	String type = dbH.getQueryBuilder().getTournamentType(tournamentId);
+	        if(type.equals("solo"))
+	        {
+	        	dbH.getQueryBuilder().setPlayerPoints(participantId, tournamentId, score);
+	        }
+	        else if(type.equals("team"))
+	        {
+	        	dbH.getQueryBuilder().setTeamPoints(participantId, tournamentId, score);
+	        }
+    	}
+    	catch(SQLException e) {
+    		
+    	}
     }
 
+    //add 2 points
     public static void addPoint(int tournamentId, int participantId){
-        //TODO dodanie 1 punkta uczestnikowi (zawodnikowi albo drużynie - w zależności od typu turnieju)
+    	try {
+	    	String type = dbH.getQueryBuilder().getTournamentType(tournamentId);
+	        if(type.equals("solo"))
+	        {
+	        	int score = dbH.getQueryBuilder().getPlayerPoints(participantId, tournamentId);
+	        	dbH.getQueryBuilder().setPlayerPoints(participantId, tournamentId, score+2);
+	        }
+	        else if(type.equals("team"))
+	        {
+	        	int score = dbH.getQueryBuilder().getPlayerPoints(participantId, tournamentId);
+	        	dbH.getQueryBuilder().setTeamPoints(participantId, tournamentId, score+2);
+	        }
+    	}
+    	catch(SQLException e) {
+    		
+    	}
     }
-
+    //add 1 point
     public static void addHalfPoint(int tournamentId, int participantId){
-        //TODO dodanie 0.5 punkta uczestnikowi (zawodnikowi albo drużynie - w zależności od typu turnieju)
+    	try {
+	    	String type = dbH.getQueryBuilder().getTournamentType(tournamentId);
+	        if(type.equals("solo"))
+	        {
+	        	int score = dbH.getQueryBuilder().getPlayerPoints(participantId, tournamentId);
+	        	dbH.getQueryBuilder().setPlayerPoints(participantId, tournamentId, score+1);
+	        }
+	        else if(type.equals("team"))
+	        {
+	        	int score = dbH.getQueryBuilder().getPlayerPoints(participantId, tournamentId);
+	        	dbH.getQueryBuilder().setTeamPoints(participantId, tournamentId, score+1);
+	        }
+    	}
+    	catch(SQLException e) {
+    		
+    	}
     }
 
     public static ArrayList<TournamentParticipant> getTournamentParticipants(int tournamentId){
@@ -63,30 +129,58 @@ public class Tournament {
     }
 
     public static void setTournamentStage(int tournamentId, int stage){
-        //TODO ustawienie etapu turnieju
+        try {
+			dbH.getQueryBuilder().setStage(tournamentId, stage);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public static int getTournamentStage(int tournamentId){
-        int stage = 0; //TODO pobranie etapu turnieju
+        int stage = -1;
+        try {
+			stage = dbH.getQueryBuilder().getStage(tournamentId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return stage;
     }
 
     public static void setTournamentSeason(int tournamentId, int season){
-        //TODO ustawienie etapu turnieju
+    	try {
+			dbH.getQueryBuilder().setSeason(tournamentId, season);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public static int getTournamentSeason(int tournamentId){
-        int season = 0; //TODO pobranie sezonu turnieju
-        return season;
-    }
+    	 int season = -1;
+         try {
+ 			season = dbH.getQueryBuilder().getSeason(tournamentId);
+ 		} catch (SQLException e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 		}
+         return season;
+     }
+    
 
     public static void createMatches(int tournamentId, List<MatchPair> matchPairs){
         //TODO Utworzyć mecze w bazie danych na postawie podanych par - mecze te mają być oznaczone jako niezaplanowane (brak daty, brak wyników)
         //TODO UWAGA! Jeżeli liczba uczestników (w turnieju kołowym lub lidze) jest nieparzysta, to jeden z nich będzie miał parę z zawodnikiem z id -1 - taki zawodnik oznacza wolny los, i jego przeciwnik nie ma meczu w tej rundzie - czyli pominąć tworzenie meczu w którym jeden z uczestników ma id -1
     }
 
-    public static void createReport(String title, String content){
-        //TODO Zapisać zaport w bazie danych
+    public static void createReport(int tid, String title, String content){
+    	try {
+			dbH.getQueryBuilder().createReport(tid, title, content);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public static void updateRating(int tournamentId, Competitor competitorX, Competitor competitorY, float didXwin){
@@ -113,14 +207,5 @@ public class Tournament {
         }
     }
 
-    /**
-     * Zapisuje uczestnika do turnieju.
-     * @param competitor Uczestnik, którego dodać do turnieju (zawodnik lub drużyna).
-     * @param tournamentId Id turnieju w bazie danych.
-     */
-    public static void addCompetitor(Competitor competitor, int tournamentId){
-        //TODO Sprawdzić czy turniej jest w etapie zapisów (wartość 0) - jeżeli nie to wysłać błąd i przerwać dodawanie
-        //TODO Dodaj uczestnika (zawodnika lub drużynę) do turnieju (prawdopodobnie encja Competitor-Tournament w bazie)
-        //TODO Wysłać event ServertriggeredEvents->dataUpdated() żeby klient sobie odświeżył dane
-    }
+
 }

@@ -89,7 +89,7 @@ public class RoundRobinTournament extends Tournament {
             else
                 report += getNameOfTeam(p.getId()) + " - " + p.getPoints();
         }
-        createReport("Raport - Etap " + stage, report);
+        createReport(tournamentId,"Raport - Etap " + stage, report);
 
         if(stage==participants.size()-1){ //Jeżeli aktualny etap był ostatnim (liczba_etapów == ilość_uczestników-1)
             setTournamentStage(tournamentId, -1); //oznaczyć etap turnieju jako -1 (zakończony)

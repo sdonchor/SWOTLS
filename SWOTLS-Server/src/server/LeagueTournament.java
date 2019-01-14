@@ -82,7 +82,7 @@ public class LeagueTournament extends Tournament {
 
         int stage = getTournamentStage(tournamentId);
         int season = getTournamentSeason(tournamentId);
-        createReport("Raport - Etap " + stage + " - Sezon " + season, report); //zapisanie raportu w bazie danych
+        createReport(tournamentId, "Raport - Etap " + stage + " - Sezon " + season, report); //zapisanie raportu w bazie danych
 
         boolean areAllClassesFinished = true; //Ma określać czy we wszystkich klasach ligi sezon już się zakończył
         for(ArrayList<TournamentParticipant> competitorsOfXClass : classes){

@@ -102,7 +102,7 @@ public class SwissTournament extends Tournament {
                 report += getNameOfTeam(p.getId()) + " - " + p.getPoints();
             report += "\n";
         }
-        createReport("Raport - Etap " + stage, report);
+        createReport(tournamentId,"Raport - Etap " + stage, report);
 
         if(stage==participants.size()-1){ //Jeżeli aktualny etap był ostatnim (organizator określa liczbę rund)
             setTournamentStage(tournamentId, -1); //oznaczyć etap turnieju jako -1 (zakończony)

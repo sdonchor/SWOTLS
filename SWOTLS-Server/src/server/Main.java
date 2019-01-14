@@ -34,6 +34,7 @@ public class Main extends Application {
 
 		DatabaseHandler db = new DatabaseHandler(address,username,password,dbName,port);
 		db.connect();
+		Tournament.setDbh(db);
 		
 		//DB TEST END
 		

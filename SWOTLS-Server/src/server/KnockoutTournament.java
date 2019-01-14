@@ -124,7 +124,7 @@ public class KnockoutTournament extends Tournament {
         for(Competitor c : losers){
             report += c.displayedName() + "\n";
         }
-        createReport("Raport - Etap " + stage, report);
+        createReport(tournamentId,"Raport - Etap " + stage, report);
 
         if(winners.size()==1) { //Jeżeli został tylko jeden gracz to
             setTournamentStage(tournamentId, -1); //oznaczyć etap turnieju jako -1 czyli zakończony
