@@ -26,6 +26,7 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		//launch(args);
 		//DB TEST BEGIN
+
 		String address="sql.sdonchor.nazwa.pl";
 	    String username="sdonchor_SWOTLS-DB";
 	    String password="ZXCasdqwe123";

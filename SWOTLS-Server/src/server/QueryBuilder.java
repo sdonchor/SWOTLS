@@ -932,7 +932,7 @@ public class QueryBuilder {
 			else if(type.equals("team")) {
 				int tournament = rs.getInt("tournament");
 				int sideA = rs.getInt("teamA");
-				int sideB = rs.getInt("teamB");;
+				int sideB = rs.getInt("teamB");
 				int sideA_score = rs.getInt("sideA_score");
 				int sideB_score=rs.getInt("sideB_score");
 				Team teamA = getTeam(sideA);
@@ -944,5 +944,22 @@ public class QueryBuilder {
 		else
 			return null;
 		return null;
+	}
+	public boolean addMatch(int tournamentId, int sideA, int sideB) throws SQLException{
+		String type = getTournamentType(tournamentId);
+		String query;
+		if(type.equals("team")) {
+			query = "INSERT INTO matches(teamA,teamB,tournament) VALUES (?,?,?)";
+		}
+		else {
+			query = "INSERT INTO matches(sideA,sideB,tournament) VALUES (?,?,?)";
+		}
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, sideA);
+		stmt.setInt(2, sideB);
+		stmt.setInt(3, tournamentId);
+		int rows = stmt.executeUpdate();
+		if(rows==1)return true;
+		else return false;
 	}
 }

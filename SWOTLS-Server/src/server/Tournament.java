@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.rowset.CachedRowSet;
+
 public class Tournament {
 	public static DatabaseHandler dbH = null;
 	public static void setDbh(DatabaseHandler d) {
@@ -43,10 +45,14 @@ public class Tournament {
     }
 
     public static server.Match getMatchById(int matchId){
-        //TODO probranie meczu
-        //TODO jeżeli mecz jest drużynowy to nie zapomnij pobrać wszystkich członków obu drużyn!!! Team.setPlayers(List<Player> players)
-        server.Match m = new server.Match(1, new Player(1,1200), new Player(2,1200), 1);
-        return m;
+
+        try {
+			return dbH.getQueryBuilder().getMatchById(matchId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			  return null;
+		}
+      
     }
 
     public static void saveElo(Player p){
@@ -123,8 +129,38 @@ public class Tournament {
     }
 
     public static ArrayList<TournamentParticipant> getTournamentParticipants(int tournamentId){
-        ArrayList<TournamentParticipant> participants = new ArrayList<>(); //TODO pobrać listę uczestników (zawodników albo drużyn) zapisanych do turnieju
-        //TODO W przypadku ligi pamiętaj żeby pobrać też informację o klasie ligowej w której się znajdują (setLeagueClass) poszczególni gracze
+    	ArrayList<TournamentParticipant> participants = new ArrayList<>();
+    	try {
+			CachedRowSet crs = dbH.getQueryBuilder().getCompetitors(tournamentId);
+			String type = dbH.getQueryBuilder().getTournamentType(tournamentId);
+			int cid=-1;
+			int startingPosition=-1;
+			int points = -1;
+			int leagueClass=-1;
+			
+			if(type.equals("solo")) {
+				while(crs.next()) {
+					cid = crs.getInt("contestant_id");
+					startingPosition = crs.getInt("starting_position");
+					points = crs.getInt("points");
+					leagueClass = crs.getInt("league");
+					participants.add(new TournamentParticipant(cid, startingPosition, points, leagueClass));
+				}
+			}
+			else if(type.equals("team")) {
+				while(crs.next()) {
+					cid = crs.getInt("team_id");
+					startingPosition = crs.getInt("starting_position");
+					points = crs.getInt("points");
+					leagueClass = crs.getInt("league");
+					participants.add(new TournamentParticipant(cid, startingPosition, points, leagueClass));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+     
         return participants;
     }
 
@@ -170,8 +206,24 @@ public class Tournament {
     
 
     public static void createMatches(int tournamentId, List<MatchPair> matchPairs){
-        //TODO Utworzyć mecze w bazie danych na postawie podanych par - mecze te mają być oznaczone jako niezaplanowane (brak daty, brak wyników)
-        //TODO UWAGA! Jeżeli liczba uczestników (w turnieju kołowym lub lidze) jest nieparzysta, to jeden z nich będzie miał parę z zawodnikiem z id -1 - taki zawodnik oznacza wolny los, i jego przeciwnik nie ma meczu w tej rundzie - czyli pominąć tworzenie meczu w którym jeden z uczestników ma id -1
+    	try {
+	    	for(int i = 0 ; i < matchPairs.size() ; i++)
+	    	{
+	    		MatchPair currentPair = matchPairs.get(i);
+	    		int sideA = currentPair.getCompetitorIdSideA();
+	    		int sideB = currentPair.getCompetitorIdSideB();
+	    		if(sideA==-1 || sideB==-1) {
+	    			continue;
+	    		}
+	    		else
+	    		{
+	    			dbH.getQueryBuilder().addMatch(tournamentId, sideA, sideB);
+	    		}
+	    		
+	    	}
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    	}
     }
 
     public static void createReport(int tid, String title, String content){

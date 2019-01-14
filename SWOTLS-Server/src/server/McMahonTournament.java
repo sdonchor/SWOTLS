@@ -63,7 +63,7 @@ public class McMahonTournament extends Tournament {
 
         if(participants.size()%2==1) {
             
-            return true; //TODO false?
+            return false; 
         }
 
         Map<TournamentParticipant, Integer> eloOfParticipants = new HashMap<>();
