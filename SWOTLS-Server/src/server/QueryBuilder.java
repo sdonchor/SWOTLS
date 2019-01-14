@@ -362,6 +362,16 @@ public class QueryBuilder {
 		crs.populate(rs);
 		return crs;
 	}
+	public CachedRowSet getFinishedMatchesById(int tid) throws SQLException {
+		String query = "SELECT * FROM matches WHERE time IS NOT NULL AND sideA_score IS NOT NULL AND tournament = ?";
+		PreparedStatement stmt=connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		ResultSet rs = stmt.executeQuery();
+		RowSetFactory factory = RowSetProvider.newFactory();
+		CachedRowSet crs = factory.createCachedRowSet();
+		crs.populate(rs);
+		return crs;
+	}
 	public CachedRowSet getReportsList(int tid) throws SQLException {
 		String query = "SELECT * FROM reports WHERE tournament_id=?";
 		PreparedStatement stmt=connection.prepareStatement(query);
@@ -425,5 +435,100 @@ public class QueryBuilder {
 		CachedRowSet crs = factory.createCachedRowSet();
 		crs.populate(rs);
 		return crs;
+	}
+	public String getTournamentType(int tid) throws SQLException {
+		String query = "SELECT * FROM tournaments WHERE tournament_id =?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			return rs.getString("type");
+		}
+		else
+			return "fail";
+	}
+	public String getContestantName(int id) throws SQLException{
+		String query = "SELECT * FROM contestants WHERE contestant_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, id);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			String name = rs.getString("name");
+			String nickname = rs.getString("nickname");
+			String lastname = rs.getString("surname");
+			String result = name +" '"+nickname+"' "+lastname;
+			return result;
+		}
+		else
+		{
+			
+			return null;
+		}
+	}
+	public String getTeamName(int id) throws SQLException{
+		String query = "SELECT * FROM teams WHERE team_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, id);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			return rs.getString("name");
+		}
+		else
+			return null;
+	}
+	public String getTournamentTypeByMatchId(int id) throws SQLException {
+		String query = "SELECT * FROM matches WHERE match_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, id);
+		int tid = -1;
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			tid=rs.getInt("tournament");
+		}
+		else
+			return null;
+		query = "SELECT * FROM tournaments WHERE tournament_id = ?";
+		stmt = connection.prepareStatement(query);
+		stmt.setInt(1, tid);
+		rs= stmt.executeQuery();
+		if(rs.next()) {
+			return rs.getString("type");
+		}
+		else
+			return null;
+	}
+	public boolean addContestantToCompetition(int cid, int tid) throws SQLException {
+		String query = "INSERT INTO `contestant-tournament`(contestant_id,tournament_id) VALUES (?,?)";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, cid);
+		stmt.setInt(2, tid);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public boolean addTeamToCompetition(int cid, int tid) throws SQLException {
+		String query = "INSERT INTO `contestant-tournament`(team_id,tournament_id) VALUES (?,?)";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, cid);
+		stmt.setInt(2, tid);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
+	}
+	public boolean planMatch(int cid, String time, int aid) throws SQLException {
+		String query = "UPDATE matches SET time=?, arena_id=? WHERE match_id=?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setString(1, time);
+		stmt.setInt(2, aid);
+		stmt.setInt(3, cid);
+		int rows = stmt.executeUpdate();
+		if(rows==1)
+			return true;
+		else
+			return false;
 	}
 }

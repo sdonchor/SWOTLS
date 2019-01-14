@@ -2,7 +2,9 @@ package application;
 
 import javax.sql.rowset.CachedRowSet;
 import java.io.IOException;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class ServerData {
 	public static boolean downloadEverything(){
 	    //TODO To tylko tymczasowo do testów, docelowo ma pobierać pojedynczo tylko to co jest żądane albo to co się zmieniło w bazie (w zależności od podejścia)
         System.out.println("Tymczasowo dla testów pobieram wszystko od nowa przy każdym odświeżeniu");
+       
         try {
             contestants.clear();
             tournaments.clear();
@@ -66,6 +69,9 @@ public class ServerData {
 			sc = new ServerConnection(address,port);
 			 ClientLog.logLine("INFO", "Połączono z serwerem "+address+":"+port+".");
             downloadEverything();
+            //test here
+
+            //
             sc.socketClose();
            
             return true;
@@ -271,7 +277,6 @@ public class ServerData {
 
     public static Map<String, Integer> getListOfAllMatches(){
         Map<String, Integer> map = new HashMap<String, Integer>();
-       // map.put("2Pesteczka vs Unity Female - 25.11.2018 11:00", 0);
         for(int i = 0; i<matches.size();i++)
         {
         	map.put(matches.get(i).toString(), matches.get(i).getId());
@@ -609,9 +614,15 @@ public class ServerData {
      * @param arenaId Id areny, która przypisać do meczu. (-1 gdy arena nie została określona)
      */
     public static void planMatch(int matchId, LocalDateTime localDate, int arenaId){
-        Dialogs.error("Niezaimplementowana funkcja");
-        Date date = Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant()); //konwersja z LocalDateTime do Date
-        //TODO ustawienie daty meczu i areny (oznaczenie jako zaplanowany - czyli ma podaną datę, ale jeszcze nie wprowadzony wynik)
+        Date date = Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(date);
+        try {
+			sc.planMatch(matchId,time,arenaId);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         ServertriggeredEvents.dataUpdated(); //To wywoływane gdy serwer zakończy operację
     }
 
@@ -621,7 +632,11 @@ public class ServerData {
      * @return Mapa zawierająca jako klucz nazwę nazwodnika, a jako wartość jego id. (analogicznie inne tego typu metody)
      */
     public static Map<String, Integer> getListOfCompetitionContestants(int competitionId){
-		//TODO teraz pobiera wszystkich zawodników, a powinno tylko zapisanych do podanego turnieju
+		CachedRowSet crs = sc.getTournamentCompetitors(competitionId);
+		
+				
+				
+				
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		for(int i = 2; i<contestants.size();i++)
 		{
@@ -636,6 +651,19 @@ public class ServerData {
      * @param competitorId Id uczestnika turnieju (zawodnika lub drużyny - w zależności od typu podanego turnieju)
      * @return Numer klasy rozgrywkowej
      */
+    public static String getTournamentType(int tid) {
+    	String type="fail";
+    	try {
+    		type=sc.getTournamentType(tid);
+			return type;
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+    	return type;
+    	
+    }
 	public static int getCompetitorsLeagueClass(int tournamnetId, int competitorId){
         int leagueClass = -9999; //TODO
         return leagueClass;
@@ -644,16 +672,33 @@ public class ServerData {
 	public static Map<String, Integer> getListOfUnplannedMatches(int competitionId){
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		try {
-			CachedRowSet crs = sc.getPlannedMatchesById(competitionId);
-			while(crs.next()) {
+			CachedRowSet crs = sc.getUnplannedMatchesById(competitionId);
+			String type = sc.getTournamentType(competitionId);
+			if(type.equals("fail")) {
 				
-				int aId = crs.getInt("sideA");
-				int bId = crs.getInt("sideB");
+				return map;
+			}
+			while(crs.next()) {
+				int aId;
+				int bId;
+				String aName = null;
+				String bName = null;
+				if(type.equals("solo")) {
+					 aId = crs.getInt("sideA");
+					 bId = crs.getInt("sideB");
+					 aName=sc.getContestantName(aId);
+					 bName=sc.getContestantName(bId);
+				}
+				else if(type.equals("team")) {
+					aId = crs.getInt("teamA");
+					 bId = crs.getInt("teamB");
+					 aName=sc.getTeamName(aId);
+					 bName=sc.getTeamName(bId);
+				}
 				int id = crs.getInt("match_id");
 				String title = "$a vs $b";
-				//wez nick gracza albo nazwe druzyny
-				//title=title.replace("$a", a);
-			//	title=title.replace("$b", b);
+				title=title.replace("$a", aName);
+				title=title.replace("$b", bName);
 				map.put(title, id);
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
@@ -664,23 +709,140 @@ public class ServerData {
 	}
 
     public static Map<String, Integer> getListOfAllPlannedMatches(){
-    	//sc.getPlannedMatches();
-        Map<String, Integer> map = new HashMap<String, Integer>();
-        map = getListOfAllMatches(); //Dla testów tymczasowo pobieram wszystkie mecze - domyślnie powinno pobierać tylko zaplanowane niezakończone.
-        return map;
-    }
-
-	public static Map<String, Integer> getListOfPlannedMatches(int competitionId){
-		//sc.getUnplannedMatchesById(competitionId);
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("Smoki vs Wilki 02.02.2019 19:00", 3);
+    	Map<String, Integer> map = new HashMap<String, Integer>();
+		try {
+			CachedRowSet crs = sc.getPlannedMatches();
+			
+			while(crs.next()) {
+				String type = sc.getTournamentTypeByMatchId(crs.getInt("match_id"));
+				if(type.equals("fail")) {
+					
+					return map;
+				}
+				int aId;
+				int bId;
+				String aName = null;
+				String bName = null;
+				if(type.equals("solo")) {
+					 aId = crs.getInt("sideA");
+					 bId = crs.getInt("sideB");
+					 aName=sc.getContestantName(aId);
+					 bName=sc.getContestantName(bId);
+				}
+				else if(type.equals("team")) {
+					aId = crs.getInt("teamA");
+					 bId = crs.getInt("teamB");
+					 aName=sc.getTeamName(aId);
+					 bName=sc.getTeamName(bId);
+				}
+				int id = crs.getInt("match_id");
+				String title = "$a vs $b";
+				title=title.replace("$a", aName);
+				title=title.replace("$b", bName);
+				map.put(title, id);
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return map;
 	}
+    
 
-	public static Map<String, Integer> getListOfFinishedMatches(int competitionId){
-		//TODO powinno pobierać (tylko) zakończone mecze w podanym turnieju (mają datę i wynik)
+	public static Map<String, Integer> getListOfPlannedMatches(int competitionId){
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("PK vs AGH (2:0)", 3);
+		try {
+			CachedRowSet crs = sc.getPlannedMatchesById(competitionId);
+			String type = sc.getTournamentType(competitionId);
+			if(type.equals("fail")) {
+				
+				return map;
+			}
+			while(crs.next()) {
+				int aId;
+				int bId;
+				String aName = null;
+				String bName = null;
+				if(type.equals("solo")) {
+					 aId = crs.getInt("sideA");
+					 bId = crs.getInt("sideB");
+					 aName=sc.getContestantName(aId);
+					 bName=sc.getContestantName(bId);
+				}
+				else if(type.equals("team")) {
+					aId = crs.getInt("teamA");
+					 bId = crs.getInt("teamB");
+					 aName=sc.getTeamName(aId);
+					 bName=sc.getTeamName(bId);
+				}
+				int id = crs.getInt("match_id");
+				String title = "$a vs $b";
+				title=title.replace("$a", aName);
+				title=title.replace("$b", bName);
+				map.put(title, id);
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return map;
+	}
+	public static void printCRS(CachedRowSet crs) {
+		System.out.println("printin crs");
+		ResultSetMetaData rsmd;
+		try {
+			rsmd = crs.getMetaData();
+			int columnsNumber = rsmd.getColumnCount();
+			while (crs.next()) {
+			    for (int i = 1; i <= columnsNumber; i++) {
+			        if (i > 1) System.out.print(",  ");
+			        String columnValue = crs.getString(i);
+			        System.out.print(columnValue + " " + rsmd.getColumnName(i));
+			    }
+			    System.out.println("");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	public static Map<String, Integer> getListOfFinishedMatches(int competitionId){
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		try {
+			CachedRowSet crs = sc.getFinishedMatchesById(competitionId);
+			String type = sc.getTournamentType(competitionId);
+			if(type.equals("fail")) {
+				
+				return map;
+			}
+			while(crs.next()) {
+				int aId;
+				int bId;
+				String aName = null;
+				String bName = null;
+				if(type.equals("solo")) {
+					 aId = crs.getInt("sideA");
+					 bId = crs.getInt("sideB");
+					 aName=sc.getContestantName(aId);
+					 bName=sc.getContestantName(bId);
+				}
+				else if(type.equals("team")) {
+					aId = crs.getInt("teamA");
+					 bId = crs.getInt("teamB");
+					 aName=sc.getTeamName(aId);
+					 bName=sc.getTeamName(bId);
+				}
+				int id = crs.getInt("match_id");
+				String title = "$a vs $b";
+				title=title.replace("$a", aName);
+				title=title.replace("$b", bName);
+				map.put(title, id);
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return map;
 	}
 
@@ -699,9 +861,19 @@ public class ServerData {
     }
 
 	public static void addCompetitorToCompetition(int competitorId, int competitionId){
-        Dialogs.error("Niezaimplementowana funkcja");
-		//TODO powinno zapisywać zawodnika lub drużynę (w zależnościu od typu podanego turnieju) do wydarzenia
-		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
+        try {
+			if(sc.getTournamentType(competitionId).equals("solo"))
+			{
+				sc.addContestantToCompetition(competitorId,competitionId);
+			}
+			else
+			{
+				sc.addTeamToCompetition(competitorId,competitionId);
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

@@ -390,4 +390,169 @@ public class ServerConnection {
 		socket.close();
 		return crs;
 	}
+	public CachedRowSet getFinishedMatchesById(int competitionId) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-finished-matches-id;"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		CachedRowSet crs = (CachedRowSet)ois.readObject();
+		if(crs!=null) {
+			ClientLog.logLine("INFO", "Pobrano zakończone mecze dla id "+competitionId+".");
+		}
+
+		socket.close();
+		return crs;
+	}
+	public String getTournamentType(int competitionId) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-tournament-type;"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("string") && sr.getBoolTypeResponse())
+		{
+			return sr.getStringTypeResponse();
+		}
+		else
+		{
+			return "fail";
+		}		
+	}
+	public String getTournamentTypeByMatchId(int mid) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-tournament-type-from-matchid;"+mid;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("string") && sr.getBoolTypeResponse())
+		{
+			return sr.getStringTypeResponse();
+		}
+		else
+		{
+			return "fail";
+		}		
+	}
+	public String getContestantName(int id) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-contestant-name;"+id;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("string") && sr.getBoolTypeResponse())
+		{
+			return sr.getStringTypeResponse();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	public String getTeamName(int id) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-team-name;"+id;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("string") && sr.getBoolTypeResponse())
+		{
+			System.out.println("response: "+sr.getResponseType() + sr.getStringTypeResponse());
+			return sr.getStringTypeResponse();
+		}
+		else
+		{
+			
+			return null;
+		}
+	}
+	public boolean addContestantToCompetition(int competitorId, int competitionId) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "contestant-to-competition;"+competitorId+";"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+		
+	
+	public boolean addTeamToCompetition(int competitorId, int competitionId) throws IOException, ClassNotFoundException{
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "team-to-competition;"+competitorId+";"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
+	public boolean planMatch(int matchId, String time, int arenaId) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "plan-match;"+matchId+";"+time+";"+arenaId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
+	public CachedRowSet getTournamentCompetitors(int competitionId)throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "get-competitors;"+competitionId;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		CachedRowSet crs = (CachedRowSet)ois.readObject();
+		if(crs!=null) {
+			ClientLog.logLine("INFO", "Pobrano zawodników dla id "+competitionId+".");
+		}
+
+		socket.close();
+		return crs;
+	}
+
 }

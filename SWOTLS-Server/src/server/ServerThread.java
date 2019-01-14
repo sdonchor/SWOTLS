@@ -613,6 +613,240 @@ public class ServerThread extends Thread{
 					}
 					
 				}
+				if(message.contains("get-finished-matches-id")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					try {
+						
+						CachedRowSet crs = dbH.getQueryBuilder().getFinishedMatchesById(tid);
+						oos.writeObject(crs);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano niezaplanowane mecze.");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać niezaplanowanych meczy.");
+					}
+					
+				}
+				if(message.contains("get-tournament-type")){
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("string");
+					try {
+						
+						String type = dbH.getQueryBuilder().getTournamentType(tid);
+						sr.setStringTypeResponse(type);
+						sr.setBoolTypeResponse(true);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano typ turnieju "+tid+".");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać typu turnieju.");
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+					}
+					
+				}
+				if(message.contains("get-tournament-type-from-matchid")){
+					String[] request = message.split(";");
+					int mid = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("string");
+					try {
+						
+						String type = dbH.getQueryBuilder().getTournamentTypeByMatchId(mid);
+						sr.setStringTypeResponse(type);
+						sr.setBoolTypeResponse(true);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano typ turnieju meczu "+mid+".");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać typu turnieju meczu.");
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+					}
+					
+				}
+				if(message.contains("get-contestant-name")){
+					String[] request = message.split(";");
+					int id = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("string");
+					try {
+						
+						String type = dbH.getQueryBuilder().getContestantName(id);
+						sr.setStringTypeResponse(type);
+						sr.setBoolTypeResponse(true);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano nazwę gracza "+id+".");
+					} catch (SQLException e) {
+						e.printStackTrace();
+						ServerLog.logLine("ERROR", "Nie udało się pobrać nazwy gracza.");
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+					}
+					
+				}
+				if(message.contains("get-team-name")){
+					String[] request = message.split(";");
+					int id = Integer.valueOf(request[1]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("string");
+					try {
+						
+						String type = dbH.getQueryBuilder().getTeamName(id);
+						System.out.println("typeep: "+type);
+						sr.setStringTypeResponse(type);
+						sr.setBoolTypeResponse(true);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Pobrano nazwę drużyny "+id+".");
+					} catch (SQLException e) {
+						ServerLog.logLine("ERROR", "Nie udało się pobrać nazwy drużyny.");
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+					}
+					
+				}
+				if(message.contains("contestant-to-competition")){
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się dodać gracza. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się dodać gracza. Brak uprawnień.");
+						continue;
+					}
+					String[] request = message.split(";");
+					int cid = Integer.valueOf(request[1]);
+					int tid = Integer.valueOf(request[2]);
+
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().addContestantToCompetition(cid,tid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Dodano gracza "+cid+" do turnieju "+tid);
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						ServerLog.logLine("ERROR", "Nie udało się dodać gracza do turnieju. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("team-to-competition")){
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się dodać drużyny. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się dodać drużyny. Brak uprawnień.");
+						continue;
+					}
+					String[] request = message.split(";");
+					int cid = Integer.valueOf(request[1]);
+					int tid = Integer.valueOf(request[2]);
+
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().addTeamToCompetition(cid,tid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Dodano drużynę "+cid+" do turnieju "+tid);
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						ServerLog.logLine("ERROR", "Nie udało się dodać drużyny do turnieju. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
+				if(message.contains("plan-match")){
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się zaplanować meczu. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się zaplanować meczu. Brak uprawnień.");
+						continue;
+					}
+					String[] request = message.split(";");
+					int cid = Integer.valueOf(request[1]);
+					String time = request[2];
+					int aid = Integer.valueOf(request[3]);
+
+					
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().planMatch(cid,time,aid);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Zaplanowano mecz "+cid);
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						ServerLog.logLine("ERROR", "Nie udało się zaplanować meczu. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
 				
 			}
 		} catch (IOException e) {
