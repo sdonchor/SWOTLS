@@ -6,6 +6,7 @@ import javax.sql.rowset.RowSetProvider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -562,7 +563,10 @@ public class QueryBuilder {
 		ResultSet rs = stmt.executeQuery();
 		RowSetFactory factory = RowSetProvider.newFactory();
 		CachedRowSet crs = factory.createCachedRowSet();
+		
 		crs.populate(rs);
+		printCRS(crs);
+		crs.beforeFirst();
 		return crs;
 	}
 	public int getTournamentSystem(int tid) throws SQLException {
@@ -998,6 +1002,25 @@ public class QueryBuilder {
 		stmt.setInt(3, tid);
 		int rows = stmt.executeUpdate();
 		if(rows==1)System.out.println("Zaaktualizowano pozycję");
+		
+	}
+	public static void printCRS(CachedRowSet crs) {
+		System.out.println("printin crs");
+		ResultSetMetaData rsmd;
+		try {
+			rsmd = crs.getMetaData();
+			int columnsNumber = rsmd.getColumnCount();
+			while (crs.next()) {
+			    for (int i = 1; i <= columnsNumber; i++) {
+			        if (i > 1) System.out.print(",  ");
+			        String columnValue = crs.getString(i);
+			        System.out.print(columnValue + " " + rsmd.getColumnName(i));
+			    }
+			    System.out.println("");
+			}
+		} catch (SQLException e) {
+			
+		}
 		
 	}
 }
