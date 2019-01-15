@@ -172,6 +172,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         to.getSelectionModel().clearSelection();
         ObservableList<String> ols = FXCollections.observableArrayList();
         ols.clear();
+        to.getItems().clear();
         if(actionString!=null)
             ols.add(actionString);
         for (String key : from.keySet()) {

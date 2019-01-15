@@ -1028,4 +1028,8 @@ public class ServerData {
 
 		}
 	}
+
+	public static void removeFromTournament(int participantId, int tournamentId){
+	    //TODO
+    }
 }
