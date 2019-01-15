@@ -42,16 +42,16 @@ public class ServerData {
 	public static boolean downloadEverything(){
         try {
             contestants.clear();
-            tournaments.clear();
-            teams.clear();
-            matches.clear();
-            arenas.clear();
-            sys_users.clear();
             ServerData.convertContestants(sc.getTable("contestants"));
+            tournaments.clear();
             ServerData.convertTournaments(sc.getTable("tournaments"));
+            teams.clear();
             ServerData.convertTeams(sc.getTable("teams"));
+            matches.clear();
             ServerData.convertMatches(sc.getTable("matches"));
+            arenas.clear();
             ServerData.convertArenas(sc.getTable("arenas"));
+            sys_users.clear();
             ServerData.convertSysUsrs(sc.getTable("system_users"));
             return true;
         } catch (Exception e) { //IOException | ClassNotFoundException e
