@@ -56,10 +56,10 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         ServertriggeredEvents.addDataUpdateListener(this);
 
         competitors = ServerData.getListOfCompetitionContestants(competition.getId());
-        //unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-        //planned = ServerData.getListOfPlannedMatches(competition.getId());
-        //finished = ServerData.getListOfFinishedMatches(competition.getId());
-        //reports = ServerData.getListOfReports(competition.getId());
+        unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
+        planned = ServerData.getListOfPlannedMatches(competition.getId());
+        finished = ServerData.getListOfFinishedMatches(competition.getId());
+        reports = ServerData.getListOfReports(competition.getId());
     }
 
     @FXML
