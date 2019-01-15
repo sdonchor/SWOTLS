@@ -640,7 +640,7 @@ public class QueryBuilder {
 			return -1;
 	}
 	public boolean setStage(int tid, int stage) throws SQLException {
-		String query = "UPDATE `tournament` SET stage = ? WHERE tournament_id = ?";
+		String query = "UPDATE `tournaments` SET stage = ? WHERE tournament_id = ?";
 		PreparedStatement stmt = connection.prepareStatement(query);
 		stmt.setInt(1, stage);
 		stmt.setInt(2, tid);
@@ -958,6 +958,25 @@ public class QueryBuilder {
 		stmt.setInt(1, sideA);
 		stmt.setInt(2, sideB);
 		stmt.setInt(3, tournamentId);
+		int rows = stmt.executeUpdate();
+		if(rows==1)return true;
+		else return false;
+	}
+	public boolean removeFromTournament(int tid, int pid) throws SQLException {
+		String type = getTournamentType(tid);
+		String query;
+		if(type.equals("team")) {
+			System.out.println("removed team");
+
+			query = "DELETE FROM `contestant-tournament` WHERE team_id = ? AND tournament_id = ?";
+		}
+		else {
+			System.out.println("removed con");
+			query = "DELETE FROM `contestant-tournament` WHERE contestant_id = ? AND tournament_id = ?";
+		}
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, pid);
+		stmt.setInt(2, tid);
 		int rows = stmt.executeUpdate();
 		if(rows==1)return true;
 		else return false;
