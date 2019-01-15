@@ -22,7 +22,7 @@ public class BergsCircle {
         slots.ensureCapacity(competitors.size());
 
         for(TournamentParticipant p : competitors){
-            slots.add(p.getStartingPosition(), p);
+            slots.add(p.getStartingPosition()-1, p);
         }
 
         if(slots.size()%2==1) {

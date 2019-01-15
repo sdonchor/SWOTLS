@@ -19,10 +19,15 @@ public class RoundRobinTournament extends Tournament {
         //Numerowanie zawodników pozycjami startowymi 1, 2, ... n (gdzie n to liczba zawodników w turnieju)
         int i = 1;
         for(TournamentParticipant participant : competitors){
-            participant.setStartingPosition(i++);
+            //participant.setStartingPosition(i++);
+            setParticipantsStartingPosition(tournamentId, participant.getId(), i++);
         }
 
         generateMatches(tournamentId, competitors, 1);
+    }
+
+    private static void setParticipantsStartingPosition(int tournamentId, int participantId, int startingPosition) {
+        //TODO
     }
 
     /**
