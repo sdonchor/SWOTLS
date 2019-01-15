@@ -679,7 +679,7 @@ public class QueryBuilder {
 			return -1;
 	}
 	public boolean setSeason(int tid, int season) throws SQLException {
-		String query = "UPDATE `tournament` SET season = ? WHERE tournament_id = ?";
+		String query = "UPDATE `tournaments` SET season = ? WHERE tournament_id = ?";
 		PreparedStatement stmt = connection.prepareStatement(query);
 		stmt.setInt(1, season);
 		stmt.setInt(2, tid);
