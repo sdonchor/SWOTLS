@@ -83,6 +83,7 @@ public class Match {
 
     @Override
     public String toString() {
+    	if(sideA.displayedName()==null) return ""; //??
         return sideA.displayedName() +
                 " vs " + sideB.displayedName() +
                 " - " + date;
