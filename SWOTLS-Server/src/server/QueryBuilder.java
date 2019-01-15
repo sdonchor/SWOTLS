@@ -968,12 +968,10 @@ public class QueryBuilder {
 		String type = getTournamentType(tid);
 		String query;
 		if(type.equals("team")) {
-			System.out.println("removed team");
 
 			query = "DELETE FROM `contestant-tournament` WHERE team_id = ? AND tournament_id = ?";
 		}
 		else {
-			System.out.println("removed con");
 			query = "DELETE FROM `contestant-tournament` WHERE contestant_id = ? AND tournament_id = ?";
 		}
 		PreparedStatement stmt = connection.prepareStatement(query);
@@ -982,5 +980,24 @@ public class QueryBuilder {
 		int rows = stmt.executeUpdate();
 		if(rows==1)return true;
 		else return false;
+	}
+	public void setStartingPos(int tid, int pid, int pos) throws SQLException {
+		String type = getTournamentType(tid);
+		String query;
+		if(type.equals("team")) {
+
+
+			query = "UPDATE `contestant-tournament` SET starting_position = ? WHERE team_id = ? AND tournament_id = ?";
+		}
+		else {
+			query = "UPDATE `contestant-tournament` SET starting_position = ? WHERE contestant_id = ? AND tournament_id = ?";
+		}
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, pos);
+		stmt.setInt(2, pid);
+		stmt.setInt(3, tid);
+		int rows = stmt.executeUpdate();
+		if(rows==1)System.out.println("Zaaktualizowano pozycję");
+		
 	}
 }

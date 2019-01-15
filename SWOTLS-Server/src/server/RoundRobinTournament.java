@@ -1,5 +1,6 @@
 package server;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,12 @@ public class RoundRobinTournament extends Tournament {
     }
 
     private static void setParticipantsStartingPosition(int tournamentId, int participantId, int startingPosition) {
-        //TODO
+       	try {
+			dbH.getQueryBuilder().setStartingPos(tournamentId,participantId,startingPosition);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
