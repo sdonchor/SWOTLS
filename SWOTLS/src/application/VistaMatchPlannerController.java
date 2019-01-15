@@ -54,11 +54,9 @@ public class VistaMatchPlannerController implements VistaContainable {
 
         ObservableList<String> options = FXCollections.observableArrayList();
         arenas = ServerData.getListOfAllArenas();
-        options.add("** Nieokreślona **");
         for(String s : arenas.keySet()){
             options.add(s);
         }
-        arenas.put("** Nieokreślona **", -1);
         arenaBox.setItems(options);
 
     }
@@ -73,8 +71,10 @@ public class VistaMatchPlannerController implements VistaContainable {
         int arenaId;
         if(arenaBox.getValue()!=null)
             arenaId = arenas.get(arenaBox.getValue());
-        else
-            arenaId = -1;
+        else{
+            Dialogs.error("Wybierz arene!");
+            return;
+        }
 
         LocalDateTime localDate = datePicker.getDateTimeValue();
         ServerData.planMatch(editId, localDate, arenaId);

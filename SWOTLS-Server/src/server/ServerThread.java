@@ -563,6 +563,45 @@ public class ServerThread extends Thread{
 					oos.close();
 					os.close();
 				}
+				if(message.contains("set-rounds")){
+					if(currentUser!=null)
+					{
+						if(!currentUser.getPermissions().equals("FULL")&&!currentUser.getPermissions().equals("ORGANIZER")){
+							ServerLog.logLine("ERROR", "Nie udało się ustawić wyniku. Brak uprawnień.");
+							continue;
+						}
+					}
+					else
+					{
+						ServerLog.logLine("ERROR", "Nie udało się ustawić liczby rund. Brak uprawnień.");
+						continue;
+					}
+					System.out.println("helloooo nie ustawie bo nie " + message);
+					String[] request = message.split(";");
+					int tournamentId = Integer.valueOf(request[1]);
+					int maxRounds = Integer.valueOf(request[2]);
+
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+
+					boolean success;
+					try {
+						success = dbH.getQueryBuilder().setNumberOfRounds(tournamentId, maxRounds);
+						sr.setBoolTypeResponse(success);
+						oos.writeObject(sr);
+						ServerLog.logLine("INFO", "Ustalono max ilość rund.");
+					} catch (SQLException e) {
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						System.out.println("SQLException when setting score..");
+						ServerLog.logLine("ERROR", "Nie udało się ustawić max ilości rund. Błąd bazy danych.");
+						e.printStackTrace();
+					}
+					oos.close();
+					os.close();
+				}
 				if(message.contains("get-planned-matches")){
 
 					OutputStream os = socket.getOutputStream();

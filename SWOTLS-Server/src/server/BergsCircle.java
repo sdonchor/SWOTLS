@@ -55,7 +55,7 @@ public class BergsCircle {
      */
     public void nextStage(){
         //Pary następnych kolejek otrzyma się przesuwając numery wierzchołków (z wyjątkiem środkowego wierzchołka) zgodnie z ruchem wskazówek zegara.
-        ArrayList<TournamentParticipant> circle = new ArrayList<>();
+        ArrayList<TournamentParticipant> circle = new ArrayList<>(slots.size());
         circle.ensureCapacity(slots.size());
         //Jeden (ostatni) uczestnik jest nieruchomy na kole, a pozostali są przesuwani o jedną pozycję
         circle.add(slots.size()-1, slots.get(slots.size()-1));

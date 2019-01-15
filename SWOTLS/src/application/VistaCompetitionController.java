@@ -27,11 +27,11 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         this.init(parent);
     }
 
-    private Map<String, Integer> competitors;
+    private Map<String, Integer> competitors = new HashMap<>();
     private Map<String, Integer> unplanned = new HashMap<>();
     private Map<String, Integer> planned = new HashMap<>();
-    private Map<String, Integer> finished;
-    private Map<String, Integer> reports;
+    private Map<String, Integer> finished = new HashMap<>();
+    private Map<String, Integer> reports = new HashMap<>();
     @Override
     public void init(VistaContainer parent){
         this.parent = parent;
@@ -113,7 +113,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             }
         }
 
-        if(unplanned.size()>1&&planned.size()>1)
+        if(unplanned.size()>1||planned.size()>1)
             Dialogs.error("Nie można przejść do następnego etapu przed zakończeniem aktualnego! Wprowadź wyniki wszystkich meczy.", "Nie można przejść do następnego etapu");
         else {
             if(competition.getStage()==0 && (competition.getSystem()==2 || competition.getSystem()==4)) {
@@ -129,7 +129,8 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                     return;
                 }
             }
-            ServerData.nextStage(competition.getId());
+            if(ServerData.nextStage(competition.getId()))
+                Dialogs.error("Udało się przejść do następnej rundy.");
         }
     }
 
@@ -171,8 +172,6 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private void reloadPane(Map<String, Integer> from, ListView<String> to, String actionString){
         to.getSelectionModel().clearSelection();
         ObservableList<String> ols = FXCollections.observableArrayList();
-        ols.clear();
-        to.getItems().clear();
         if(actionString!=null)
             ols.add(actionString);
         for (String key : from.keySet()) {
@@ -219,12 +218,12 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 actionString = "** Następny etap **";
 
             reloadPane(planned, lvPlanned, actionString);
-            unplannedPane.setExpanded(true);
+            plannedPane.setExpanded(true);
         }else if(finishedPane.isExpanded()){
             finishedPane.setExpanded(false);
             finished = ServerData.getListOfFinishedMatches(competition.getId());
             reloadPane(finished, lvFinished, "** Następny etap **");
-            unplannedPane.setExpanded(true);
+            finishedPane.setExpanded(true);
         }
     }
 

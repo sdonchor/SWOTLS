@@ -927,17 +927,19 @@ public class ServerData {
 	 * Przechodzi do następnego etapu podanego turnieju.
 	 * @param competitionId Id turnieju, w którym ma nastąpić przejście do następnego etapu.
 	 */
-	public static void nextStage(int competitionId){
+	public static boolean nextStage(int competitionId){
 
 		try {
 			if(!sc.nextStage(competitionId)) {
 				Dialogs.error("Turniej zakończony.");
+				return false;
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			ClientLog.logLine("ERROR", "Nie udało się przejść do kolejnego etapu. Błąd połączenia.");
-
+            return false;
 		}
 		ServertriggeredEvents.dataUpdated(); //wywoływane gdy serwer zakończy operację
+        return true;
 	}
 
     public static void setScore(int matchId, int scoreA, int scoreB) {
