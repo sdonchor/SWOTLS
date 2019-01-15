@@ -1034,7 +1034,7 @@ public class ServerData {
 	    try {
 	    	if(sc.removeFromTournament(participantId,tournamentId))
 	    	{
-	    		ClientLog.logLine("INFO", "Usunięto z turnieju "+tournamentId+" gracza "+tournamentId+".");
+	    		ClientLog.logLine("INFO", "Usunięto z turnieju "+tournamentId+" gracza "+participantId+".");
 	    		ServertriggeredEvents.dataUpdated();
 	    		return true;
 	    	}

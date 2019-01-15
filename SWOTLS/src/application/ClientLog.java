@@ -21,8 +21,9 @@ public class ClientLog {
 		return dtf.format(now);
 	}
 	public static void logLine(String type, String msg) 
-	{ 
-		if(type.equals("ERROR")){
+	{
+        System.out.println(msg);
+        if(type.equals("ERROR")){
 		    Dialogs.error(msg);
         }
 

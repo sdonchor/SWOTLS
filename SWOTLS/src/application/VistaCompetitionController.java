@@ -194,29 +194,37 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
         //Sprawdza, który panel jest otwarty i przeładowywuje w nim dane.
         if(competitorsPane.isExpanded()){
+            competitorsPane.setExpanded(false);
             if(competition.getStage()==0)
                 reloadPane(competitors, lvCompetitors, "** Dodaj **");
             else
                 reloadPane(competitors, lvCompetitors, null);
+            competitorsPane.setExpanded(true);
         }else if(unplannedPane.isExpanded()){
+            unplannedPane.setExpanded(false);
             unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
 
             String actionString = null;
-            if(unplanned.size()>0)
+            if(unplanned.size()==0)
                 actionString = "** Następny etap **";
 
             reloadPane(unplanned, lvUnplanned, actionString);
+            unplannedPane.setExpanded(true);
         }else if(plannedPane.isExpanded()){
+            plannedPane.setExpanded(false);
             planned = ServerData.getListOfPlannedMatches(competition.getId());
 
             String actionString = null;
-            if(planned.size()>0)
+            if(planned.size()==0)
                 actionString = "** Następny etap **";
 
             reloadPane(planned, lvPlanned, actionString);
+            unplannedPane.setExpanded(true);
         }else if(finishedPane.isExpanded()){
+            finishedPane.setExpanded(false);
             finished = ServerData.getListOfFinishedMatches(competition.getId());
             reloadPane(finished, lvFinished, "** Następny etap **");
+            unplannedPane.setExpanded(true);
         }
     }
 
@@ -288,7 +296,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(plannedPane.isExpanded()){
                     planned = ServerData.getListOfPlannedMatches(competition.getId());
                     String actionString = null;
-                    if(planned.size()>0)
+                    if(planned.size()==0)
                         actionString = "** Następny etap **";
 
                     reloadPane(planned, lvPlanned, actionString);
@@ -325,7 +333,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(unplannedPane.isExpanded()){
                     unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
                     String actionString = null;
-                    if(unplanned.size()>0)
+                    if(unplanned.size()==0)
                         actionString = "** Następny etap **";
                     reloadPane(unplanned, lvUnplanned, actionString);
                 }else {
