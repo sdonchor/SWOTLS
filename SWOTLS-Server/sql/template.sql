@@ -141,8 +141,8 @@ ALTER TABLE `contestants`
   ADD CONSTRAINT `contestants_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`team_id`);
 
 ALTER TABLE `matches`
-  ADD CONSTRAINT `matches_ibfk_1` FOREIGN KEY (`sideA`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `matches_ibfk_2` FOREIGN KEY (`sideB`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `matches_ibfk_1` FOREIGN KEY (`sideA`) REFERENCES `contestants` (`contestant_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `matches_ibfk_2` FOREIGN KEY (`sideB`) REFERENCES `contestants` (`contestant_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `matches_ibfk_4` FOREIGN KEY (`arena_id`) REFERENCES `arenas` (`arena_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `matches_ibfk_5` FOREIGN KEY (`tournament`) REFERENCES `tournaments` (`tournament_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `matches_ibfk_6` FOREIGN KEY (`teamA`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE,

@@ -954,10 +954,12 @@ public class QueryBuilder {
 		else {
 			query = "INSERT INTO matches(sideA,sideB,tournament) VALUES (?,?,?)";
 		}
+		
 		PreparedStatement stmt = connection.prepareStatement(query);
 		stmt.setInt(1, sideA);
 		stmt.setInt(2, sideB);
 		stmt.setInt(3, tournamentId);
+		System.out.println(stmt);
 		int rows = stmt.executeUpdate();
 		if(rows==1)return true;
 		else return false;

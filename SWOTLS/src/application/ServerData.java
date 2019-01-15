@@ -178,21 +178,36 @@ public class ServerData {
 				int mid = crs.getInt("match_id");
 				int sideAid = crs.getInt("sideA");
 				int sideBid = crs.getInt("sideB");
+				int teamAid = crs.getInt("teamA");
+				int teamBid = crs.getInt("teamB");
 				int sideAscore = crs.getInt("sideA_score");
 				int sideBscore = crs.getInt("sideB_score");
 				int arenaId = crs.getInt("arena_id");
 				Date time = crs.getDate("time"); //??
 				int tournamentId = crs.getInt("tournament");
 				
-				Team a = ServerData.getTeamById(sideAid);
-				Team b = ServerData.getTeamById(sideBid);
-				Competition t = ServerData.getTournamentById(tournamentId);
-				Arena arena = ServerData.getArenaById(arenaId);
+				String type = sc.getTournamentTypeByMatchId(mid);
+				if(type.equals("team")) {
+					Team a = ServerData.getTeamById(teamAid);
+					Team b = ServerData.getTeamById(teamBid);
+					Competition t = ServerData.getTournamentById(tournamentId);
+					Arena arena = ServerData.getArenaById(arenaId);
 
-				Match m = new Match(mid,a,b,sideAscore,sideBscore,t,time,arena);
-				matches.add(m);
+					Match m = new Match(mid,a,b,sideAscore,sideBscore,t,time,arena);
+					matches.add(m);
+				}
+				else {
+					Player a = getContestantById(sideAid);
+					Player b = getContestantById(sideBid);
+					Competition t = ServerData.getTournamentById(tournamentId);
+					Arena arena = ServerData.getArenaById(arenaId);
+
+					Match m = new Match(mid,a,b,sideAscore,sideBscore,t,time,arena);
+					matches.add(m);
+				}
+
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException | IOException e) {
 			ClientLog.logLine("ERROR", "Nie udało się przetworzyć tabeli matches.");
 
 		}
