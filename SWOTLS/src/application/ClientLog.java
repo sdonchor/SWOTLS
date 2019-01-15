@@ -22,6 +22,10 @@ public class ClientLog {
 	}
 	public static void logLine(String type, String msg) 
 	{ 
+		if(type.equals("ERROR")){
+		    Dialogs.error(msg);
+        }
+
 		String filename=filenameTemplate+getDate()+".log";
 		String line = "[$time][$type]: $msg";
 		line = line.replace("$time", getTime());

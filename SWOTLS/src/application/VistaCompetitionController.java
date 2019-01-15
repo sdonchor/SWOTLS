@@ -171,6 +171,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private void reloadPane(Map<String, Integer> from, ListView<String> to, String actionString){
         to.getSelectionModel().clearSelection();
         ObservableList<String> ols = FXCollections.observableArrayList();
+        ols.clear();
         if(actionString!=null)
             ols.add(actionString);
         for (String key : from.keySet()) {

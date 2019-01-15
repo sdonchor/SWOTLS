@@ -40,9 +40,6 @@ public class ServerData {
 	}
 
 	public static boolean downloadEverything(){
-	    
-        System.out.println("Tymczasowo dla testów pobieram wszystko od nowa przy każdym odświeżeniu");
-       
         try {
             contestants.clear();
             tournaments.clear();
@@ -530,8 +527,8 @@ public class ServerData {
 		} catch (ClassNotFoundException | IOException e) {
 			ClientLog.logLine("ERROR", "Nie udało się edytować gracza "+nickname+". Błąd połączenia.");
 		}
-        
-        
+
+        ServertriggeredEvents.dataUpdated();
     }
 
     public static void newTeam(String name, String from, int leaderId){ //serverside ready
@@ -656,12 +653,6 @@ public class ServerData {
 		return map;
 	}
 
-    /**
-     * Pobiera numer klasy rozgrywkowej (podanej ligi) w której znajduje się podany uczestnik (drużyna lub zawodnik)
-     * @param tournamnetId Id ligi
-     * @param competitorId Id uczestnika turnieju (zawodnika lub drużyny - w zależności od typu podanego turnieju)
-     * @return Numer klasy rozgrywkowej
-     */
     public static String getTournamentType(int tid) {
     	String type="fail";
     	try {
@@ -674,6 +665,13 @@ public class ServerData {
     	return type;
     	
     }
+
+    /**
+     * Pobiera numer klasy rozgrywkowej (podanej ligi) w której znajduje się podany uczestnik (drużyna lub zawodnik)
+     * @param tournamentId Id ligi
+     * @param competitorId Id uczestnika turnieju (zawodnika lub drużyny - w zależności od typu podanego turnieju)
+     * @return Numer klasy rozgrywkowej
+     */
 	public static int getCompetitorsLeagueClass(int tournamentId, int competitorId){
 		int league = -1;
     	try {

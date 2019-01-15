@@ -15,11 +15,6 @@ public class VistaCompetitionViewerController extends VistaEntryViewerController
         addEntry("Nazwa", competition.getName() );
         addEntry("Typ", competition.getType().toString() );
         addEntry("Informacje dodatkowe", competition.getAdditionalInfo() );
-        User u = competition.getCreator();
-        if(u!=null)
-            addEntry("Założyciel", u.getLogin() );
-        else
-            addEntry("Założyciel", "" );
 
         String system = "Nieokreślony";
 
