@@ -41,18 +41,18 @@ public class ServerData {
 
 	public static boolean downloadEverything(){
         try {
-            contestants.clear();
-            ServerData.convertContestants(sc.getTable("contestants"));
+            sys_users.clear();
+            ServerData.convertSysUsrs(sc.getTable("system_users"));
             tournaments.clear();
             ServerData.convertTournaments(sc.getTable("tournaments"));
             teams.clear();
             ServerData.convertTeams(sc.getTable("teams"));
-            matches.clear();
-            ServerData.convertMatches(sc.getTable("matches"));
+            contestants.clear();
+            ServerData.convertContestants(sc.getTable("contestants"));
             arenas.clear();
             ServerData.convertArenas(sc.getTable("arenas"));
-            sys_users.clear();
-            ServerData.convertSysUsrs(sc.getTable("system_users"));
+            matches.clear();
+            ServerData.convertMatches(sc.getTable("matches"));
             return true;
         } catch (Exception e) { //IOException | ClassNotFoundException e
             System.out.println("Couldn't download database.");
