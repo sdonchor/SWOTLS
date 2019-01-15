@@ -42,7 +42,8 @@ public class VistaTeamViewerInTournamentController extends VistaEntryViewerContr
             return;
         }
 
-        ServerData.removeFromTournament(team.getId(), tournament.getId());
+        Dialogs.error("Przejdź do panelu federacji aby usunąć zawodnika");
+        //ServerData.removeFromTournament(team.getId(), tournament.getId());
         getParent().close();
     }
 

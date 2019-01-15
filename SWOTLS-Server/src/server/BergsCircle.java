@@ -20,9 +20,10 @@ public class BergsCircle {
 
     public BergsCircle(List<TournamentParticipant> competitors){
         slots.ensureCapacity(competitors.size());
+        Tournament.ensureSize(slots, competitors.size());
 
         for(TournamentParticipant p : competitors){
-            slots.add(p.getStartingPosition()-1, p);
+            slots.set(p.getStartingPosition()-1, p);
         }
 
         if(slots.size()%2==1) {
@@ -55,13 +56,15 @@ public class BergsCircle {
      */
     public void nextStage(){
         //Pary następnych kolejek otrzyma się przesuwając numery wierzchołków (z wyjątkiem środkowego wierzchołka) zgodnie z ruchem wskazówek zegara.
-        ArrayList<TournamentParticipant> circle = new ArrayList<>(slots.size());
+        ArrayList<TournamentParticipant> circle = new ArrayList<>(slots);
         circle.ensureCapacity(slots.size());
+
+
         //Jeden (ostatni) uczestnik jest nieruchomy na kole, a pozostali są przesuwani o jedną pozycję
-        circle.add(slots.size()-1, slots.get(slots.size()-1));
-        circle.add(0, slots.get(slots.size()-2));
+        circle.set(slots.size()-1, slots.get(slots.size()-1));
+        circle.set(0, slots.get(slots.size()-2));
         for(int i = 0; i<slots.size()-2; i++){
-            circle.add(i+1, slots.get(i));
+            circle.set(i+1, slots.get(i));
         }
         this.slots = circle;
         this.stage++;

@@ -66,6 +66,12 @@ public class VistaCompetitorChooserController implements VistaContainable {
                 Dialogs.error("Nie wybrano uczestnika do dodania!");
                 return;
             }
+
+            if(competition.getStage()!=0){
+                Dialogs.error("Zapisy już się skończyły!");
+                return;
+            }
+
             int id = contestants.get(s);
             ServerData.addCompetitorToCompetition(id, competition.getId());
             addedContestants.put(s, id);

@@ -29,12 +29,6 @@ public class VistaMatchPlannerController implements VistaContainable {
         this.init(parent);
         this.editId = match.getId();
         actionButton.setText("Zapisz");
-
-        Arena a = match.getArena();
-        if(a!=null)
-            arenaBox.setValue(a.getName());
-        else
-            arenaBox.setValue("** Nieokreślona **");
     }
 
     @FXML private ComboBox<String> arenaBox;
@@ -77,6 +71,10 @@ public class VistaMatchPlannerController implements VistaContainable {
         }
 
         LocalDateTime localDate = datePicker.getDateTimeValue();
+        if(localDate==null){
+            Dialogs.error("Podaj date meczu");
+            return;
+        }
         ServerData.planMatch(editId, localDate, arenaId);
 
         parent.close();

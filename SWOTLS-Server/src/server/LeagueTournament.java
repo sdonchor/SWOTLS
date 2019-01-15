@@ -25,14 +25,18 @@ public class LeagueTournament extends Tournament {
 
         //Posegregowanie uczestników do osobnych kolekcji według klas, w których się znajdują.
         ArrayList< ArrayList<TournamentParticipant> > classes = new ArrayList<>();
+        int maxleague = 0;
+        for(TournamentParticipant participant : competitors){
+            if(participant.getLeagueClass()>maxleague)
+                maxleague = participant.getLeagueClass();
+        }
+        ensureSize(classes, maxleague);
+
         for(TournamentParticipant participant : competitors){
             int leagueClass = participant.getLeagueClass();
-            if(leagueClass>classes.size()){
-                classes.ensureCapacity(leagueClass);
-                if(classes.get(leagueClass)==null)
-                    classes.add(new ArrayList<>());
-            }
-            classes.get(leagueClass).add(participant);
+            if(classes.get(leagueClass-1)==null)
+                classes.set(leagueClass-1, new ArrayList<>());
+            classes.get(leagueClass-1).add(participant);
         }
         return classes;
     }
@@ -70,6 +74,7 @@ public class LeagueTournament extends Tournament {
             return false;
         }else if(stage==0){
             endEntriesStage(tournamentId);
+            return true;
         }
 
         ArrayList< ArrayList<TournamentParticipant> > classes = getParticipantsInClasses(tournamentId);
@@ -104,8 +109,6 @@ public class LeagueTournament extends Tournament {
             //Zwiększenie sezonu o 1 i ustawienie etapu na 0 - oznacza to czas pomiędzy sezonami (organizator może ponownie awansować, degradować, usuwać, dodawać zawodników)
             setTournamentStage(tournamentId, 0);
             setTournamentSeason(tournamentId, season+1);
-
-            
             return false;
         }
 

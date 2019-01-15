@@ -83,7 +83,7 @@ public class Match {
 
     @Override
     public String toString() {
-    	if(sideA==null || sideB==null) return "null"; //TODO xD
+    	if(sideA==null || sideB==null) return "Mecz " + id;
         return sideA.displayedName() +
                 " vs " + sideB.displayedName() +
                 " - " + date;

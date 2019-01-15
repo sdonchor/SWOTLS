@@ -54,6 +54,13 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
         MainController.setTabContainer(this);
         ServertriggeredEvents.addDataUpdateListener(this);
+
+        competitors = ServerData.getListOfCompetitionContestants(competition.getId());
+        unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
+        planned = ServerData.getListOfPlannedMatches(competition.getId());
+        finished = ServerData.getListOfFinishedMatches(competition.getId());
+        reports = ServerData.getListOfReports(competition.getId());
+
     }
 
     @FXML
@@ -84,6 +91,11 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
     private void nextSage(){
         if(!VistaLogInController.hasOrganizerPermissions()){
             Dialogs.insufficientPermissions();
+            return;
+        }
+
+        if(competitors.size()<3){
+            Dialogs.error("Dodaj conajmniej 2 uczestników.");
             return;
         }
 
@@ -130,7 +142,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 }
             }
             if(ServerData.nextStage(competition.getId()))
-                Dialogs.error("Udało się przejść do następnej rundy.");
+                Dialogs.error("Udało się przejść do następnej rundy.", "Sukces");
         }
     }
 
@@ -193,37 +205,33 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
 
         //Sprawdza, który panel jest otwarty i przeładowywuje w nim dane.
         if(competitorsPane.isExpanded()){
-            competitorsPane.setExpanded(false);
+            //competitorsPane.setExpanded(false);
+            competitors = ServerData.getListOfCompetitionContestants(competition.getId());
             if(competition.getStage()==0)
                 reloadPane(competitors, lvCompetitors, "** Dodaj **");
             else
                 reloadPane(competitors, lvCompetitors, null);
-            competitorsPane.setExpanded(true);
+            //competitorsPane.setExpanded(true);
         }else if(unplannedPane.isExpanded()){
-            unplannedPane.setExpanded(false);
+            //unplannedPane.setExpanded(false);
             unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-
-            String actionString = null;
-            if(unplanned.size()==0)
-                actionString = "** Następny etap **";
-
-            reloadPane(unplanned, lvUnplanned, actionString);
-            unplannedPane.setExpanded(true);
+            reloadPane(unplanned, lvUnplanned, "** Następny etap **");
+            //unplannedPane.setExpanded(true);
         }else if(plannedPane.isExpanded()){
-            plannedPane.setExpanded(false);
+            //plannedPane.setExpanded(false);
             planned = ServerData.getListOfPlannedMatches(competition.getId());
-
-            String actionString = null;
-            if(planned.size()==0)
-                actionString = "** Następny etap **";
-
-            reloadPane(planned, lvPlanned, actionString);
-            plannedPane.setExpanded(true);
+            reloadPane(planned, lvPlanned, "** Następny etap **");
+            //plannedPane.setExpanded(true);
         }else if(finishedPane.isExpanded()){
-            finishedPane.setExpanded(false);
+            //finishedPane.setExpanded(false);
             finished = ServerData.getListOfFinishedMatches(competition.getId());
             reloadPane(finished, lvFinished, "** Następny etap **");
-            finishedPane.setExpanded(true);
+            //finishedPane.setExpanded(true);
+        }else if(resultsPane.isExpanded()){
+            //resultsPane.setExpanded(false);
+            reports = ServerData.getListOfReports(competition.getId());
+            reloadPane(reports, lvResults, "** Następny etap **");
+            //resultsPane.setExpanded(true);
         }
     }
 
@@ -294,11 +302,8 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(plannedPane.isExpanded()){
                     planned = ServerData.getListOfPlannedMatches(competition.getId());
-                    String actionString = null;
-                    if(planned.size()==0)
-                        actionString = "** Następny etap **";
 
-                    reloadPane(planned, lvPlanned, actionString);
+                    reloadPane(planned, lvPlanned, "** Następny etap **");
                 }else {
                     lvPlanned.getSelectionModel().clearSelection();
                 }
@@ -331,10 +336,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             public void invalidated(Observable observable) {
                 if(unplannedPane.isExpanded()){
                     unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-                    String actionString = null;
-                    if(unplanned.size()==0)
-                        actionString = "** Następny etap **";
-                    reloadPane(unplanned, lvUnplanned, actionString);
+                    reloadPane(unplanned, lvUnplanned, "** Następny etap **");
                 }else {
                     lvUnplanned.getSelectionModel().clearSelection();
                 }
@@ -392,7 +394,11 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                 if(m==null)
                     return;
 
-                new VistaMatchViewerController(newTab(m.toString()), m);
+                s = m.toString();
+                if(s.isEmpty())
+                    s = "Mecz "+id;
+
+                new VistaMatchViewerController(newTab(s), m);
             }
         });
 

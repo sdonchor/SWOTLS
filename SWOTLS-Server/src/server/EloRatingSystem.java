@@ -7,8 +7,8 @@ public class EloRatingSystem {
 
     /**
      * Oblicza zmianę rankingu dla podanych danych.
-     * @param playerRank Ranking gracza (X) dla którego obliczamy zmianę.
-     * @param opponentRank Ranking przeciwnika gracza X (gracza Y).
+     * @param playerRating Ranking gracza (X) dla którego obliczamy zmianę.
+     * @param opponentRating Ranking przeciwnika gracza X (gracza Y).
      * @param result 0 jeśli gracz X przegrał, 0.5 jeśli zremisował, 1 jeśli wygrał
      * @return
      */
@@ -43,6 +43,9 @@ public class EloRatingSystem {
     public static void updateRating(Team teamX, Team teamY, float didXWin){
         //Obliczenie średniego rankingu graczy z drużyny X
         List<Player> playersX = teamX.getPlayers();
+        if(playersX.size()==0)
+            return;
+
         int ratingX = 0;
         for(Player p : playersX){
             ratingX += p.getElo();
@@ -51,6 +54,9 @@ public class EloRatingSystem {
 
         //Obliczenie średniego rankingu graczy z drużyny Y
         List<Player> playersY = teamY.getPlayers();
+        if(playersY.size()==0)
+            return;
+
         int ratingY = 0;
         for(Player p : playersY){
             ratingY += p.getElo();

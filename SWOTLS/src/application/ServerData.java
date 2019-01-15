@@ -931,7 +931,8 @@ public class ServerData {
 
 		try {
 			if(!sc.nextStage(competitionId)) {
-				Dialogs.error("Turniej zakończony.");
+				Dialogs.error("Turniej zakończony.", "Komunikat");
+                ServertriggeredEvents.dataUpdated();
 				return false;
 			}
 		} catch (ClassNotFoundException | IOException e) {

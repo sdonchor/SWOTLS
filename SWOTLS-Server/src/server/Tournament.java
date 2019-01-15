@@ -184,6 +184,17 @@ public class Tournament {
         return stage;
     }
 
+	public static int getMaxRounds(int tournamentId){
+		int stage = 999;
+		try {
+			stage = dbH.getQueryBuilder().getMaxRounds(tournamentId);
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return stage;
+	}
+
     public static void setTournamentSeason(int tournamentId, int season){
     	try {
 			dbH.getQueryBuilder().setSeason(tournamentId, season);
@@ -258,5 +269,12 @@ public class Tournament {
         }
     }
 
+    public static void ensureSize(ArrayList<?> list, int size) {
+        // Prevent excessive copying while we're adding
+        list.ensureCapacity(size);
+        while (list.size() < size) {
+            list.add(null);
+        }
+    }
 
 }

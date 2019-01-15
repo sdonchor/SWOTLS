@@ -666,6 +666,18 @@ public class QueryBuilder {
 		else
 			return -1;
 	}
+	public int getMaxRounds(int tid) throws SQLException{
+		String query = "SELECT * FROM `tournaments` WHERE tournament_id = ?";
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1,tid);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next())
+		{
+			return rs.getInt("rounds");
+		}
+		else
+			return -1;
+	}
 	public boolean setSeason(int tid, int season) throws SQLException {
 		String query = "UPDATE `tournament` SET season = ? WHERE tournament_id = ?";
 		PreparedStatement stmt = connection.prepareStatement(query);

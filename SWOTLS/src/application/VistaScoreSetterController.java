@@ -23,8 +23,10 @@ public class VistaScoreSetterController implements VistaContainable {
     public VistaScoreSetterController(VistaContainer parent, Match match){
         this.init(parent);
         this.match = match;
-        labelA.setText("Punkty " + match.getSideA().displayedName());
-        labelB.setText("Punkty " + match.getSideB().displayedName());
+        if(match.getSideA()!=null)
+            labelA.setText("Punkty " + match.getSideA().displayedName());
+        if(match.getSideB()!=null)
+            labelB.setText("Punkty " + match.getSideB().displayedName());
     }
 
     @FXML private Label labelA;
@@ -81,7 +83,7 @@ public class VistaScoreSetterController implements VistaContainable {
             int iScoreA = Integer.parseInt(scoreA.getText());
             int iScoreB = Integer.parseInt(scoreB.getText());
             if(iScoreA==iScoreB && match.getCompetition().getSystem()==1){
-                Dialogs.error("W systemie turniejowym nie może być remisów!");
+                Dialogs.error("W systemie pucharowym nie może być remisów!");
                 return;
             }
 

@@ -11,8 +11,10 @@ public class VistaMatchViewerController extends VistaEntryViewerController {
     public VistaMatchViewerController(VistaContainer parent, Match m){
         super(parent);
         addEntry("Id", String.valueOf(m.getId()) );
-        addEntry("Strona A", m.getSideA().displayedName() );
-        addEntry("Strona B", m.getSideB().displayedName() );
+        if(m.getSideA()!=null)
+            addEntry("Strona A", m.getSideA().displayedName() );
+        if(m.getSideB()!=null)
+            addEntry("Strona B", m.getSideB().displayedName() );
         addEntry("Wynik A", String.valueOf(m.getScoreA()) );
         addEntry("Wynik B", String.valueOf(m.getScoreB()) );
         addEntry("Data", String.valueOf(m.getDate()) );

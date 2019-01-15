@@ -87,7 +87,7 @@ public class McMahonTournament extends Tournament {
             int elo = eloOfParticipants.get(p)-100;
             int points = 0;
             while (elo>=lowestElo){
-                points++;
+                addPoint(tournamentId, p.getId());
                 elo -= 100;
             }
             p.setPoints(points);

@@ -101,6 +101,8 @@ public class RoundRobinTournament extends Tournament {
                 report += getDisplayedNameOfPlayer(p.getId()) + " - " + p.getPoints();
             else
                 report += getNameOfTeam(p.getId()) + " - " + p.getPoints();
+
+            report += "\n";
         }
         createReport(tournamentId,"Raport - Etap " + stage, report);
 
