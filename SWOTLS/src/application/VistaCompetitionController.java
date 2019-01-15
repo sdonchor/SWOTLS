@@ -262,7 +262,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                     if(competition.getSystem()==5) {
                         new VistaPlayerInLeagueViewerController(MainController.newTab("Zawodnik - " + player.displayedName()), player, competition);
                     }else {
-                        new VistaPlayerViewerController(newTab("Zawodnik - " + player.displayedName()), player);
+                        new VistaPlayerViewerInTournamentController(newTab("Zawodnik - " + player.displayedName()), player, competition);
                     }
                 }else {
                     //TEAM
@@ -273,7 +273,7 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
                     if(competition.getSystem()==5) {
                         new VistaTeamInLeagueViewerController(MainController.newTab("Drużyna - " + t.displayedName()), t, competition);
                     }else {
-                        new VistaTeamViewerController(newTab("Drużyna - " + t.displayedName()), t);
+                        new VistaTeamViewerInTournamentController(newTab("Drużyna - " + t.displayedName()), t, competition);
                     }
                 }
 
