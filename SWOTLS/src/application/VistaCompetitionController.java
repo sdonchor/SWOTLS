@@ -56,11 +56,10 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
         ServertriggeredEvents.addDataUpdateListener(this);
 
         competitors = ServerData.getListOfCompetitionContestants(competition.getId());
-        unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
-        planned = ServerData.getListOfPlannedMatches(competition.getId());
-        finished = ServerData.getListOfFinishedMatches(competition.getId());
-        reports = ServerData.getListOfReports(competition.getId());
-
+        //unplanned = ServerData.getListOfUnplannedMatches(competition.getId());
+        //planned = ServerData.getListOfPlannedMatches(competition.getId());
+        //finished = ServerData.getListOfFinishedMatches(competition.getId());
+        //reports = ServerData.getListOfReports(competition.getId());
     }
 
     @FXML
@@ -156,10 +155,12 @@ public class VistaCompetitionController implements VistaContainable, Refreshable
             else
                 s = "Perspektywa wydarzenia: " + competition.getName() + " - Etap " + competition.getStage();
         }
-        else {
+        else if(competition.getStage()==0) {
             s = "Perspektywa wydarzenia: " + competition.getName() + " - Zapisy";
             if(competition.getSeason()==5)
                 s += " przed sezonem " + competition.getSeason();
+        }else{
+            s = "Perspektywa wydarzenia: " + competition.getName() + " - Zakończony";
         }
 
 

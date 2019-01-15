@@ -61,7 +61,7 @@ public class MainController extends VistaContainer  {
 
     @FXML
     private void openTimetable(ActionEvent event){
-        String s = "Wszystkie niezakończone, ale zaplanowane mecze w federacji:\n";
+        String s = "Wszystkie mecze w federacji z ustaloną datą:\n";
         Map<String, Integer> matches = ServerData.getListOfAllPlannedMatches();
         for(String match : matches.keySet()){
             s += match + "\n";

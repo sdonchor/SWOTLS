@@ -738,42 +738,14 @@ public class ServerData {
 	}
 
     public static Map<String, Integer> getListOfAllPlannedMatches(){
-    	Map<String, Integer> map = new HashMap<String, Integer>();
-		try {
-			CachedRowSet crs = sc.getPlannedMatches();
-			
-			while(crs.next()) {
-				String type = sc.getTournamentTypeByMatchId(crs.getInt("match_id"));
-				if(type.equals("fail")) {
-					
-					return map;
-				}
-				int aId;
-				int bId;
-				String aName = null;
-				String bName = null;
-				if(type.equals("solo")) {
-					 aId = crs.getInt("sideA");
-					 bId = crs.getInt("sideB");
-					 aName=sc.getContestantName(aId);
-					 bName=sc.getContestantName(bId);
-				}
-				else if(type.equals("team")) {
-					aId = crs.getInt("teamA");
-					 bId = crs.getInt("teamB");
-					 aName=sc.getTeamName(aId);
-					 bName=sc.getTeamName(bId);
-				}
-				int id = crs.getInt("match_id");
-				String title = "$a vs $b";
-				title=title.replace("$a", aName);
-				title=title.replace("$b", bName);
-				map.put(title, id);
-			}
-		} catch (ClassNotFoundException | IOException | SQLException e) {
-			ClientLog.logLine("ERROR", "Nie udało się pobrać listy planowanych. Błąd połączenia.");
-		}
-		return map;
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for(int i = 0; i<matches.size();i++)
+        {
+            Match m = matches.get(i);
+            if(m.getDate()!=null)
+                map.put(matches.get(i).toString(), matches.get(i).getId());
+        }
+        return map;
 	}
     
 
@@ -805,8 +777,10 @@ public class ServerData {
 				}
 				int id = crs.getInt("match_id");
 				String title = "$a vs $b";
-				title=title.replace("$a", aName);
-				title=title.replace("$b", bName);
+				if(aName!=null)
+				    title=title.replace("$a", aName);
+				if(bName!=null)
+				    title=title.replace("$b", bName);
 				map.put(title, id);
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
