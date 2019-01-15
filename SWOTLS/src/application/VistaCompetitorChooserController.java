@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,7 +21,9 @@ public class VistaCompetitorChooserController implements VistaContainable {
     private Competition competition;
 
     public VistaCompetitorChooserController(VistaContainer parent, Map<String, Integer> addedContestants, Competition competition){
-        this.addedContestants = addedContestants;
+        //this.addedContestants = addedContestants;
+        this.addedContestants = new HashMap<>(addedContestants);
+
         this.competition = competition;
         this.init(parent);
     }
@@ -66,6 +69,7 @@ public class VistaCompetitorChooserController implements VistaContainable {
             int id = contestants.get(s);
             ServerData.addCompetitorToCompetition(id, competition.getId());
             addedContestants.put(s, id);
+            ServertriggeredEvents.dataUpdated();
             init();
         }else {
             Dialogs.insufficientPermissions();

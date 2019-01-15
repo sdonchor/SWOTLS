@@ -65,6 +65,15 @@ public class VistaCompetitionCreatorController implements VistaContainable {
                 return;
             }
 
+            if(nameField.getText().isEmpty()){
+                Dialogs.error("Musisz podać nazwę turnieju!");
+                return;
+            }
+
+            if(additionalField.getText().isEmpty()){
+                additionalField.setText(" ");
+            }
+
             ServerData.newTournament(nameField.getText(), systemBox.getValue(), typeBox.getValue(), additionalField.getText());
 
             parent.close();
