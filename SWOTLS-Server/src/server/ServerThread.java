@@ -1036,6 +1036,33 @@ public class ServerThread extends Thread{
 					}
 					
 				}
+				if(message.contains("remove-from-tournament")){
+					
+					String[] request = message.split(";");
+					int tid = Integer.valueOf(request[1]);
+					int pid = Integer.valueOf(request[2]);
+					OutputStream os = socket.getOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(os);
+					ServerResponse sr = new ServerResponse();
+					sr.setResponseType("boolean");
+					try {
+						
+						boolean league = dbH.getQueryBuilder().removeFromTournament(tid,pid);
+						sr.setBoolTypeResponse(true);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+						ServerLog.logLine("INFO", "Usunięto zawodnika "+pid+" z turnieju "+tid+".");
+					} catch (SQLException e) {
+						e.printStackTrace();
+						ServerLog.logLine("ERROR", "Nie udało się usunąć.");
+						sr.setBoolTypeResponse(false);
+						oos.writeObject(sr);
+						oos.close();
+						os.close();
+					}
+					
+				}
 				
 			}
 		} catch (IOException e) {

@@ -1029,7 +1029,23 @@ public class ServerData {
 		}
 	}
 
-	public static void removeFromTournament(int participantId, int tournamentId){
-	    //TODO
+	public static boolean removeFromTournament(int participantId, int tournamentId){
+		
+	    try {
+	    	if(sc.removeFromTournament(participantId,tournamentId))
+	    	{
+	    		ClientLog.logLine("INFO", "Usunięto z turnieju "+tournamentId+" gracza "+tournamentId+".");
+	    		ServertriggeredEvents.dataUpdated();
+	    		return true;
+	    	}
+	    	else
+	    	{
+	    		ClientLog.logLine("ERROR", "Nie udało się usunąć gracza.");
+	    		return false;
+	    	}
+	    }catch(ClassNotFoundException | IOException e) {
+	    	ClientLog.logLine("ERROR", "Nie udało się usunąć gracza. Błąd połączenia.");
+	    	return false;
+	    }
     }
 }

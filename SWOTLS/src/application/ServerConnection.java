@@ -659,5 +659,23 @@ public class ServerConnection {
 			return -1;
 		}		
 	}
+	public boolean removeFromTournament(int tid, int pid) throws IOException, ClassNotFoundException {
+		socketOpen();
+		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+		String request = "remove-from-tournament;"+tid+";"+pid;
+		printWriter.println(request);
+		
+		InputStream is = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(is);
+		ServerResponse sr = (ServerResponse)ois.readObject();
+		if(sr!=null && sr.getResponseType().equals("boolean") && sr.getBoolTypeResponse())
+		{
+			return sr.getBoolTypeResponse();
+		}
+		else
+		{
+			return false;
+		}	
+	}
 
 }
