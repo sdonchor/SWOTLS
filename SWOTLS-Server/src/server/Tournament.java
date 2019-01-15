@@ -142,7 +142,7 @@ public class Tournament {
 				while(crs.next()) {
 					cid = crs.getInt("contestant_id");
 					startingPosition = crs.getInt("starting_position");
-					points = crs.getInt("points");
+					points = crs.getInt("score");
 					leagueClass = crs.getInt("league");
 					participants.add(new TournamentParticipant(cid, startingPosition, points, leagueClass));
 				}
@@ -151,7 +151,7 @@ public class Tournament {
 				while(crs.next()) {
 					cid = crs.getInt("team_id");
 					startingPosition = crs.getInt("starting_position");
-					points = crs.getInt("points");
+					points = crs.getInt("score");
 					leagueClass = crs.getInt("league");
 					participants.add(new TournamentParticipant(cid, startingPosition, points, leagueClass));
 				}
